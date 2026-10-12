@@ -4,7 +4,7 @@ elev-38
 ### Roll:
 Webbserver och SSH administration
 ### Intern IP:
-172.20.1.138
+172.xx.x.xxx
 ### Tjänster och portar:
 Tjänster: Apache och SSH
 
