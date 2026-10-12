@@ -1,18 +1,59 @@
-# Lagerkarta
-Lagerkartan visar hur olika lager och protokoll hänger ihop i nätverkskommunikation. Varje lager har sin egen uppgift och hjälper till att förklara hur data skickas och tas emot.
+# Lagerkarta – nätverkstrafik
 
-### 4. Applikationslagret – DNS och HTTP
+Lagerkartan visar vad de olika TCP/IP-lagren gör och hur de syns i den nätverkstrafik jag har undersökt i Wireshark.
 
-Det här lagret handlar om vad kommunikationen används till. DNS hjälper till att hitta IP-adresser med hjälp av domännamn och HTTP används när man kommunicerar med webbsidor.
+## 1. Applikationslagret – DNS, HTTP, SSH och NTP
 
-### 3. Transportlagret – TCP och UDP
+**Uppgift:** Det här lagret handlar om vad kommunikationen används till.
 
-Det här lagret handlar om hur data skickas och vilka portar som används. TCP kontrollerar att data kommer fram på rätt sätt, medan UDP skickar data utan samma kontroll.
+* **DNS:** Översätter domännamn till IP-adresser.
+* **HTTP:** Används för kommunikation med webbsidor.
+* **SSH:** Används för säker fjärrinloggning.
+* **NTP:** Används för att synkronisera tid.
 
-### 2. Internetlagret – IP och ICMP
+**Belägg:** Jag hittade en DNS-fråga efter log.sec.chas-lab.dev och ett svar med IP-adressen 46.224.108.117. Jag hittade även en HTTP GET-förfrågan för samma domän samt SSH- och NTP-trafik.
 
-Det här lagret handlar om IP-adresser och hur data hittar fram mellan nätverk. ICMP används bland annat för att testa om det går att nå en annan enhet.
+## 2. Transportlagret – TCP och UDP
 
-### 1. Nätverksåtkomstlagret – Ethernet och ARP
+**Uppgift:** Det här lagret hanterar transporten av data och använder portar för att skilja mellan olika tjänster.
 
-Det här lagret handlar om hur enheter kommunicerar på ett lokalt nätverk. Ethernet används för att skicka data och ARP hjälper till att hitta rätt MAC-adress utifrån en IP-adress.
+* **TCP:** Används bland annat för HTTP och SSH.
+* **UDP:** Används bland annat för DNS och NTP.
+
+**Belägg:** Jag observerade TCP-portarna 22, 80, 4444 och 9000 samt UDP-portarna 53 och 123. Ett TCP-paket till port 9000 hade RST-flaggan. Jag hittade också TCP-trafik till port 4444 med Base64-kodat innehåll som avkodades till ”lodjur stol smula kalender”. Jag har inte fastställt vad den trafiken användes till.
+
+## 3. Internetlagret – IPv4 och ICMP
+
+**Uppgift:** Det här lagret hanterar IP-adresser och kommunikation mellan enheter.
+
+* **IPv4:** Används för att adressera källa och mål.
+* **ICMP:** Används bland annat för ping och för att kontrollera om en enhet går att nå.
+
+**Belägg:** Jag hittade ett ICMP Echo Request från 172.20.1.58 till 172.20.1.109. Paket 63 innehöll texten ”bricka”.
+
+## 4. Nätverksåtkomstlagret – Ethernet och ARP
+
+**Uppgift:** Det här lagret hanterar kommunikationen över den lokala nätverkslänken.
+
+* **Ethernet:** Används för att transportera data i nätverksramar.
+* **ARP:** Hjälper till att hitta MAC-adressen som hör till en IPv4-adress på det lokala nätverket.
+
+**Belägg:** Jag hittade ett ARP-svar som kopplade IP-adressen 172.20.1.58 till MAC-adressen 86:00:00:a1:0b:3a. Jag använde informationen för att hitta rätt ICMP-paket.
+
+## Exempel – SSH genom de fyra lagren
+
+Jag hittade SSH-trafik mellan 172.20.1.2 och 172.20.1.109. Samma trafik går att beskriva genom de fyra TCP/IP-lagren.
+
+| Lager           | Koppling till trafiken                                             |
+| --------------- | ------------------------------------------------------------------ |
+| Applikation     | SSH används för säker fjärrinloggning.                             |
+| Transport       | TCP används på port 22.                                            |
+| Internet        | IPv4-adresserna visar källan och målet.                            |
+| Nätverksåtkomst | Ethernet används för att transportera data över den lokala länken. |
+
+Exemplet visar hur lagren har olika uppgifter men samarbetar när data skickas över ett nätverk.
+
+## Sammanfattning
+
+Jag har undersökt nätverkstrafiken i Wireshark och kopplat protokollen till rätt TCP/IP-lager. Jag har också hittat olika trafikflöden och undersökt innehållet i vissa paket. Där jag inte har kunnat fastställa vad trafiken används till har jag hållit mig till det jag faktiskt har observerat.
+
