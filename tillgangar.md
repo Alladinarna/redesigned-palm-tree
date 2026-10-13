@@ -26,7 +26,7 @@ chronyd och dhclient körs också men är klienter, inte tjänster som andra kan
 |---|---|---|---|---|
 | elev-46 | 172.20.1.146/32 | 46.224.175.57/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 13:32Z 2026-10-13 |
 | elev-24 | 172.20.1.124/32 | 91.99.144.137/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:15Z 2026-10-13 |
-| elev-38 | | | | |
+| elev-38 | 172.20.1.138/32 | 91.107.220.202/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:45Z 2026-10-13|
 | elev-09 | 172.20.1.109/32 | 2.28.105.6/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 15:57Z 2026-10-13 |
 
 ## Observationer 
