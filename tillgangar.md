@@ -30,7 +30,7 @@ chronyd och dhclient körs också men är klienter, inte tjänster som andra kan
 | elev-09 | | | | |
 
 ## Observationer 
-- sshd och httpd lyssnar på 0.0.0.0 alltså även publikt. SSH är ändå stängt från internet vilket betyder att filtrering sker i moln plattformens brandvägg och inte på värden.
+- sshd och httpd lyssnar på 0.0.0.0 alltså även publikt. Enligt kursinstruktionen är SSH ändå stängt från internet.
 - Varje värd har två adresser. Kortnamnet i /etc/hosts pekar på den interna medans DNS zonern sec.chas-lab.dev publicerar den publika.
 - Jump har en publik adress i ett annat block (2.28.140) än log, ctf och elev-46 som alla ligger i 46.224. Vi vet inte varför.
 - DNS-resolvrarna är publika adresser. DNS-trafiken lämnar labbnätet via eth0.
