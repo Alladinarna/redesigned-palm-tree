@@ -22,7 +22,7 @@ Belägg: ip route, ip -br addr på elev-46, 11:50Z 2026-10-13.
 Alla fyra servrar kör Rocky linux 9 med samma grunduppsättning, webbserver och SSH nås bara via jump servern. eth1 mot labbnätet och eth0 mot internet.
 chronyd och dhclient körs också men är klienter, inte tjänster som andra kan nå.
 
-| Elev | Adress intern | Adress publik | Tjänster | Belägg |
+| Elev | intern Adress | publik Adress | Tjänster | Belägg |
 |---|---|---|---|---|
 | elev-46 | 172.20.1.146/32 | 46.224.175.57/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 13:32Z 2026-10-13 |
 | elev-24 | | | | |
