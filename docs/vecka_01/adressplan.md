@@ -14,13 +14,13 @@
 
 | Prefix | Syfte | Uträkning | Adressintervall för enheter (första–sista) | Ansvarig tjänst | Reserverat utrymme | Kommentar |
 |---|---|---|---|---|---|---|
-| 10.40.0.0/24 | Klienter | 150 → 2⁸ − 2 − 1 = 253 → /24 | 10.40.0.2 – 10.40.0.254 | Arbetsplatser (DHCP) | – | Gateway .1, broadcast 10.40.0.255 |
+| 10.40.0.0/24 | Klienter | 150 → 2⁸ − 2 − 1 = 253 → /24 | 10.40.0.2 – 10.40.0.254 | Arbetsplatser (DHCP) | 10.40.1.0 – 10.40.9.255(se nästa tabell) | Gateway .1, broadcast 10.40.0.255 |
 | 10.40.10.0/26 | Gäst och besök | 50 → 2⁶ − 2 − 1 = 61 → /26 | 10.40.10.2 – 10.40.10.62 | Gästnät (DHCP) | 10.40.10.64 – 10.40.10.255 | Gateway .1, broadcast 10.40.10.63 |
 | 10.40.20.0/27 | Servrar | 18 → 2⁵ − 2 − 1 = 29 → /27 | 10.40.20.2 – 10.40.20.30 | Webb och SSH (elevservrarna) | 10.40.20.32 – 10.40.20.255 | Gateway .1, broadcast 10.40.20.31 |
 | 10.40.30.0/28 | Drift och administration | 8 → 2⁴ − 2 − 1 = 13 → /28 | 10.40.30.2 – 10.40.30.14 | jump (SSH 22) | 10.40.30.16 – 10.40.30.255 | Gateway .1, broadcast 10.40.30.15 |
-| 10.40.40.0/29 | Databaser | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.40.2 – 10.40.40.6 | Databastjänst | 10.40.40.8 – 10.40.40.255 | Gateway .1, broadcast 10.40.40.7. Exakt på gränsen |
+| 10.40.40.0/29 | Databaser | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.40.2 – 10.40.40.6 | Databastjänst | 10.40.40.8 – 10.40.40.255 | Gateway .1, broadcast 10.40.40.7. |
 | 10.40.50.0/29 | Logg och övervakning | 4 → 2³ − 2 − 1 = 5 → /29 | 10.40.50.2 – 10.40.50.6 | log (TCP 514, HTTP) | 10.40.50.8 – 10.40.50.255 | Gateway .1, broadcast 10.40.50.7 |
-| 10.40.60.0/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.60.2 – 10.40.60.6 | Publik webb (HTTP 80) | 10.40.60.8 – 10.40.60.255 | Gateway .1, broadcast 10.40.60.7. Exakt på gränsen |
+| 10.40.60.0/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.60.2 – 10.40.60.6 | Publik webb (HTTP 80) | 10.40.60.8 – 10.40.60.255 | Gateway .1, broadcast 10.40.60.7. |
 | 10.40.250.0/30 | Länknät 1 | 2 → 2² − 2 = 2 → /30 | 10.40.250.1 – 10.40.250.2 | Routing (intern gateway) | – | Broadcast 10.40.250.3 |
 | 10.40.250.4/30 | Länknät 2 | 2 → 2² − 2 = 2 → /30 | 10.40.250.5 – 10.40.250.6 | Routing | – | Broadcast 10.40.250.7 |
 | 10.40.250.8/30 | Länknät 3 | 2 → 2² − 2 = 2 → /30 | 10.40.250.9 – 10.40.250.10 | Routing | 10.40.250.12 – 10.40.250.255 | Broadcast 10.40.250.11 |
@@ -30,11 +30,11 @@
 | Intervall | Status |
 |---|---|
 | 10.40.1.0 – 10.40.9.255 | Reserverat (klienternas tillväxt) |
-| 10.40.11.0 – 10.40.19.255 | Reserverat |
-| 10.40.21.0 – 10.40.29.255 | Reserverat |
-| 10.40.31.0 – 10.40.39.255 | Reserverat |
-| 10.40.41.0 – 10.40.49.255 | Reserverat |
-| 10.40.51.0 – 10.40.59.255 | Reserverat |
+| 10.40.11.0 – 10.40.19.255 | Reserverat (gäst och besök tillväxt) |
+| 10.40.21.0 – 10.40.29.255 | Reserverat (servrar tillväxt) |
+| 10.40.31.0 – 10.40.39.255 | Reserverat (drift och admistration tillxäxt) |
+| 10.40.41.0 – 10.40.49.255 | Reserverat (Databaser tillväxt)|
+| 10.40.51.0 – 10.40.59.255 | Reserverat (logg och övervakning tillväxt) |
 | 10.40.61.0 – 10.40.249.255 | Reserverat för framtida grupper |
 | 10.40.251.0 – 10.40.255.255 | Reserverat för infrastruktur |
 
