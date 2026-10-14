@@ -44,4 +44,4 @@ Reserverat utrymme får inte tas i bruk utan att planen uppdateras.
 
 
 ## Metod
-Uträkningarna är gjorda för hand och kontrollerade med `ipcalc`. AI (Claude) har använts som stöd vid sammanställningen.
+Uträkningarna är gjorda för hand och kontrollerade med ipcalc på elev-46, 2026-10-14T18:55:02Z. AI (Claude) har använts som stöd vid sammanställningen.
