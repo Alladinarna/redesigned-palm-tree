@@ -58,7 +58,7 @@ Inte tillåtet:
 - Gäst och besök → interna subnät
 - Logg och övervakning → andra subnät
 
-Se zonskissen i [zonforslag.md](zonforslag.md).
+Se zonskissen i [vecka_02](zonskiss.png).
 
 ## Metod
 Uträkningarna är gjorda för hand och kontrollerade med ipcalc på elev-46, 2026-10-14T18:55:02Z. AI (Claude) har använts som stöd vid sammanställningen.
