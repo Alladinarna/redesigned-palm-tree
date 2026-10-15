@@ -20,7 +20,7 @@
 | 10.40.30.0/28 | Drift och administration | 8 → 2⁴ − 2 − 1 = 13 → /28 | 10.40.30.2 – 10.40.30.14 | jump (SSH 22) | 10.40.30.16 – 10.40.30.255 | Gateway .1, broadcast 10.40.30.15 |
 | 10.40.40.0/29 | Databaser | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.40.2 – 10.40.40.6 | Databastjänst | 10.40.40.8 – 10.40.40.255 | Gateway .1, broadcast 10.40.40.7. |
 | 10.40.50.0/29 | Logg och övervakning | 4 → 2³ − 2 − 1 = 5 → /29 | 10.40.50.2 – 10.40.50.6 | log (TCP 514, HTTP) | 10.40.50.8 – 10.40.50.255 | Gateway .1, broadcast 10.40.50.7 |
-| 10.40.60.0/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.60.2 – 10.40.60.6 | Publik webb (HTTP 80) | 10.40.60.8 – 10.40.60.255 | Gateway .1, broadcast 10.40.60.7. |
+| 10.40.60.0/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.60.2 – 10.40.60.6 | Publik webb (HTTP 80,443) | 10.40.60.8 – 10.40.60.255 | Gateway .1, broadcast 10.40.60.7. |
 | 10.40.250.0/30 | Länknät 1 | 2 → 2² − 2 = 2 → /30 | 10.40.250.1 – 10.40.250.2 | Routing (intern gateway) | – | Broadcast 10.40.250.3 |
 | 10.40.250.4/30 | Länknät 2 | 2 → 2² − 2 = 2 → /30 | 10.40.250.5 – 10.40.250.6 | Routing | – | Broadcast 10.40.250.7 |
 | 10.40.250.8/30 | Länknät 3 | 2 → 2² − 2 = 2 → /30 | 10.40.250.9 – 10.40.250.10 | Routing | 10.40.250.12 – 10.40.250.255 | Broadcast 10.40.250.11 |
@@ -42,6 +42,23 @@ Reserverat utrymme får inte tas i bruk utan att planen uppdateras.
 
 ## Vilka subnät ska nå varandra
 
+Tillåtna flöden (allt annat blockeras som standard):
+
+- Gäst och besök → endast internet
+- Internet → DMZ (webbservern) (TCP 80/443)
+- Klienter → Servrar (nödvändiga tjänster) och internet
+- DMZ(webbserver) → Servrar (endast app-port)
+- Servrar → Databaser (endast Databas-port)
+- Drift och administration (jump) → alla interna subnät (SSH 22)
+- DMZ(webbserver), Servrar, Databaser och jump → Logg och övervakning (TCP 514, envägs)
+- Behöriga administratörer(internet) → Drift och administration/jump(ssh 22)
+
+Inte tillåtet:
+- DMZ → Databaser direkt, all åtkomst till data går via Servrar
+- Gäst och besök → interna subnät
+- Logg och övervakning → andra subnät
+
+Se zonskissen i [zonforslag.md](zonforslag.md).
 
 ## Metod
 Uträkningarna är gjorda för hand och kontrollerade med ipcalc på elev-46, 2026-10-14T18:55:02Z. AI (Claude) har använts som stöd vid sammanställningen.
