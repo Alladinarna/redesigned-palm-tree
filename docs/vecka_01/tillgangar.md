@@ -31,16 +31,16 @@ chronyd och dhclient körs också men är klienter, inte tjänster som andra kan
 
 # Klassifiering
 
-| Zon | Känslighet (C, I)| Driftkritikalitet( A ) |
+| Zon | Känslighet (C, I) | Driftkritikalitet (A) |
 |---|---|---|
-| Klientzon | Medel,  | Medel, arbets effektiviteten kan bli påverkat men förmodligen kan arbetet fortgå.|
-| Gästzon| Medel | Låg, nätverk för gäster är ett plus men har ingen större påverkan utan, påverkar ingen drift. |
-| Logzon| Hög | Hög, utan loggar finns ingen spårning på vem som gjort vad. |
-| Serverzon (applikation) | Hög | Hög, utan applikations servern kan verksamheten påverkas och i värsta fall inte fungera. |
-| Databaszon | Hög | Hög. Slutar databasen fungera kan applikationsservern inte hämta data, och tjänsterna som bygger på den slutar fungera. Nätverket i sig påverkas inte, men verksamheten gör det.|
-| Adminzon| Hög | Hög, Admin servern använd för administrativ åtkomst och slutar jumps-servern kan admin inte längre komma åt någon server och för att exempelvis felsöka. |
-| DMZ (Publik webb) | Hög | Hög, Webbservern driver företagets publika webbtjänst. Om den slutar fungera påverkas åtkomsten till webbplatsen, men de interna servrarna kan fortfarande fungera.|
-| Länknät | Hög | Hög, Länknäten kopplar ihop routrarna och gör att trafik kan skickas mellan olika nätverk. Om ett länknät slutar fungera kan kommunikationen mellan berörda zoner påverkas och vissa tjänster bli otillgängliga.|
+| Klientzon | Medel, på arbetsdatorerna finns mejl, dokument och inloggningar. Kommer någon obehörig åt dem kan de läsa eller ändra information, men det drabbar främst enskilda användare. | Medel, arbetseffektiviteten kan bli påverkad men förmodligen kan arbetet fortgå. |
+| Gästzon | Låg, gäster ska bara nå internet och ingen av företagets information finns i zonen. | Låg, nätverk för gäster är ett plus men påverkar inte driften. |
+| Loggzon | Hög, om obehöriga kan läsa eller ändra loggarna går de inte att lita på och det blir svårt att utreda incidenter. | Medel, verksamheten kan fortsätta utan loggservern men under tiden finns ingen spårning på vem som gjort vad. |
+| Serverzon (applikation) | Hög, applikationerna hanterar viktig data och har åtkomst till databasen. Kommer obehöriga åt dem kan data läsas eller ändras. | Hög, utan applikationsservern kan verksamheten påverkas och i värsta fall inte fungera. |
+| Databaszon | Hög, kommer obehöriga åt databasen kommer de åt hela företagets information inklusive kunduppgifter, vilket kan bryta mot flera lagar och ge böter och ekonomiska förluster. | Hög, slutar databasen fungera kan applikationsservern inte hämta data och tjänsterna som bygger på den slutar fungera. Nätverket påverkas inte, men verksamheten gör det. |
+| Adminzon | Hög, jump har behörighet till alla interna zoner. Kommer obehöriga åt den har de vägar in till hela företagets infrastruktur. | Hög, jump används för administrativ åtkomst. Slutar den fungera kan admin inte komma åt servrarna, exempelvis för att felsöka. |
+| DMZ (publik webb) | Medel, webbsidan är publik så det gör inget om den läses. Men ändrar någon den syns det för alla besökare. | Medel, webbplatsen slutar fungera men de interna servrarna fortsätter fungera. |
+| Länknät | Hög, kommer någon obehörig åt routrarna kan den manipulera och dirigera om nätverkstrafiken. | Hög, länknäten kopplar ihop routrarna. Slutar ett länknät fungera kan kommunikationen mellan zonerna påverkas och vissa tjänster bli otillgängliga. |
 ## Observationer 
 - sshd och httpd lyssnar på 0.0.0.0 alltså även publikt. Enligt kursinstruktionen är SSH ändå stängt från internet.
 - Varje värd har två adresser. Kortnamnet i /etc/hosts pekar på den interna medans DNS zonern sec.chas-lab.dev publicerar den publika.
