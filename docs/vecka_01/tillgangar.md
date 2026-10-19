@@ -12,7 +12,7 @@ Belägg: ip route, ip -br addr på elev-46, 11:50Z 2026-10-13.
 |---|---|---|---|---|---|---|
 | jump | Bastion, enda vägen in till servrarna | 172.20.1.2 | 2.28.140.211 | SSH 22 | getent hosts 2026-10-13 | Adminzon |
 | log | Central loggmottagare och testtjänst | 172.20.1.58 | 46.224.108.117 | TCP 514, HTTP | getent hosts 2026-10-13 | Logzon |
-| ctf/jump | Tar emot och kontrollerar flaggor | 172.20.1.10 | 46.224.130.227 | HTTP | getent hosts 2026-10-13 | Adminzon |
+| ctf | Kursens CTF-server. Tar emot och kontrollerar flaggor. Används via kommandon på jump (ctf-status, kontrollera, lämna-flagga). | 172.20.1.10 | 46.224.130.227 | HTTP | getent hosts 2026-10-13 | Utanför uppdraget, kursens infrastruktur |
 | Intern gateway | Router för labbnätet | 172.20.0.1 | — | Routing | ip route 11:50Z 2026-10-13 | Länk-nät |
 | Extern gateway | Väg mot internet, DHCP | 172.31.1.1 | — | DHCP 67, routing | ip route 11:50Z 2026-10-13 | - |
 | DNS | Namnuppslag för externa namn och kursens zon | 185.12.64.1, 185.12.64.2 | — | DNS 53 | /etc/resolv.conf 11:50Z 2026-10-13 | - |
