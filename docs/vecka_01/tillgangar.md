@@ -29,6 +29,18 @@ chronyd och dhclient körs också men är klienter, inte tjänster som andra kan
 | elev-38 | 172.20.1.138/32 | 91.107.220.202/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:45Z 2026-10-13|
 | elev-09 | 172.20.1.109/32 | 2.28.105.6/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 15:57Z 2026-10-13 |
 
+# Klassifiering
+
+| Zon | Känslighet (C, I)| Driftkritikalitet( A ) |
+|---|---|---|
+| Klientzon | Medel,  | Medel, arbets effektiviteten kan bli påverkat men förmodligen kan arbetet fortgå.|
+| Gästzon| Medel | Låg, nätverk för gäster är ett plus men har ingen större påverkan utan, påverkar ingen drift. |
+| Logzon| Hög | Hög, utan loggar finns ingen spårning på vem som gjort vad. |
+| Serverzon (applikation) | Hög | Hög, utan applikations servern kan verksamheten påverkas och i värsta fall inte fungera. |
+| Databaszon | Hög | Hög. Slutar databasen fungera kan applikationsservern inte hämta data, och tjänsterna som bygger på den slutar fungera. Nätverket i sig påverkas inte, men verksamheten gör det.|
+| Adminzon| Hög | Hög, Admin servern använd för administrativ åtkomst och slutar jumps-servern kan admin inte längre komma åt någon server och för att exempelvis felsöka. |
+| DMZ (Publik webb) | Hög | Hög, Webbservern driver företagets publika webbtjänst. Om den slutar fungera påverkas åtkomsten till webbplatsen, men de interna servrarna kan fortfarande fungera.|
+| Länknät | Hög | Hög, Länknäten kopplar ihop routrarna och gör att trafik kan skickas mellan olika nätverk. Om ett länknät slutar fungera kan kommunikationen mellan berörda zoner påverkas och vissa tjänster bli otillgängliga.|
 ## Observationer 
 - sshd och httpd lyssnar på 0.0.0.0 alltså även publikt. Enligt kursinstruktionen är SSH ändå stängt från internet.
 - Varje värd har två adresser. Kortnamnet i /etc/hosts pekar på den interna medans DNS zonern sec.chas-lab.dev publicerar den publika.
