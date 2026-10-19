@@ -8,7 +8,8 @@
 - Länknäten undantas från gateway-regeln, eftersom de två adresserna där är routrarna själva.
 - Varje grupp har ett eget värde i tredje oktetten. Det ger utrymme för tillväxt och förenklar summering per zon. Oanvänt utrymme är reserverat.
 - Länknät dimensioneras som /30 eftersom vi inte vet om uppdragsgivarens routrar stödjer RFC 3021 (/31).
-- Teamets labbtillgångar representerar grupperna så här: jump → Drift och administration, log → Logg och övervakning, elev-46/-24/-38/-09 → Servrar/DMZ, intern gateway → Länknät.
+- Teamets labbtillgångar representerar grupperna så här: jump → Drift och administration, log → Logg och övervakning, elev-46/-24/-38/-09 → Servrar, intern gateway → Länknät.
+- Klient-, gäst-, databas- och DMZ-zonen har ingen motsvarighet i labbmiljön. De ingår i planen för uppdragsgivarens miljö.
 
 ## Adressplan
 
