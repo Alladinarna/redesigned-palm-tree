@@ -12,7 +12,10 @@
 
 ## Svar i vår labbmiljö idag
 
-- **2 och 3: Nej.** Min server nådde loggservern på 22, 514 och 6514.
-- **4 och 6: Ja**, men bara för resursen i U3.2.
-- **5: Nej.** Servrarna litade på eMudhras komprometterade certifikat, och ingenting stoppade dem för det.
-- **1 och 7:** Beror på hur klassificeringslistan ser ut och vad som finns i loggarna.
+1. **Nej.** Klassificeringen gäller zoner, inte enskilda tillgångar. Jump och loggservern får klass genom sina zoner (Adminzon och Loggzon, båda hög), men ctf-servern, DNS och extern gateway ligger utanför zonerna och har ingen klass.
+2. **Nej.** Min server nådde loggservern på 22, 514 och 6514 utan att visa vem den var.
+3. **Nej.** Samma test: loggservern gick att nå på fler portar än 6514.
+4. **Ja**, men bara för resursen i U3.2.
+5. **Nej.** Servrarna litade på eMudhras komprometterade certifikat, och ingenting stoppade dem för det.
+6. **Ja**, men bara för resursen i U3.2.
+7. **Ja, men bara lokalt.** `journalctl -u sshd` visar varje inloggning med tid, användare, källadress och vilken nyckel som användes. Loggen verkar dock inte skickas till loggservern, så den kan raderas av den som tar över servern.
