@@ -12,7 +12,7 @@
 
 ## Svar i vår labbmiljö idag
 
-1. **Nej.** Klassificeringen gäller zoner, inte enskilda tillgångar. Jump och loggservern får klass genom sina zoner (Adminzon och Loggzon, båda hög), men ctf-servern, DNS och extern gateway ligger utanför zonerna och har ingen klass.
+1. **Ja.** Klassificeringen finns på alla zoner, även tillgångar utan zon indelning har klassificering.
 2. **Nej.** Min server nådde loggservern på 22, 514 och 6514 utan att visa vem den var.
 3. **Nej.** Samma test: loggservern gick att nå på fler portar än 6514.
 4. **Ja**, men bara för resursen i U3.2.
