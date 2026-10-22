@@ -25,5 +25,20 @@
 | 19 | Alla serverzoner, Klientzon och Infrastruktur | Internet (NTP) | UDP | 123 | Utgående | Korrekt tid för loggar, inloggningar och certifikat | Molnbrandvägg, trafik mot internet |
 | 20 | Alla serverzoner | Internet (paketförråd) | TCP | 443 | Utgående | Säkerhetsuppdateringar via dnf | Molnbrandvägg, trafik mot internet |
 | 21 | Infrastruktur | Loggzon | TCP | 6514 | Envägs | Routrarna skickar loggar till loggservern för spårbarhet vid incidenter | Värd (nftables), privat nät som inte passerar molnbrandväggen |
+| 22 | Adminzon | Alla interna zoner | ICMP | – (echo) | Envägs | Felsökning, att kunna kontrollera om en enhet går att nå | Värd (nftables), privat nät som inte passerar molnbrandväggen |
+| 23 | Alla serverzoner | Extern gateway (DHCP) | UDP | 67, 68 | Utgående | Servrarna får sin publika adress via DHCP | Värd (nftables), måste tillåtas så att servern behåller sin adress |
 
 **Nekanderegel:** Allt som inte står ovan är nekat, inkommande och utgående, i både molnbrandväggen och värdbrandväggen.
+
+## Jämförelse med trafikbaslinjen (vecka 1)
+
+| Flöde i baslinjen | I flödestabellen? | Beslut |
+|---|---|---|
+| SSH från jump till server, TCP 22 | Ja, rad 16 | Tillåts |
+| DNS till 185.12.64.1, UDP 53 | Ja, rad 18 | Tillåts |
+| NTP till 185.12.64.2, UDP 123 | Ja, rad 19 | Tillåts |
+| ICMP echo från loggservern | Delvis, rad 22 | Tillåts bara från Adminzon för felsökning |
+| HTTP till loggserverns testtjänst, TCP 80 | Nej | Nekas. Testtjänst för kursens labbar, ingen verksamhetsfunktion. Loggar skickas på TCP 6514 |
+| UDP 901–904 från ctf-servern | Nej | Nekas i designen. Kursens labbtrafik, se zoner-i-labbet.md |
+| TCP 9000 till loggservern | Nej | Nekas. Labbtrafik utan verksamhetsfunktion |
+| TCP 4444 till 203.0.113.230 (avvikelse) | Nej | Nekas av nekanderegeln. Porten används ofta för bakdörrar där en kapad server kopplar upp sig mot angriparen, vilket visar varför utgående trafik också måste nekas |
