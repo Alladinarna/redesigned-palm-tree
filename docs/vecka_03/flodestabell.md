@@ -25,4 +25,5 @@
 | 19 | Alla serverzoner, Klientzon och Infrastruktur | Internet (NTP) | UDP | 123 | Utgående | Korrekt tid för loggar, inloggningar och certifikat | Molnbrandvägg, trafik mot internet |
 | 20 | Alla serverzoner | Internet (paketförråd) | TCP | 443 | Utgående | Säkerhetsuppdateringar via dnf | Molnbrandvägg, trafik mot internet |
 | 21 | Infrastruktur | Loggzon | TCP | 6514 | Envägs | Routrarna skickar loggar till loggservern för spårbarhet vid incidenter | Värd (nftables), privat nät som inte passerar molnbrandväggen |
+
 **Nekanderegel:** Allt som inte står ovan är nekat, inkommande och utgående, i både molnbrandväggen och värdbrandväggen.
