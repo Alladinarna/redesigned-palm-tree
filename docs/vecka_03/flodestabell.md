@@ -33,8 +33,9 @@ Prefixen kommer från adressplanen ([adressplan.md](../vecka_02/adressplan.md)).
 | F19 | Alla serverzoner, Klientzon och Infrastruktur | Hetzners NTP-servrar (ntp.hetzner.com: 213.239.239.164, 213.239.239.165, 213.239.239.166) | UDP | 123 | Ut | Korrekt tid för loggar, inloggningar och certifikat | Värd och molnbrandvägg |
 | F20 | Alla serverzoner | Internet (paketförråd) | TCP | 443 | Ut | Säkerhetsuppdateringar via dnf | Värd och molnbrandvägg |
 | F21 | Infrastruktur (10.40.1.240–.251) | Loggzon (10.40.1.152/29) | TCP | 6514 (TLS) | Intern | Routrarna skickar loggar till loggservern för spårbarhet vid incidenter | Värd |
-| F22 | Adminzon (10.40.1.128/28) | Samma zoner som F16 (inte Loggzon) | ICMP | echo-request | Intern | Felsökning, att kunna kontrollera om en enhet går att nå | Värd |
+| F22 | Adminzon (10.40.1.128/28) | Samma zoner som F16 (inte Loggzon, se F24) | ICMP | echo-request | Intern | Felsökning, att kunna kontrollera om en enhet går att nå | Värd |
 | F23 | Alla serverzoner | DHCP-servern | UDP | 68 → 67 | Ut | Servrarna förnyar sina adresser på alla nätkort. Utan regeln tappar servern adresserna när lånet går ut | Värd (molnbrandväggen släpper alltid DHCP) |
+| F24 | Adminzon (10.40.1.128/28), endast loggadmin-kontot | Loggzon (10.40.1.152/29) | ICMP | echo-request | Intern | Felsökning av loggservern. Bara loggadministratören ska nå Loggzonen, även med ping | Värd. Loggserverns brandvägg ser bara jumps adress, inte vilket konto som pingar. Kontot styrs därför på jump, i kedjan ut (nftables `meta skuid` för loggadmin-kontot) |
  
 **Nekanderegel:** Allt som inte står ovan nekas, inkommande och utgående.
 - **På värden:** policy drop i både kedjan in och kedjan ut, med en loggregel sist i varje kedja.
@@ -52,7 +53,7 @@ Driftflödena är det varje teamserver (elev-46, elev-24, elev-38 och elev-09) s
 | D1 | In | jump 172.20.1.2 → min server | TCP 22 | Administration via jump | F16 | Värd |
 | D2 | In | ctf 172.20.1.10 → min server | TCP 22 | Kursens kontrolltjänst. Utan den kommer CTF-kontrollerna inte in | – (labbet) | Värd |
 | D3 | Ut | min server → 185.12.64.1 och 185.12.64.2 | UDP och TCP 53 | Namnuppslag | F18 | Värd |
-| D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med server ntp.hetzner.com). Slutar tidssynken fungera kontrolleras adresserna med getent ahostsv4 ntp.hetzner.com | F19 | Värd och molnbrandvägg |
+| D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med `server ntp.hetzner.com`). Slutar tidssynken fungera kontrolleras adresserna med `getent ahostsv4 ntp.hetzner.com` | F19 | Värd och molnbrandvägg |
 | D5 | Ut | min server → log 172.20.1.58 | TCP 514 | Brandväggsloggen till loggservern. Klartext i vecka 4, TCP 6514 med TLS från vecka 5 | F11–F14 | Värd |
 | D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) | UDP 68 → 67 | Förnyelse av serverns adresser | F23 | Värd |
 | D7 | Ut | min server → internet | TCP 443 | Paketuppdateringar (dnf) | F20 | Värd och molnbrandvägg |
@@ -67,7 +68,7 @@ Flödena går på teamnätet (eth2). Adresserna följer adressplanen.
 | F9 | elev-46 (10.40.1.146) | elev-24 (10.40.1.98) | TCP 8080 | elev-46 | elev-24 |
 | F10 | elev-24 (10.40.1.98) | elev-38 (10.40.1.162) | TCP 5432 | elev-24 | elev-38 |
  
-F15 realiseras inte i labbet. Kursens regel stänger SSH från internet, och jump är kursens server.
+F15 realiseras inte i labbet. Kursens regel stänger SSH från internet, och jump är kursens server. F17 och F24 realiseras inte heller, eftersom både jump och log är kursens servrar.
  
 ## Jämförelse med trafikbaslinjen (vecka 1)
  
@@ -75,7 +76,7 @@ F15 realiseras inte i labbet. Kursens regel stänger SSH från internet, och jum
 |---|---|---|
 | SSH från jump till server, TCP 22 | Ja, F16 och D1 | Tillåts |
 | DNS till 185.12.64.1, UDP 53 | Ja, F18 och D3 | Tillåts |
-| NTP till ntp.hetzner.com (213.239.239.164–.166), UDP 123 | Ja, F19 och D4 | Tillåts. Verifierat på elev-46 26/10 med chronyc -n sources och getent |
+| NTP till ntp.hetzner.com (213.239.239.164–.166), UDP 123 | Ja, F19 och D4 | Tillåts. Verifierat på elev-46 26/10 med `chronyc -n sources` och `getent` |
 | ICMP echo från loggservern | Delvis, F22 | Tillåts bara från Adminzon för felsökning |
 | HTTP till loggserverns testtjänst, TCP 80 | Nej | Nekas. Testtjänst för kursens labbar, ingen verksamhetsfunktion. Loggar skickas på TCP 6514 (TCP 514 i vecka 4, D5) |
 | UDP 901–904 från ctf-servern | Nej | Nekas i designen. Kursens labbtrafik, se [zoner-i-labbet.md](../vecka_04/zoner-i-labbet.md) |
