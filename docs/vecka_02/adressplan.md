@@ -106,4 +106,4 @@ Se zonskissen i [reviderad-zonskiss2.0.png](../vecka_03/reviderad-zonskiss2.0.pn
  
 ## Metod
  
-Uträkningarna är gjorda för hand och kontrolleras av gruppen och säkerställs med AI. AI (Claude) har använts som stöd vid sammanställningen.
+Uträkningarna är gjorda för hand och kontrolleras av gruppen och säkersälls med ipcalc. AI (Claude) har använts som stöd vid sammanställningen.
