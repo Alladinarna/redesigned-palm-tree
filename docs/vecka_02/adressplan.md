@@ -53,7 +53,7 @@ Reserverat utrymme får inte tas i bruk utan att planen uppdateras.
  
 ## Realisering i labbet (Hetzner)
  
-Teamnätet 10.40.1.0/24 skapas med moln nät skapa 10.40.1.0/24 av en person i teamet: _(elev-NN, fylls i)_. Varje medlem kopplar sin egen server med moln koppla ADRESS. Servern får då ett nytt nätkort, eth2.
+Teamnätet 10.40.1.0/24 skapas med `moln nät skapa 10.40.1.0/24` av en person i teamet: Gabriel (elev-09). Varje medlem kopplar sin egen server med `moln koppla ADRESS`. Servern får då ett nytt nätkort, eth2.
  
 | Zon | Labbtillgång | Adress | Skapas som subnät i Hetzner | Kommentar |
 |---|---|---|---|---|
@@ -61,16 +61,18 @@ Teamnätet 10.40.1.0/24 skapas med moln nät skapa 10.40.1.0/24 av en person i t
 | Serverzon (applikation) | elev-24 | 10.40.1.98 (eth2) | Ja, 10.40.1.96/27 | |
 | Databaszon | elev-38 | 10.40.1.162 (eth2) | Ja, 10.40.1.160/29 | |
 | Klientzon | elev-09 | 10.40.1.2 (eth2) | Ja, 10.40.1.0/26 | |
-| Adminzon | jump | 172.20.1.2 (labbnätet) | Nej | Ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
-| Loggzon | log | 172.20.1.58 (labbnätet) | Nej | Ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
-| Gästzon | – | – | Nej | Ingen motsvarighet i labbet |
+| Adminzon | jump | 172.20.1.2 (labbnätet) | Ja, 10.40.1.128/28 (ingen server kopplas) | jump ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
+| Loggzon | log | 172.20.1.58 (labbnätet) | Ja, 10.40.1.152/29 (ingen server kopplas) | log ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
+| Gästzon | – | – | Ja, 10.40.1.64/27 (ingen server kopplas) | Ingen motsvarighet i labbet |
 | Infrastruktur | Hetzners gateway | 10.40.1.1 | Nej | Ersätter uppdragsgivarens routrar och länknät |
+ 
+Alla sju zonsubnät skapas i Hetzner, så att adressplanen med subnät per zon är realiserad i sin helhet (kursmål 7). Länknäten skapas inte.
  
 Flödestabellen och regelverket använder jumps och logs verkliga adresser (172.20.1.2 och 172.20.1.58), inte adresser i Adminzonen eller Loggzonen.
  
 Trafik i teamnätet (eth2) och labbnätet (eth1) passerar inte molnbrandväggen och filtreras därför med nftables på varje server.
  
-Planen kontrolleras mot moln status efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
+Planen kontrolleras mot `moln status` efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
  
 ## Vilka zoner ska nå varandra
  
@@ -88,7 +90,8 @@ Tillåtna flöden:
 - Behörig administratör (extern) → Adminzon/jump (SSH 22 + MFA) – F15
 - Adminzon/jump → Gästzon, Klientzon, DMZ, Serverzon, Databaszon och Infrastruktur (SSH 22). Jump når inte Loggzonen med vanliga administratörskonton – F16
 - Adminzon/jump → Loggzon (SSH 22) endast med separat loggadmin-konto – F17
-- Adminzon/jump → samma zoner som F16 (ICMP echo, felsökning) – F22
+- Adminzon/jump → samma zoner som F16 (ICMP echo, felsökning). Loggzonen ingår inte – F22
+- Adminzon/jump → Loggzon (ICMP echo) endast från loggadmin-kontot – F24
 - Serverzonerna → Hetzners DNS-resolvrar 185.12.64.1 och 185.12.64.2 (UDP/TCP 53) – F18
 - Serverzonerna, Klientzon och Infrastruktur → Hetzners NTP-servrar 213.239.239.164–.166 (UDP 123, tidssynk) – F19
 - Serverzonerna → internet (TCP 443, paketuppdateringar) – F20
