@@ -53,7 +53,7 @@ Reserverat utrymme får inte tas i bruk utan att planen uppdateras.
  
 ## Realisering i labbet (Hetzner)
  
-Teamnätet 10.40.1.0/24 skapas med `moln nät skapa 10.40.1.0/24` av en person i teamet: _(elev-NN, fylls i)_. Varje medlem kopplar sin egen server med `moln koppla ADRESS`. Servern får då ett nytt nätkort, eth2.
+Teamnätet 10.40.1.0/24 skapas med moln nät skapa 10.40.1.0/24 av en person i teamet: _(elev-NN, fylls i)_. Varje medlem kopplar sin egen server med moln koppla ADRESS. Servern får då ett nytt nätkort, eth2.
  
 | Zon | Labbtillgång | Adress | Skapas som subnät i Hetzner | Kommentar |
 |---|---|---|---|---|
@@ -70,7 +70,7 @@ Flödestabellen och regelverket använder jumps och logs verkliga adresser (172.
  
 Trafik i teamnätet (eth2) och labbnätet (eth1) passerar inte molnbrandväggen och filtreras därför med nftables på varje server.
  
-Planen kontrolleras mot `moln status` efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
+Planen kontrolleras mot moln status efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
  
 ## Vilka zoner ska nå varandra
  
