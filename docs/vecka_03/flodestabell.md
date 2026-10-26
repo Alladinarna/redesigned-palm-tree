@@ -52,7 +52,7 @@ Driftflödena är det varje teamserver (elev-46, elev-24, elev-38 och elev-09) s
 | D1 | In | jump 172.20.1.2 → min server | TCP 22 | Administration via jump | F16 | Värd |
 | D2 | In | ctf 172.20.1.10 → min server | TCP 22 | Kursens kontrolltjänst. Utan den kommer CTF-kontrollerna inte in | – (labbet) | Värd |
 | D3 | Ut | min server → 185.12.64.1 och 185.12.64.2 | UDP och TCP 53 | Namnuppslag | F18 | Värd |
-| D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med `server ntp.hetzner.com`). Slutar tidssynken fungera kontrolleras adresserna med `getent ahostsv4 ntp.hetzner.com` | F19 | Värd och molnbrandvägg |
+| D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med server ntp.hetzner.com). Slutar tidssynken fungera kontrolleras adresserna med getent ahostsv4 ntp.hetzner.com | F19 | Värd och molnbrandvägg |
 | D5 | Ut | min server → log 172.20.1.58 | TCP 514 | Brandväggsloggen till loggservern. Klartext i vecka 4, TCP 6514 med TLS från vecka 5 | F11–F14 | Värd |
 | D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) | UDP 68 → 67 | Förnyelse av serverns adresser | F23 | Värd |
 | D7 | Ut | min server → internet | TCP 443 | Paketuppdateringar (dnf) | F20 | Värd och molnbrandvägg |
@@ -75,7 +75,7 @@ F15 realiseras inte i labbet. Kursens regel stänger SSH från internet, och jum
 |---|---|---|
 | SSH från jump till server, TCP 22 | Ja, F16 och D1 | Tillåts |
 | DNS till 185.12.64.1, UDP 53 | Ja, F18 och D3 | Tillåts |
-| NTP till ntp.hetzner.com (213.239.239.164–.166), UDP 123 | Ja, F19 och D4 | Tillåts. Verifierat på elev-46 26/10 med `chronyc -n sources` och `getent` |
+| NTP till ntp.hetzner.com (213.239.239.164–.166), UDP 123 | Ja, F19 och D4 | Tillåts. Verifierat på elev-46 26/10 med chronyc -n sources och getent |
 | ICMP echo från loggservern | Delvis, F22 | Tillåts bara från Adminzon för felsökning |
 | HTTP till loggserverns testtjänst, TCP 80 | Nej | Nekas. Testtjänst för kursens labbar, ingen verksamhetsfunktion. Loggar skickas på TCP 6514 (TCP 514 i vecka 4, D5) |
 | UDP 901–904 från ctf-servern | Nej | Nekas i designen. Kursens labbtrafik, se [zoner-i-labbet.md](../vecka_04/zoner-i-labbet.md) |
