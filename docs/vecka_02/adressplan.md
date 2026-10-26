@@ -74,30 +74,32 @@ Planen kontrolleras mot `moln status` efter workshop 1 (28/10). Hetzner tillåte
  
 ## Vilka zoner ska nå varandra
  
-Enligt zonskissen. Default deny gäller både mellan och inom zoner, in- och utgående.
+Enligt zonskissen. Default deny gäller både mellan och inom zoner, in- och utgående. Exakta portar, riktningar och lager står i flödestabellen ([flodestabell.md](../vecka_03/flodestabell.md)). Radnumren nedan hänvisar dit.
  
 Tillåtna flöden:
  
-- Internet → DMZ (TCP 80/443)
-- Gästzon → endast internet
-- Klientzon → internet (webb)
-- Klientzon → Serverzon (endast angivna tjänster och portar)
-- DMZ → Serverzon (endast app-port)
-- Serverzon → Databaszon (endast DB-port)
-- DMZ, Serverzon, Databaszon och jump → Loggzon (TCP 6514 med TLS, envägs; i vecka 4 TCP 514 i klartext)
-- Behörig administratör (extern) → Adminzon/jump (SSH 22 + MFA)
-- Adminzon/jump → Gästzon, Klientzon, DMZ, Serverzon, Databaszon och Infrastruktur (SSH 22). Jump når inte Loggzonen med vanliga administratörskonton
-- Adminzon/jump → Loggzon (SSH 22) endast med separat loggadmin-konto
-- Alla servrar → Hetzners DNS-resolvrar 185.12.64.1 och 185.12.64.2 (UDP/TCP 53, namnuppslag)
-- Alla servrar → internet (UDP 123, tidssynk med NTP)
-- Alla servrar → DHCP-servern (UDP 68 → 67, förnyelse av serverns adresser)
+- Internet → DMZ (TCP 80/443) – F4, F5
+- Gästzon → internet (webb och DNS) – F1–F3
+- Klientzon → internet (webb och DNS) – F6, F7
+- Klientzon → Serverzon (TCP 443) – F8
+- DMZ → Serverzon (app-port TCP 8080) – F9
+- Serverzon → Databaszon (TCP 5432) – F10
+- DMZ, Serverzon, Databaszon, Adminzon och Infrastruktur → Loggzon (TCP 6514 med TLS, envägs; i vecka 4 TCP 514 i klartext, D5) – F11–F14, F21
+- Behörig administratör (extern) → Adminzon/jump (SSH 22 + MFA) – F15
+- Adminzon/jump → Gästzon, Klientzon, DMZ, Serverzon, Databaszon och Infrastruktur (SSH 22). Jump når inte Loggzonen med vanliga administratörskonton – F16
+- Adminzon/jump → Loggzon (SSH 22) endast med separat loggadmin-konto – F17
+- Adminzon/jump → samma zoner som F16 (ICMP echo, felsökning) – F22
+- Serverzonerna → Hetzners DNS-resolvrar 185.12.64.1 och 185.12.64.2 (UDP/TCP 53) – F18
+- Serverzonerna, Klientzon och Infrastruktur → Hetzners NTP-servrar 213.239.239.164–.166 (UDP 123, tidssynk) – F19
+- Serverzonerna → internet (TCP 443, paketuppdateringar) – F20
+- Serverzonerna → DHCP-servern (UDP 68 → 67, förnyelse av adresser) – F23
 Inte tillåtet:
  
 - DMZ → Databaszon direkt, all åtkomst till data går via Serverzonen
 - Gästzon → interna zoner
 - Loggzon → andra zoner
 - Servrar → Adminzon
-Se zonskissen i [zonskiss.png](zonskiss.png).
+Se zonskissen i [reviderad-zonskiss2.0.png](../vecka_03/reviderad-zonskiss2.0.png).
  
 ## Metod
  
