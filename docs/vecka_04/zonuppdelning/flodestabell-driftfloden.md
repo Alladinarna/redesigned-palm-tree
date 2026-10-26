@@ -34,24 +34,21 @@ Svarstrafik på tillåtna flöden släpps av `ct state established,related` och 
 
 ## Föreslagna ändringar i flödestabellen (v3)
 
-1. **Rad 18** – lägg till TCP 53 och skriv resolvrarnas adresser (185.12.64.1, 185.12.64.2).
+1. **Rad 7 och 18** – "extern DNS" blir Hetzners resolvrar (185.12.64.1, 185.12.64.2), på både UDP och TCP 53. Annan DNS ut nekas.
 2. **Rad 23** – DHCP gäller alla tre gränssnitt, inte bara den externa gatewayen.
 3. **Rad 11–14** – loggarna går på TCP 514 i vecka 4. TCP 6514 med TLS gäller från vecka 5.
 4. **Ny rad D2** – ctf-servern behöver SSH, inte bara tcp/80 som står i zoner-i-labbet.
 5. **Rad 8–10, 12** – lägg till adresserna ur tabellen ovan, så att någon annan kan implementera raderna utan att fråga.
 
-## Rader som gäller elev-24 (Serverzon)
+## Rader per server
 
-| Rad | Riktning | Flöde |
-|---|---|---|
-| D1/16 | In | jump → elev-24 tcp/22 |
-| D2 | In | ctf → elev-24 tcp/22 |
-| 8 | In | Klientzon → elev-24 tcp/443 |
-| 9 | In | DMZ → elev-24 tcp/8080 |
-| 22 | In | jump → elev-24 ICMP echo |
-| L1 | In | ctf → elev-24 tcp/80 (labbkrav, se zoner-i-labbet) |
-| 10 | Ut | elev-24 → Databaszon tcp/5432 |
-| 12 | Ut | elev-24 → log tcp/6514 (från v5) |
-| D3–D7 | Ut | Driftflöden enligt tabellen ovan |
+Alla fyra har D1–D7, rad 22 (ping från jump) och L1 (ctf → tcp/80, labbkrav enligt zoner-i-labbet). Utöver det:
 
-Regelverket finns i [elev-24-zon.nft](elev-24-zon.nft) och spårbarheten i [sparbarhetslista.md](sparbarhetslista.md).
+| Server | Zon | In | Ut | Mapp |
+|---|---|---|---|---|
+| elev-09 | Klientzon | – | 6 (webb tcp/80, 443), 8 (→ Serverzon tcp/443) | [elev-09](elev-09/) |
+| elev-24 | Serverzon | 8 (från Klientzon tcp/443), 9 (från DMZ tcp/8080) | 10 (→ Databaszon tcp/5432), 12 (→ log tcp/6514) | [elev-24](elev-24/) |
+| elev-38 | Databaszon | 10 (från Serverzon tcp/5432) | 13 (→ log tcp/6514) | [elev-38](elev-38/) |
+| elev-46 | DMZ | 4–5 (från internet tcp/80, 443) | 9 (→ Serverzon tcp/8080), 11 (→ log tcp/6514) | [elev-46](elev-46/) |
+
+Varje mapp har regelverket (`<server>-zon.nft`), rsyslog-filen, molnbrandväggen, spårbarhetslistan, testfallen, testskriptet och testprotokollet.

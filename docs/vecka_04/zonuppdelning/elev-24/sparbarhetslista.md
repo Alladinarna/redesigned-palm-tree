@@ -1,6 +1,6 @@
 # Spårbarhetslista – elev-24 (Serverzon)
 
-Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. Regelns identifierare är kommentaren i [elev-24-zon.nft](elev-24-zon.nft) eller beskrivningen i [molnbrandväggen](molnbrandvagg-elev-24.md). Rad-id enligt [flödestabellen](../../vecka_03/flodestabell.md) och [driftflödena](flodestabell-driftfloden.md).
+Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. Regelns identifierare är kommentaren i [elev-24-zon.nft](elev-24-zon.nft) eller beskrivningen i [molnbrandväggen](molnbrandvagg-elev-24.md). Rad-id enligt [flödestabellen](../../../vecka_03/flodestabell.md) och [driftflödena](../flodestabell-driftfloden.md).
 
 **Loggar?** Tillåtande regler loggar inte. Allt som inte släpps av någon regel loggas av den sista regeln i kedjan (`ZON-IN-DROP` / `ZON-UT-DROP`) och skickas till loggservern (D5).
 

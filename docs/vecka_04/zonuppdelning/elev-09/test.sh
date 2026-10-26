@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Läser testfall.csv och kör de testfall vars källa är den här servern.
-# Skriver faktiskt utfall per rad och sparar resultatet som testprotokoll-<server>-<tid>.csv.
+# Skriver faktiskt utfall per rad och sparar resultatet som testprotokoll-<målserver>-fran-<server>-<tid>.csv.
 # Utfall: oppen (svar), avvisad (RST eller ICMP-fel, snabbt nej), tyst (inget svar före timeout).
-# Användning: ./test.sh [testfall.csv]
+# Kolumnen nekas_av säger var ett nekat fall ska synas i loggen (ZON-IN/UT-DROP) eller "moln".
+# Användning: ./test.sh [testfall.csv]   eller alla servrar:  for f in ../elev-*/testfall.csv; do ./test.sh "$f"; done
 fil="${1:-testfall.csv}"
 jag="$(hostname -s)"
-ut="testprotokoll-${jag}-$(date -u +%Y%m%dT%H%M%SZ).csv"
+mal="$(basename "$(cd "$(dirname "$fil")" && pwd)")"   # vilken servers testfall (mappens namn)
+ut="testprotokoll-${mal}-fran-${jag}-$(date -u +%Y%m%dT%H%M%SZ).csv"
 
 prova_tcp() {   # $1 = adress, $2 = port
     timeout 3 bash -c "exec 3<>/dev/tcp/$1/$2" 2>/dev/null
@@ -49,8 +51,8 @@ prova_icmp() {  # $1 = adress
     fi
 }
 
-echo "id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat" | tee "$ut"
-tail -n +2 "$fil" | while IFS=, read -r id kalla dest port proto riktn forv _; do
+echo "id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av" | tee "$ut"
+tail -n +2 "$fil" | while IFS=, read -r id kalla dest port proto riktn forv _ nekas _; do
     [ "$kalla" = "$jag" ] || continue
     start=$(date +%s%N)
     case "$proto/$port" in
@@ -62,6 +64,6 @@ tail -n +2 "$fil" | while IFS=, read -r id kalla dest port proto riktn forv _; d
     esac
     ms=$(( ($(date +%s%N) - start) / 1000000 ))
     [ "$utfall" = "$forv" ] && res=OK || res=AVVIKER
-    echo "$id,$kalla,$dest,$port,$proto,$riktn,$forv,$utfall,$ms,$res" | tee -a "$ut"
+    echo "$id,$kalla,$dest,$port,$proto,$riktn,$forv,$utfall,$ms,$res,$nekas" | tee -a "$ut"
 done
 echo "Sparat: $ut" >&2
