@@ -1,0 +1,44 @@
+#!/usr/sbin/nft -f
+# elev-24 – Serverzon (applikation), teamnätet 10.40.1.130 på eth2.
+# Byggt ur flödestabellen (docs/vecka_03/flodestabell.md) och driftflödena
+# (docs/vecka_04/zonuppdelning/flodestabell-driftfloden.md). Varje regel har radens id som kommentar.
+# Läggs i /etc/nftables/zon.nft och inkluderas från /etc/sysconfig/nftables.conf.
+flush ruleset
+
+define JUMP        = 172.20.1.2
+define CTF         = 172.20.1.10
+define LOG         = 172.20.1.58
+define HETZNER_DNS = { 185.12.64.1, 185.12.64.2 }
+define KLIENTZON   = 10.40.1.0/25
+define DATABASZON  = 10.40.1.208/29
+define DMZ         = 10.40.1.224/29
+
+table inet zon {
+    chain in {
+        type filter hook input priority 0; policy drop;
+        ct state established,related accept
+        ct state invalid drop
+        iif "lo" accept
+        ip saddr $JUMP tcp dport 22 accept comment "D1/16 SSH från jump"
+        ip saddr $CTF tcp dport 22 accept comment "D2 kontroll från ctf"
+        ip saddr $JUMP icmp type echo-request accept comment "22 ping från adminzon"
+        ip saddr $KLIENTZON tcp dport 443 accept comment "8 klienter till intern webbapp"
+        ip saddr $DMZ tcp dport 8080 accept comment "9 DMZ hämtar data från appservern"
+        ip saddr $CTF tcp dport 80 accept comment "L1 ctf testar webbservern"
+        limit rate 10/minute log prefix "ZON-IN-DROP " level info
+    }
+
+    chain ut {
+        type filter hook output priority 0; policy drop;
+        ct state established,related accept
+        oif "lo" accept
+        ip daddr $HETZNER_DNS meta l4proto { tcp, udp } th dport 53 accept comment "D3/18 DNS"
+        oifname "eth0" udp dport 123 accept comment "D4/19 NTP"
+        ip daddr $LOG tcp dport 514 accept comment "D5 brandväggslogg till log"
+        ip daddr $LOG tcp dport 6514 accept comment "12 loggar till log med TLS"
+        udp sport 68 udp dport 67 accept comment "D6/23 DHCP-förnyelse"
+        ip daddr $DATABASZON tcp dport 5432 accept comment "10 appen till databasen"
+        oifname "eth0" tcp dport 443 accept comment "D7/20 paketuppdateringar"
+        limit rate 10/minute log prefix "ZON-UT-DROP " level info
+    }
+}
