@@ -76,7 +76,7 @@ F15 realiseras inte i labbet. Kursens regel stänger SSH från internet, och jum
 |---|---|---|
 | SSH från jump till server, TCP 22 | Ja, F16 och D1 | Tillåts |
 | DNS till 185.12.64.1, UDP 53 | Ja, F18 och D3 | Tillåts |
-| NTP till ntp.hetzner.com (213.239.239.164–.166), UDP 123 | Ja, F19 och D4 | Tillåts. Verifierat på elev-46 26/10 med `chronyc -n sources` och `getent` |
+| NTP från 172.20.1.109 till 185.12.64.2, UDP 123 (kursens fångstfil U1.4) | Ja, som F19 och D4, men mot ntp.hetzner.com (213.239.239.164–.166) | Tillåts. Våra servrar använder ntp.hetzner.com, verifierat på elev-46 26/10 med `chronyc -n sources` och `getent`. Regeln skrivs efter vad servrarna faktiskt använder, inte efter värden i kursens fångst |
 | ICMP echo från loggservern | Delvis, F22 | Tillåts bara från Adminzon för felsökning |
 | HTTP till loggserverns testtjänst, TCP 80 | Nej | Nekas. Testtjänst för kursens labbar, ingen verksamhetsfunktion. Loggar skickas på TCP 6514 (TCP 514 i vecka 4, D5) |
 | UDP 901–904 från ctf-servern | Nej | Nekas i designen. Kursens labbtrafik, se [zoner-i-labbet.md](../vecka_04/zoner-i-labbet.md) |
