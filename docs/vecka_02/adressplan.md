@@ -72,7 +72,7 @@ Flödestabellen och regelverket använder jumps och logs verkliga adresser (172.
  
 Trafik i teamnätet (eth2) och labbnätet (eth1) passerar inte molnbrandväggen och filtreras därför med nftables på varje server.
  
-Planen kontrolleras mot `moln status` efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
+Nätet och alla sju zonsubnät skapades 26/10 och är kontrollerade med `moln status`, som visar gateway 10.40.1.1 för samtliga subnät. Alla fyra servrar är kopplade och svarar på ping. Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
  
 ## Vilka zoner ska nå varandra
  
@@ -106,4 +106,4 @@ Se zonskissen i [reviderad-zonskiss2.0.png](../vecka_03/reviderad-zonskiss2.0.pn
  
 ## Metod
  
-Uträkningarna är gjorda för hand och kontrolleras av grupp och säkerställs med AI. AI (Claude) har använts som stöd vid sammanställningen.
+Uträkningarna är gjorda för hand och kontrolleras av gruppen och säkerställs med AI. AI (Claude) har använts som stöd vid sammanställningen.
