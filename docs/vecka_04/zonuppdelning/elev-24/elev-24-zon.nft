@@ -1,5 +1,5 @@
 #!/usr/sbin/nft -f
-# elev-24 – Serverzon (applikation), teamnätet 10.40.1.130 på eth2.
+# elev-24 – Serverzon (applikation), teamnätet 10.40.1.98 på eth2.
 # Byggt ur flödestabellen (docs/vecka_03/flodestabell.md) och driftflödena
 # (docs/vecka_04/zonuppdelning/flodestabell-driftfloden.md). Varje regel har radens id som kommentar.
 # Läggs i /etc/nftables/zon.nft och inkluderas från /etc/sysconfig/nftables.conf.
@@ -9,9 +9,9 @@ define JUMP        = 172.20.1.2
 define CTF         = 172.20.1.10
 define LOG         = 172.20.1.58
 define HETZNER_DNS = { 185.12.64.1, 185.12.64.2 }
-define KLIENTZON   = 10.40.1.0/25
-define DATABASZON  = 10.40.1.208/29
-define DMZ         = 10.40.1.224/29
+define KLIENTZON   = 10.40.1.0/26
+define DATABASZON  = 10.40.1.160/29
+define DMZ         = 10.40.1.144/29
 
 table inet zon {
     chain in {

@@ -2,10 +2,10 @@ id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,nekas_av
 D1-till,jump,172.20.1.138,22,tcp,in,oppen,,
 L1-nek,jump,172.20.1.138,80,tcp,in,tyst,,elev-38 in
 22-till,jump,172.20.1.138,-,icmp,in,oppen,,
-10-till,elev-24,10.40.1.210,5432,tcp,in,oppen,,
+10-till,elev-24,10.40.1.162,5432,tcp,in,oppen,,
 10-nek,jump,172.20.1.138,5432,tcp,in,tyst,,elev-38 in
-10-nek-dmz,elev-46,10.40.1.210,5432,tcp,in,tyst,,elev-46 ut
-ut-nek-intern,elev-38,10.40.1.130,8080,tcp,ut,tyst,,elev-38 ut
+10-nek-dmz,elev-46,10.40.1.162,5432,tcp,in,tyst,,elev-46 ut
+ut-nek-intern,elev-38,10.40.1.98,8080,tcp,ut,tyst,,elev-38 ut
 13-till,elev-38,172.20.1.58,6514,tcp,ut,oppen,,
 D3-till,elev-38,185.12.64.1,53,udp,ut,oppen,,
 D3-nek,elev-38,8.8.8.8,53,udp,ut,tyst,,elev-38 ut

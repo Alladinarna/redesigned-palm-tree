@@ -1,5 +1,5 @@
 #!/usr/sbin/nft -f
-# elev-38 – Databaszon, teamnätet 10.40.1.210 på eth2.
+# elev-38 – Databaszon, teamnätet 10.40.1.162 på eth2.
 # Byggt ur flödestabellen (docs/vecka_03/flodestabell.md) och driftflödena
 # (docs/vecka_04/zonuppdelning/flodestabell-driftfloden.md). Varje regel har radens id som kommentar.
 # Läggs i /etc/nftables/zon.nft och inkluderas från /etc/sysconfig/nftables.conf.
@@ -9,7 +9,7 @@ define JUMP        = 172.20.1.2
 define CTF         = 172.20.1.10
 define LOG         = 172.20.1.58
 define HETZNER_DNS = { 185.12.64.1, 185.12.64.2 }
-define SERVERZON   = 10.40.1.128/27
+define SERVERZON   = 10.40.1.96/27
 
 table inet zon {
     chain in {

@@ -34,7 +34,7 @@ journalctl -k -g ZON- --since "-15 min"
 
 ## Nollmätning före regelverket
 
-Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och innan teamnätet fanns: [bevis/testprotokoll-elev-24-fore-regelverk.csv](bevis/testprotokoll-elev-24-fore-regelverk.csv).
+Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och innan teamnätet fanns: [bevis/testprotokoll-elev-24-fore-regelverk.csv](bevis/testprotokoll-elev-24-fore-regelverk.csv). Den kördes med de adresser som gällde före Hugos adressplan (elev-38 = 10.40.1.210 i stället för 10.40.1.162), vilket inte påverkar resultatet eftersom teamnätet inte fanns än.
 
 - De nekade fallen **D3-nek, D7-nek** gav `oppen` och **D5-nek** gav `avvisad` (loggservern svarar RST på tcp/9000). Utan regelverk släpps alltså trafiken ut. När samma fall ger `tyst` efter att regelverket laddats är det regelverket som stoppar dem, inte en fel adress eller en tjänst som saknas.
 - **10-till** gav `tyst` eftersom elev-38 ännu inte är kopplad till teamnätet. Det är ett exempel på ett nekat utfall som inte bevisar något om reglerna.

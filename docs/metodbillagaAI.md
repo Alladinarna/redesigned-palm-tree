@@ -11,3 +11,4 @@
 | 2026-10-21 | reviderad-zonskiss.png | Skapa reviderad zonskiss utifrån ändringarna i markeringstabellen | Hugo |
 | 2026-10-22 | flodestabell.md | Stöd vid jämförelse av trafikbaslinjen från vecka 1 och flödestabellen i vecka 3 | Hugo |
 | 2026-10-22 | zoner-i-labbet.md | utkast tabell till hur teamets servrar ska representera zonerna i vecka 4 baserat på information från repot och gruppen | Hugo |
+| 2026-10-26 | vecka_04/zonuppdelning/, zoner-i-labbet.md, flodestabell.md, tillgangar.md, markeringstabell.md, zonskiss.png | Utkast till regelverk (nftables, molnbrandvägg), spårbarhetslistor, testfall och testskript per server, samt uppdatering av äldre material till teamnätet 10.40.1.0/24. Syntax kontrollerad med nft -c och ipcalc på elev-24 | Stef |

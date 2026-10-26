@@ -2,10 +2,10 @@ id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,nekas_av
 D1-till,jump,172.20.1.109,22,tcp,in,oppen,,
 L1-nek,jump,172.20.1.109,80,tcp,in,tyst,,elev-09 in
 22-till,jump,172.20.1.109,-,icmp,in,oppen,,
-in-nek-intern,elev-24,10.40.1.10,22,tcp,in,tyst,,elev-24 ut
-8-till,elev-09,10.40.1.130,443,tcp,ut,oppen,,
-8-nek,elev-09,10.40.1.130,8080,tcp,ut,tyst,,elev-09 ut
-8-nek-db,elev-09,10.40.1.210,5432,tcp,ut,tyst,,elev-09 ut
+in-nek-intern,elev-24,10.40.1.2,22,tcp,in,tyst,,elev-24 ut
+8-till,elev-09,10.40.1.98,443,tcp,ut,oppen,,
+8-nek,elev-09,10.40.1.98,8080,tcp,ut,tyst,,elev-09 ut
+8-nek-db,elev-09,10.40.1.162,5432,tcp,ut,tyst,,elev-09 ut
 6-till-80,elev-09,download.rockylinux.org,80,tcp,ut,oppen,,
 6-till-443,elev-09,download.rockylinux.org,443,tcp,ut,oppen,,
 6-nek,elev-09,8.8.8.8,53,tcp,ut,tyst,,elev-09 ut

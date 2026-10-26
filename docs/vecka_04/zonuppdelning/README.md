@@ -5,10 +5,10 @@ Utkast för teamets fyra servrar. Gemensamt underlag ligger här, och varje serv
 | Fil / mapp | Innehåll |
 |---|---|
 | [flodestabell-driftfloden.md](flodestabell-driftfloden.md) | Driftflöden D1–D7, zonernas adresser, rader per server och föreslagna ändringar i flödestabellen |
-| [elev-09/](elev-09/) | Klientzon (10.40.1.10) |
-| [elev-24/](elev-24/) | Serverzon (10.40.1.130) |
-| [elev-38/](elev-38/) | Databaszon (10.40.1.210) |
-| [elev-46/](elev-46/) | DMZ (10.40.1.226) |
+| [elev-09/](elev-09/) | Klientzon (10.40.1.2) |
+| [elev-24/](elev-24/) | Serverzon (10.40.1.98) |
+| [elev-38/](elev-38/) | Databaszon (10.40.1.162) |
+| [elev-46/](elev-46/) | DMZ (10.40.1.146) |
 
 Varje servermapp innehåller:
 

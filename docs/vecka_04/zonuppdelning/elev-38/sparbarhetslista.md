@@ -9,7 +9,7 @@ Varje rad i flödestabellen som gäller elev-38, och var den är implementerad. 
 | D1/16 | In | jump 172.20.1.2 | elev-38 | tcp/22 | Värd | `D1/16 SSH från jump` | Nej | Utkast |
 | D2 | In | ctf 172.20.1.10 | elev-38 | tcp/22 | Värd | `D2 kontroll från ctf` | Nej | Utkast |
 | 22 | In | jump 172.20.1.2 | elev-38 | icmp echo-request | Värd | `22 ping från adminzon` | Nej | Utkast |
-| 10 | In | Serverzon 10.40.1.128/27 | elev-38 | tcp/5432 | Värd | `10 appen till databasen` | Nej | Utkast |
+| 10 | In | Serverzon 10.40.1.96/27 | elev-38 | tcp/5432 | Värd | `10 appen till databasen` | Nej | Utkast |
 | L1 | In | ctf 172.20.1.10 | elev-38 | tcp/80 | Värd | `L1 ctf testar webbservern` | Nej | Utkast |
 | 13 | Ut | elev-38 | log 172.20.1.58 | tcp/6514 | Värd | `13 loggar till log med TLS` | Nej | Utkast (används från v5) |
 | D3/18 | Ut | elev-38 | 185.12.64.1, 185.12.64.2 | udp/53, tcp/53 | Värd (molnet släpper alltid) | `D3/18 DNS` | Nej | Utkast |

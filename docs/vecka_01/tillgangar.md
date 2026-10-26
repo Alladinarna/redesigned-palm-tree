@@ -24,12 +24,14 @@ K = känslighet, D = driftkritikalitet. En tillgång som ligger i en zon får sa
 Alla fyra servrar kör Rocky linux 9 med samma grunduppsättning, webbserver och SSH nås bara via jump servern. eth1 mot labbnätet och eth0 mot internet.
 chronyd och dhclient körs också men är klienter, inte tjänster som andra kan nå.
 
-| Elev | intern Adress | publik Adress | Tjänster | Belägg | Zon | Klass (K/D) |
-|---|---|---|---|---|---|---|
-| elev-46 | 172.20.1.146/32 | 46.224.175.57/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 13:32Z 2026-10-13 | Serverzon | Hög/Hög |
-| elev-24 | 172.20.1.124/32 | 91.99.144.137/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:15Z 2026-10-13 | Serverzon | Hög/Hög |
-| elev-38 | 172.20.1.138/32 | 91.107.220.202/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:45Z 2026-10-13| Serverzon | Hög/Hög |
-| elev-09 | 172.20.1.109/32 | 2.28.105.6/32 | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 15:57Z 2026-10-13 | Serverzon | Hög/Hög |
+| Elev | intern Adress | publik Adress | Teamnät (eth2, från v4) | Tjänster | Belägg | Zon | Klass (K/D) |
+|---|---|---|---|---|---|---|---|
+| elev-46 | 172.20.1.146/32 | 46.224.175.57/32 | 10.40.1.146 (planerad) | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 13:32Z 2026-10-13 | DMZ (publik webb) | Medel/Medel |
+| elev-24 | 172.20.1.124/32 | 91.99.144.137/32 | 10.40.1.98 (planerad) | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:15Z 2026-10-13 | Serverzon (applikation) | Hög/Hög |
+| elev-38 | 172.20.1.138/32 | 91.107.220.202/32 | 10.40.1.162 (planerad) | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 16:45Z 2026-10-13| Databaszon | Hög/Hög |
+| elev-09 | 172.20.1.109/32 | 2.28.105.6/32 | 10.40.1.2 (planerad) | SSH 22, HTTP 80 | ip -br addr, ip route, ss -tulnp, getent hosts 15:57Z 2026-10-13 | Klientzon | Medel/Medel |
+
+**Uppdaterat 2026-10-26:** I vecka 1 stod alla fyra servrar i Serverzonen. Från vecka 4 representerar de var sin zon enligt [zoner-i-labbet](../vecka_04/zoner-i-labbet.md), och klassen följer zonen i klassificeringen nedan. Teamnätets adresser kommer från [adressplanen](../vecka_02/adressplan.md) och sätts när servern kopplas med `moln koppla`.
 
 # Klassificering
 

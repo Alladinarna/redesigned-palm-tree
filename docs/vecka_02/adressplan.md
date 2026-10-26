@@ -97,7 +97,7 @@ Inte tillåtet:
 - Gästzon → interna zoner
 - Loggzon → andra zoner
 - Servrar → Adminzon
-Se zonskissen i [zonskiss.png](zonskiss.png).
+Se den reviderade zonskissen i [reviderad-zonskiss2.0.png](../vecka_03/reviderad-zonskiss2.0.png). Zonförslaget från vecka 2 finns i [zonskiss.png](zonskiss.png).
  
 ## Metod
  
