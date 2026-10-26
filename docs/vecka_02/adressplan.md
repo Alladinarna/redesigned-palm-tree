@@ -1,65 +1,104 @@
-# Adressplan – zonuppdraget
-
-## Förutsättningar
-- Uppdragsgivarens adressutrymme är 10.40.0.0/16 (privat enligt RFC 1918).
+# Adressplan – Boiler Room (team 1, Alladinarna)
+ 
+## Förutsättningar och antaganden
+ 
+- Teamets tilldelade nät är 10.40.1.0/24 (teamnummer 1). Blocket är privat enligt RFC 1918.
 - Planen omfattar IPv4. IPv6 är avstängt på labbservrarna och ingår inte i planen.
-- Antalet enheter per grupp bygger på antaganden om ett mellanstort företag, med 25 % tillväxt inräknad (dimensionering enligt kursens exempel).
-- I varje subnät reserveras nätadressen, broadcastadressen och första användbara adressen (.1) för gateway. Adresser för enheter börjar därför på .2. Användbara för enheter = 2^värdbitar − 2 − 1.
-- Länknäten undantas från gateway-regeln, eftersom de två adresserna där är routrarna själva.
-- Varje grupp har ett eget värde i tredje oktetten. Det ger utrymme för tillväxt och förenklar summering per zon. Oanvänt utrymme är reserverat.
-- Länknät dimensioneras som /30 eftersom vi inte vet om uppdragsgivarens routrar stödjer RFC 3021 (/31).
-- Teamets labbtillgångar representerar grupperna så här: jump → Drift och administration, log → Logg och övervakning, elev-46/-24/-38/-09 → Servrar, intern gateway → Länknät.
-- Klient-, gäst-, databas- och DMZ-zonen har ingen motsvarighet i labbmiljön. De ingår i planen för uppdragsgivarens miljö.
-
+- Dimensioneringen utgår från kursens exempel för uppdragsgivaren (ett mellanstort företag) och är anpassad till teamets tilldelade /24. Cirka 25 % tillväxt är inräknad.
+- Zonerna skiljs åt i fjärde oktetten, och subnäten ligger i storleksordning.
+- Gateway: i uppdragsgivarens miljö reserverar vi första användbara adressen (.1 i subnätet) för gateway i varje subnät, och enheter börjar på andra adressen. Användbara för enheter = 2^värdbitar − 2 − 1. I labbet (Hetzner) är 10.40.1.1 den enda faktiska gatewayen, gemensam för hela nätet. Övriga subnäts .1-adresser är reserverade enligt vår konvention, inte av plattformen.
+- Länknät dimensioneras som /30 eftersom vi inte vet om uppdragsgivarens routrar stödjer RFC 3021 (/31). Länknäten undantas från gateway-regeln. I labbet dokumenteras de men skapas inte, eftersom Hetzners gateway routar mellan subnäten.
+- Zonnamnen är desamma som i zonskissen.
+## Dimensionering
+ 
+| Grupp | Idag | Med 25 % tillväxt |
+|---|---|---|
+| Klientzon | 44 | 55 |
+| Gästzon | 20 | 25 |
+| Serverzon (applikation) | 14 | 18 |
+| Adminzon (drift och administration) | 6 | 8 |
+| DMZ | 4 | 5 |
+| Loggzon (logg och övervakning) | 3 | 4 |
+| Databaszon | 4 | 5 |
+| Infrastruktur (länknät mellan routrar) | 3 st à 2 adresser | |
+ 
 ## Adressplan
-
+ 
 | Prefix | Syfte | Uträkning | Adressintervall för enheter (första–sista) | Ansvarig tjänst | Reserverat utrymme | Kommentar |
 |---|---|---|---|---|---|---|
-| 10.40.0.0/24 | Klienter | 150 → 2⁸ − 2 − 1 = 253 → /24 | 10.40.0.2 – 10.40.0.254 | Arbetsplatser (DHCP) | 10.40.1.0 – 10.40.9.255(se nästa tabell) | Gateway .1, broadcast 10.40.0.255 |
-| 10.40.10.0/26 | Gäst och besök | 50 → 2⁶ − 2 − 1 = 61 → /26 | 10.40.10.2 – 10.40.10.62 | Gästnät (DHCP) | 10.40.10.64 – 10.40.10.255 | Gateway .1, broadcast 10.40.10.63 |
-| 10.40.20.0/27 | Servrar | 18 → 2⁵ − 2 − 1 = 29 → /27 | 10.40.20.2 – 10.40.20.30 | Webb och SSH (elevservrarna) | 10.40.20.32 – 10.40.20.255 | Gateway .1, broadcast 10.40.20.31 |
-| 10.40.30.0/28 | Drift och administration | 8 → 2⁴ − 2 − 1 = 13 → /28 | 10.40.30.2 – 10.40.30.14 | jump (SSH 22) | 10.40.30.16 – 10.40.30.255 | Gateway .1, broadcast 10.40.30.15 |
-| 10.40.40.0/29 | Databaser | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.40.2 – 10.40.40.6 | Databastjänst | 10.40.40.8 – 10.40.40.255 | Gateway .1, broadcast 10.40.40.7. |
-| 10.40.50.0/29 | Logg och övervakning | 4 → 2³ − 2 − 1 = 5 → /29 | 10.40.50.2 – 10.40.50.6 | log (TCP 514, HTTP) | 10.40.50.8 – 10.40.50.255 | Gateway .1, broadcast 10.40.50.7 |
-| 10.40.60.0/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.60.2 – 10.40.60.6 | Publik webb (HTTP 80,443) | 10.40.60.8 – 10.40.60.255 | Gateway .1, broadcast 10.40.60.7. |
-| 10.40.250.0/30 | Länknät 1 | 2 → 2² − 2 = 2 → /30 | 10.40.250.1 – 10.40.250.2 | Routing (intern gateway) | – | Broadcast 10.40.250.3 |
-| 10.40.250.4/30 | Länknät 2 | 2 → 2² − 2 = 2 → /30 | 10.40.250.5 – 10.40.250.6 | Routing | – | Broadcast 10.40.250.7 |
-| 10.40.250.8/30 | Länknät 3 | 2 → 2² − 2 = 2 → /30 | 10.40.250.9 – 10.40.250.10 | Routing | 10.40.250.12 – 10.40.250.255 | Broadcast 10.40.250.11 |
-
+| 10.40.1.0/26 | Klientzon | 55 → 2⁶ − 2 − 1 = 61 → /26 | 10.40.1.2 – 10.40.1.62 | Arbetsplatser (DHCP) | Se nästa tabell | Gateway .1 (även Hetzners gateway för hela nätet), broadcast 10.40.1.63 |
+| 10.40.1.64/27 | Gästzon | 25 → 2⁵ − 2 − 1 = 29 → /27 | 10.40.1.66 – 10.40.1.94 | Gästnät (DHCP) | Se nästa tabell | Gateway .65, broadcast 10.40.1.95 |
+| 10.40.1.96/27 | Serverzon (applikation) | 18 → 2⁵ − 2 − 1 = 29 → /27 | 10.40.1.98 – 10.40.1.126 | Applikationsserver | Se nästa tabell | Gateway .97, broadcast 10.40.1.127 |
+| 10.40.1.128/28 | Adminzon (drift och administration) | 8 → 2⁴ − 2 − 1 = 13 → /28 | 10.40.1.130 – 10.40.1.142 | jump (SSH 22) | Se nästa tabell | Gateway .129, broadcast 10.40.1.143 |
+| 10.40.1.144/29 | DMZ | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.1.146 – 10.40.1.150 | Publik webb (HTTP 80, HTTPS 443) | Se nästa tabell | Gateway .145, broadcast 10.40.1.151. Fullt efter tillväxt – växer via reserven |
+| 10.40.1.152/29 | Loggzon (logg och övervakning) | 4 → 2³ − 2 − 1 = 5 → /29 | 10.40.1.154 – 10.40.1.158 | log (syslog TCP 6514 med TLS) | Se nästa tabell | Gateway .153, broadcast 10.40.1.159. I vecka 4 tar log emot på TCP 514 i klartext, TLS från vecka 5 |
+| 10.40.1.160/29 | Databaszon | 5 → 2³ − 2 − 1 = 5 → /29 | 10.40.1.162 – 10.40.1.166 | Databastjänst | Se nästa tabell | Gateway .161, broadcast 10.40.1.167. Fullt efter tillväxt – växer via reserven |
+| 10.40.1.240/30 | Infrastruktur – länknät 1 | 2 → 2² − 2 = 2 → /30 | 10.40.1.241 – 10.40.1.242 | Routing (intern gateway) | – | Broadcast 10.40.1.243. Skapas inte i Hetzner |
+| 10.40.1.244/30 | Infrastruktur – länknät 2 | 2 → 2² − 2 = 2 → /30 | 10.40.1.245 – 10.40.1.246 | Routing | – | Broadcast 10.40.1.247. Skapas inte i Hetzner |
+| 10.40.1.248/30 | Infrastruktur – länknät 3 | 2 → 2² − 2 = 2 → /30 | 10.40.1.249 – 10.40.1.250 | Routing | – | Broadcast 10.40.1.251. Skapas inte i Hetzner |
+ 
 ## Reserverat utrymme mellan grupperna
-
-| Intervall | Status |
-|---|---|
-| 10.40.1.0 – 10.40.9.255 | Reserverat (klienternas tillväxt) |
-| 10.40.11.0 – 10.40.19.255 | Reserverat (gäst och besök tillväxt) |
-| 10.40.21.0 – 10.40.29.255 | Reserverat (servrar tillväxt) |
-| 10.40.31.0 – 10.40.39.255 | Reserverat (drift och admistration tillxäxt) |
-| 10.40.41.0 – 10.40.49.255 | Reserverat (Databaser tillväxt)|
-| 10.40.51.0 – 10.40.59.255 | Reserverat (logg och övervakning tillväxt) |
-| 10.40.61.0 – 10.40.249.255 | Reserverat för framtida grupper |
-| 10.40.251.0 – 10.40.255.255 | Reserverat för infrastruktur |
-
+ 
+| Intervall | Prefix | Status |
+|---|---|---|
+| 10.40.1.168 – 10.40.1.175 | /29 | Reserverat (tillväxt DMZ, Loggzon, Databaszon) |
+| 10.40.1.176 – 10.40.1.191 | /28 | Reserverat (tillväxt Serverzon, Adminzon) |
+| 10.40.1.192 – 10.40.1.223 | /27 | Reserverat (tillväxt Klientzon, Gästzon) |
+| 10.40.1.224 – 10.40.1.239 | /28 | Reserverat för framtida zoner |
+| 10.40.1.252 – 10.40.1.255 | /30 | Reserverat för infrastruktur (fjärde länknät) |
+ 
+Zonerna ligger tätt, så ett subnät kan inte växa på plats. Tillväxt sker genom att ett nytt subnät tas ur reserven.
+ 
 Reserverat utrymme får inte tas i bruk utan att planen uppdateras.
-
-## Vilka subnät ska nå varandra
-
-Tillåtna flöden (allt annat blockeras som standard):
-
-- Gäst och besök → endast internet
-- Internet → DMZ (webbservern) (TCP 80/443)
-- Klienter → Servrar (nödvändiga tjänster) och internet
-- DMZ(webbserver) → Servrar (endast app-port)
-- Servrar → Databaser (endast Databas-port)
-- Drift och administration (jump) → alla interna subnät (SSH 22)
-- DMZ(webbserver), Servrar, Databaser och jump → Logg och övervakning (TCP 514, envägs)
-- Behöriga administratörer(internet) → Drift och administration/jump(ssh 22)
-
+ 
+## Realisering i labbet (Hetzner)
+ 
+Teamnätet 10.40.1.0/24 skapas med `moln nät skapa 10.40.1.0/24` av en person i teamet: _(elev-NN, fylls i)_. Varje medlem kopplar sin egen server med `moln koppla ADRESS`. Servern får då ett nytt nätkort, eth2.
+ 
+| Zon | Labbtillgång | Adress | Skapas som subnät i Hetzner | Kommentar |
+|---|---|---|---|---|
+| DMZ | elev-46 | 10.40.1.146 (eth2) | Ja, 10.40.1.144/29 | |
+| Serverzon (applikation) | elev-24 | 10.40.1.98 (eth2) | Ja, 10.40.1.96/27 | |
+| Databaszon | elev-38 | 10.40.1.162 (eth2) | Ja, 10.40.1.160/29 | |
+| Klientzon | elev-09 | 10.40.1.2 (eth2) | Ja, 10.40.1.0/26 | |
+| Adminzon | jump | 172.20.1.2 (labbnätet) | Nej | Ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
+| Loggzon | log | 172.20.1.58 (labbnätet) | Nej | Ligger i labbnätet 172.20.1.0/24, utanför teamnätet |
+| Gästzon | – | – | Nej | Ingen motsvarighet i labbet |
+| Infrastruktur | Hetzners gateway | 10.40.1.1 | Nej | Ersätter uppdragsgivarens routrar och länknät |
+ 
+Flödestabellen och regelverket använder jumps och logs verkliga adresser (172.20.1.2 och 172.20.1.58), inte adresser i Adminzonen eller Loggzonen.
+ 
+Trafik i teamnätet (eth2) och labbnätet (eth1) passerar inte molnbrandväggen och filtreras därför med nftables på varje server.
+ 
+Planen kontrolleras mot `moln status` efter workshop 1 (28/10). Hetzner tillåter subnät ned till /30, så alla zonsubnät i planen går att skapa.
+ 
+## Vilka zoner ska nå varandra
+ 
+Enligt zonskissen. Default deny gäller både mellan och inom zoner, in- och utgående.
+ 
+Tillåtna flöden:
+ 
+- Internet → DMZ (TCP 80/443)
+- Gästzon → endast internet
+- Klientzon → internet (webb)
+- Klientzon → Serverzon (endast angivna tjänster och portar)
+- DMZ → Serverzon (endast app-port)
+- Serverzon → Databaszon (endast DB-port)
+- DMZ, Serverzon, Databaszon och jump → Loggzon (TCP 6514 med TLS, envägs; i vecka 4 TCP 514 i klartext)
+- Behörig administratör (extern) → Adminzon/jump (SSH 22 + MFA)
+- Adminzon/jump → Gästzon, Klientzon, DMZ, Serverzon, Databaszon och Infrastruktur (SSH 22). Jump når inte Loggzonen med vanliga administratörskonton
+- Adminzon/jump → Loggzon (SSH 22) endast med separat loggadmin-konto
+- Alla servrar → Hetzners DNS-resolvrar 185.12.64.1 och 185.12.64.2 (UDP/TCP 53, namnuppslag)
+- Alla servrar → internet (UDP 123, tidssynk med NTP)
+- Alla servrar → DHCP-servern (UDP 68 → 67, förnyelse av serverns adresser)
 Inte tillåtet:
-- DMZ → Databaser direkt, all åtkomst till data går via Servrar
-- Gäst och besök → interna subnät
-- Logg och övervakning → andra subnät
-
-Se zonskissen i [vecka_02](zonskiss.png).
-
+ 
+- DMZ → Databaszon direkt, all åtkomst till data går via Serverzonen
+- Gästzon → interna zoner
+- Loggzon → andra zoner
+- Servrar → Adminzon
+Se zonskissen i [zonskiss.png](zonskiss.png).
+ 
 ## Metod
-Uträkningarna är gjorda för hand och kontrollerade med ipcalc på elev-46, 2026-10-14T18:55:02Z. AI (Claude) har använts som stöd vid sammanställningen.
+ 
+Uträkningarna är gjorda för hand och kontrolleras med ipcalc. AI (Claude) har använts som stöd vid sammanställningen.
