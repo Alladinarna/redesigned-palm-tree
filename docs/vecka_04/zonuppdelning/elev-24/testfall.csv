@@ -1,21 +1,22 @@
 id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,nekas_av
 D1-till,jump,172.20.1.124,22,tcp,in,oppen,,
-L1-nek,jump,172.20.1.124,80,tcp,in,tyst,,elev-24 in
-22-till,jump,172.20.1.124,-,icmp,in,oppen,,
-22-nek,elev-46,10.40.1.98,-,icmp,in,tyst,,elev-46 ut
-8-till,elev-09,10.40.1.98,443,tcp,in,oppen,,
-8-nek,jump,172.20.1.124,443,tcp,in,tyst,,elev-24 in
-9-till,elev-46,10.40.1.98,8080,tcp,in,oppen,,
-9-nek,jump,172.20.1.124,8080,tcp,in,tyst,,elev-24 in
-9-nek-intern,elev-46,10.40.1.98,5432,tcp,in,tyst,,elev-46 ut
-10-till,elev-24,10.40.1.162,5432,tcp,ut,oppen,,
-10-nek,elev-24,10.40.1.162,22,tcp,ut,tyst,,elev-24 ut
-12-till,elev-24,172.20.1.58,6514,tcp,ut,oppen,,
+80-nek,jump,172.20.1.124,80,tcp,in,tyst,,elev-24 in
+F22-till,jump,172.20.1.124,-,icmp,in,oppen,,
+F22-nek,elev-46,10.40.1.98,-,icmp,in,tyst,,elev-46 ut
+F8-till,elev-09,10.40.1.98,443,tcp,in,oppen,,
+F8-nek,jump,172.20.1.124,443,tcp,in,tyst,,elev-24 in
+F9-till,elev-46,10.40.1.98,8080,tcp,in,oppen,,
+F9-nek,jump,172.20.1.124,8080,tcp,in,tyst,,elev-24 in
+F9-nek-intern,elev-46,10.40.1.98,5432,tcp,in,tyst,,elev-46 ut
+F10-till,elev-24,10.40.1.162,5432,tcp,ut,oppen,,
+F10-nek,elev-24,10.40.1.162,22,tcp,ut,tyst,,elev-24 ut
 D3-till,elev-24,185.12.64.1,53,udp,ut,oppen,,
 D3-till-tcp,elev-24,185.12.64.1,53,tcp,ut,oppen,,
 D3-nek,elev-24,8.8.8.8,53,udp,ut,tyst,,elev-24 ut
 D4-till,elev-24,ntp.hetzner.com,123,udp,ut,oppen,,
+D4-nek,elev-24,185.12.64.2,123,udp,ut,tyst,,elev-24 ut
 D5-till,elev-24,172.20.1.58,514,tcp,ut,oppen,,
 D5-nek,elev-24,172.20.1.58,9000,tcp,ut,tyst,,elev-24 ut
+F12-nek-v4,elev-24,172.20.1.58,6514,tcp,ut,tyst,,elev-24 ut
 D7-till,elev-24,download.rockylinux.org,443,tcp,ut,oppen,,
 D7-nek,elev-24,log.sec.chas-lab.dev,80,tcp,ut,tyst,,elev-24 ut

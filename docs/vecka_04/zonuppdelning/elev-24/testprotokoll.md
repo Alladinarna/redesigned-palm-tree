@@ -14,8 +14,8 @@ Nekade fall in mot elev-24 körs från **jump** över labbnätet (172.20.1.124).
 
 ## Förberedelser
 
-- Lyssnare för rad 8 och 9 på elev-24: `sudo ncat -lk 443` och `ncat -lk 8080` i varsin terminal.
-- elev-38 lyssnar på tcp/5432 för rad 10, med sin egen inkommande regel för rad 10.
+- Lyssnare för F8 och F9 på elev-24: `sudo ncat -lk 443` och `ncat -lk 8080` i varsin terminal.
+- elev-38 lyssnar på tcp/5432 för F10, med sin egen inkommande regel för F10.
 - Skriptet och testfallen kopieras till varje källa som behövs, även jump: `scp -r elev-24 jump:` och `scp -r elev-24 student@elev-24:` från repot.
 
 ## Körning
