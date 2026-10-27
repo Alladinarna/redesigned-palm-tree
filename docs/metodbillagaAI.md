@@ -12,3 +12,8 @@
 | 2026-10-22 | flodestabell.md | Stöd vid jämförelse av trafikbaslinjen från vecka 1 och flödestabellen i vecka 3 | Hugo |
 | 2026-10-22 | zoner-i-labbet.md | utkast tabell till hur teamets servrar ska representera zonerna i vecka 4 baserat på information från repot och gruppen | Hugo |
 | 2026-10-26 | vecka_04/zonuppdelning/, zoner-i-labbet.md, flodestabell.md, tillgangar.md, markeringstabell.md, zonskiss.png | Utkast till regelverk (nftables, molnbrandvägg), spårbarhetslistor, testfall och testskript per server, samt uppdatering av äldre material till teamnätet 10.40.1.0/24. Syntax kontrollerad med nft -c och ipcalc på elev-24 | Stef |
+| 2026-10-26 | adressplan.md | Stöd vid omräkningen till 10.40.1.0/24. Teamet valde dimensionering och subnät och kontrollerade mot moln status | Gabriel, Hugo |
+| 2026-10-26 | flodestabell.md | Stöd vid struktur (F-id, lager, D1–D7) och granskning. Portar, beslut och NTP-verifiering gjordes av teamet | Gabriel, Hugo |
+| 2026-10-26 | reviderad-zonskiss2.0.png | Stöd vid uppdatering av skissen enligt teamets beslut | Hugo |
+| 2026-10-26 | markeringstabell.md, zoner-i-labbet.md | Stöd vid uppdatering av prefix och hänvisningar till flödestabellen | Hugo |
+| 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
