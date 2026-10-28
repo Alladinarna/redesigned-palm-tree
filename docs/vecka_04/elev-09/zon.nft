@@ -1,0 +1,27 @@
+#!/usr/sbin/nft -f
+flush ruleset
+
+table inet zon {
+    chain in {
+        type filter hook input priority 0; policy drop;
+        ct state established,related accept
+        ct state invalid drop
+        iif "lo" accept
+        ip saddr 172.20.1.2 tcp dport 22 accept comment "D1 SSH från jump"
+        ip saddr 172.20.1.10 tcp dport 22 accept comment "D2 kontroll från ctf"
+                limit rate 10/minute log prefix "ZON-IN-DROP " level info
+    }
+
+    chain ut {
+        type filter hook output priority 0; policy drop;
+        ct state established,related accept
+        oif "lo" accept
+        ip daddr { 185.12.64.1, 185.12.64.2 } meta l4proto { tcp, udp } th dport 53 accept comment "D3 DNS"
+        udp sport 68 udp dport 67 accept comment "D6 DHCP"
+        ip daddr 10.40.1.98 tcp dport 443 accept comment "F8 klient till applikation"
+        ip daddr { 213.239.239.164, 213.239.239.165, 213.239.239.166 } udp dport 123 accept comment "D4 NTP"
+        ip daddr 172.20.1.58 tcp dport 514 accept comment "D5 logg till log"
+        oif "eth0" tcp dport { 80, 443 } accept comment "F6 webb ut (även D7 dnf)"
+                limit rate 10/minute log prefix "ZON-UT-DROP " level info
+    }
+}
