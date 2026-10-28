@@ -14,9 +14,9 @@ Nekade fall in mot elev-46 körs från **jump** över labbnätet (172.20.1.146).
 
 ## Förberedelser
 
-- Webbservern på tcp/80 finns redan. Lyssnare för rad 5: `sudo ncat -lk 443`.
-- elev-24 lyssnar på tcp/8080 för rad 9 (`ncat -lk 8080`).
-- Raderna 4-till, 5-till och 4-nek körs från jump, som går ut på internet via eth0 och därför passerar elev-46:s molnbrandvägg.
+- Webbservern på tcp/80 finns redan. Lyssnare för F5: `sudo ncat -lk 443`.
+- elev-24 lyssnar på tcp/8080 för F9 (`ncat -lk 8080`).
+- Testfallen F4-till, F5-till och F4-nek körs från jump, som går ut på internet via eth0 och därför passerar elev-46:s molnbrandvägg.
 - Skriptet och testfallen kopieras till varje källa som behövs, även jump: `scp -r elev-46 jump:` och `scp -r elev-46 student@elev-46:` från repot.
 
 ## Körning
@@ -40,17 +40,18 @@ journalctl -k -g ZON- --since "-15 min"
 | Id | Källa | Förväntat | Nekas av | Faktiskt | Paket i fångsten | Loggrad | Resultat |
 |---|---|---|---|---|---|---|---|
 | D1-till | jump | oppen | – | | | | |
-| 4-till | jump | oppen | – | | | | |
-| 5-till | jump | oppen | – | | | | |
-| 4-nek | jump | tyst | moln | | | | |
-| L1-nek | jump | tyst | elev-46 in | | | | |
-| 22-till | jump | oppen | – | | | | |
-| 9-till | elev-46 | oppen | – | | | | |
-| 9-nek | elev-46 | tyst | elev-46 ut | | | | |
-| 11-till | elev-46 | oppen | – | | | | |
+| F4-till | jump | oppen | – | | | | |
+| F5-till | jump | oppen | – | | | | |
+| F4-nek | jump | tyst | moln | | | | |
+| 80-nek | jump | tyst | elev-46 in | | | | |
+| F22-till | jump | oppen | – | | | | |
+| F9-till | elev-46 | oppen | – | | | | |
+| F9-nek | elev-46 | tyst | elev-46 ut | | | | |
+| F11-nek-v4 | elev-46 | tyst | elev-46 ut | | | | |
 | D3-till | elev-46 | oppen | – | | | | |
 | D3-nek | elev-46 | tyst | elev-46 ut | | | | |
 | D4-till | elev-46 | oppen | – | | | | |
+| D4-nek | elev-46 | tyst | elev-46 ut | | | | |
 | D5-till | elev-46 | oppen | – | | | | |
 | D5-nek | elev-46 | tyst | elev-46 ut | | | | |
 | D7-till | elev-46 | oppen | – | | | | |

@@ -1,6 +1,6 @@
-# Flödestabell vecka 4: driftflöden och labbadresser (utkast)
+# Flödestabell vecka 4: driftflöden och rader per server
 
-Tillägg till [flödestabellen från vecka 3](../../vecka_03/flodestabell.md). Med default deny i båda riktningarna stängs allt som servern själv behöver om det inte står i tabellen. Här läggs driftflödena D1–D7 till, och varje zon får de adresser som reglerna skrivs med.
+Driftflödena D1–D7 och de interna flödena mellan teamservrarna står nu i själva [flödestabellen](../../vecka_03/flodestabell.md), avsnittet *Realisering i labbet*. Den här filen sammanfattar bara vilka rader som hamnar på vilken server. Id:t (F1–F24, D1–D7) används som kommentar i nftables och som början på beskrivningen i molnbrandväggen.
 
 ## Zonernas adresser i labbet
 
@@ -16,42 +16,19 @@ Ur [adressplanen](../../vecka_02/adressplan.md) (teamnät 10.40.1.0/24) och [zon
 | Loggzon | 172.20.1.58 | log |
 | Kursens kontrolltjänst | 172.20.1.10 | ctf |
 
-## Driftflöden
-
-Gäller alla fyra servrar. Id:t används som kommentar i nftables och som början på beskrivningen i molnbrandväggen.
-
-| Rad | Källa | Mål | Protokoll | Port | Riktning | Motivering | Filtreras var | Motsvarar rad i v3 |
-|---|---|---|---|---|---|---|---|---|
-| D1 | jump 172.20.1.2 | Egen server | TCP | 22 | Inkommande | Administration via jump | Värd (nftables), labbnätet passerar inte molnbrandväggen | 16 |
-| D2 | ctf 172.20.1.10 | Egen server | TCP | 22 | Inkommande | Kursens kontrolltjänst loggar in på servern | Värd (nftables) | 24 |
-| D3 | Egen server | Hetzners resolvrar 185.12.64.1, 185.12.64.2 | UDP och TCP | 53 | Utgående | Namnuppslag. TCP behövs för stora svar | Värd (nftables). Molnbrandväggen släpper alltid Hetzners DNS | 7, 18 |
-| D4 | Egen server | Internet (ntp.hetzner.com) | UDP | 123 | Utgående | Korrekt tid för loggar, inloggningar och certifikat (chrony) | Värd (nftables) och molnbrandvägg | 19 |
-| D5 | Egen server | log 172.20.1.58 | TCP | 514 | Utgående | Brandväggsloggen skickas till loggservern. Klartext i v4, byts mot TLS på 6514 i v5 | Värd (nftables) | 25 (rad 11–14 gäller från v5) |
-| D6 | Egen server | DHCP-servrarna 172.31.1.1 (eth0), 172.20.0.1 (eth1), 10.40.1.1 (eth2) | UDP | 68 → 67 | Utgående | Förnyelse av serverns adresser. Utan regeln tappar servern adressen när lånet (24 h) går ut | Värd (nftables). Molnbrandväggen släpper alltid DHCP | 23 |
-| D7 | Egen server | Internet (paketförråd) | TCP | 443 | Utgående | Säkerhetsuppdateringar via dnf | Värd (nftables) och molnbrandvägg | 20 |
-
-Svarstrafik på tillåtna flöden släpps av `ct state established,related` och behöver inga egna rader.
-
-## Ändringar i flödestabellen (v3)
-
-Genomförda i [flödestabellen](../../vecka_03/flodestabell.md) 2026-10-26:
-
-1. **Rad 7 och 18** – "extern DNS" är Hetzners resolvrar (185.12.64.1, 185.12.64.2) på både UDP och TCP 53, och filtreras på värden.
-2. **Rad 23** – DHCP gäller alla tre gränssnitt.
-3. **Rad 24 (ny)** – ctf-servern behöver SSH och tcp/80 (D2, L1).
-4. **Rad 25 (ny)** – loggarna går på TCP 514 i vecka 4. Rad 11–14 (TCP 6514 med TLS) gäller från vecka 5.
-
-Kvar att göra: zonernas adresser står i [adressplanen](../../vecka_02/adressplan.md) och [zoner-i-labbet](../zoner-i-labbet.md), men inte i själva flödestabellen.
-
 ## Rader per server
 
-Alla fyra har D1–D7, rad 22 (ping från jump) och L1 (ctf → tcp/80, labbkrav enligt zoner-i-labbet). Utöver det:
+Alla fyra har D1–D7 och F22 (ping från jump). NTP (D4/F19) är låst till ntp.hetzner.com (213.239.239.164–.166) på värden och i molnet. Utöver det:
 
 | Server | Zon | In | Ut | Mapp |
 |---|---|---|---|---|
-| elev-09 | Klientzon | – | 6 (webb tcp/80, 443), 8 (→ Serverzon tcp/443) | [elev-09](elev-09/) |
-| elev-24 | Serverzon | 8 (från Klientzon tcp/443), 9 (från DMZ tcp/8080) | 10 (→ Databaszon tcp/5432), 12 (→ log tcp/6514) | [elev-24](elev-24/) |
-| elev-38 | Databaszon | 10 (från Serverzon tcp/5432) | 13 (→ log tcp/6514) | [elev-38](elev-38/) |
-| elev-46 | DMZ | 4–5 (från internet tcp/80, 443) | 9 (→ Serverzon tcp/8080), 11 (→ log tcp/6514) | [elev-46](elev-46/) |
+| elev-09 | Klientzon | – | F6 (webb tcp/80, 443), F8 (→ Serverzon tcp/443) | [elev-09](elev-09/) |
+| elev-24 | Serverzon | F8 (från Klientzon tcp/443), F9 (från DMZ tcp/8080) | F10 (→ Databaszon tcp/5432), F12 (→ log, som D5 i v4) | [elev-24](elev-24/) |
+| elev-38 | Databaszon | F10 (från Serverzon tcp/5432) | F13 (→ log, som D5 i v4) | [elev-38](elev-38/) |
+| elev-46 | DMZ | F4–F5 (från internet tcp/80, 443) | F9 (→ Serverzon tcp/8080), F11 (→ log, som D5 i v4) | [elev-46](elev-46/) |
+
+F11–F13 realiseras i vecka 4 som D5 (TCP 514 i klartext). TCP 6514 med TLS läggs till i vecka 5, och fram till dess nekas den porten.
+
+Ingen generell öppning för ctf → tcp/80. Den tidigare regeln L1 gällde U3.4, som är stängd. Öppningar för enskilda labbar läggs bara till när en labb kräver det ([zoner-i-labbet](../zoner-i-labbet.md)).
 
 Varje mapp har regelverket (`<server>-zon.nft`), rsyslog-filen, molnbrandväggen, spårbarhetslistan, testfallen, testskriptet och testprotokollet.

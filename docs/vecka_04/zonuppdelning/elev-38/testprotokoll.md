@@ -14,8 +14,8 @@ Nekade fall in mot elev-38 körs från **jump** över labbnätet (172.20.1.138).
 
 ## Förberedelser
 
-- Lyssnare för rad 10 på elev-38: `ncat -lk 5432` (eller databasen om den finns).
-- elev-24 kör 10-till, elev-46 kör 10-nek-dmz.
+- Lyssnare för F10 på elev-38: `ncat -lk 5432` (eller databasen om den finns).
+- elev-24 kör F10-till, elev-46 kör F10-nek-dmz.
 - Skriptet och testfallen kopieras till varje källa som behövs, även jump: `scp -r elev-38 jump:` och `scp -r elev-38 student@elev-38:` från repot.
 
 ## Körning
@@ -39,16 +39,17 @@ journalctl -k -g ZON- --since "-15 min"
 | Id | Källa | Förväntat | Nekas av | Faktiskt | Paket i fångsten | Loggrad | Resultat |
 |---|---|---|---|---|---|---|---|
 | D1-till | jump | oppen | – | | | | |
-| L1-nek | jump | tyst | elev-38 in | | | | |
-| 22-till | jump | oppen | – | | | | |
-| 10-till | elev-24 | oppen | – | | | | |
-| 10-nek | jump | tyst | elev-38 in | | | | |
-| 10-nek-dmz | elev-46 | tyst | elev-46 ut | | | | |
+| 80-nek | jump | tyst | elev-38 in | | | | |
+| F22-till | jump | oppen | – | | | | |
+| F10-till | elev-24 | oppen | – | | | | |
+| F10-nek | jump | tyst | elev-38 in | | | | |
+| F10-nek-dmz | elev-46 | tyst | elev-46 ut | | | | |
 | ut-nek-intern | elev-38 | tyst | elev-38 ut | | | | |
-| 13-till | elev-38 | oppen | – | | | | |
+| F13-nek-v4 | elev-38 | tyst | elev-38 ut | | | | |
 | D3-till | elev-38 | oppen | – | | | | |
 | D3-nek | elev-38 | tyst | elev-38 ut | | | | |
 | D4-till | elev-38 | oppen | – | | | | |
+| D4-nek | elev-38 | tyst | elev-38 ut | | | | |
 | D5-till | elev-38 | oppen | – | | | | |
 | D5-nek | elev-38 | tyst | elev-38 ut | | | | |
 | D7-till | elev-38 | oppen | – | | | | |

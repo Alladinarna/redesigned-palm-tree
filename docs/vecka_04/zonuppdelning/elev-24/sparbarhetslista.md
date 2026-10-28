@@ -13,10 +13,10 @@ Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. 
 | F9 | In | DMZ 10.40.1.144/29 (elev-46) | elev-24 | tcp/8080 | Värd | `F9 DMZ hämtar data från appservern` | Nej | Utkast |
 | F10 | Ut | elev-24 | Databaszon 10.40.1.160/29 (elev-38) | tcp/5432 | Värd | `F10 appen till databasen` | Nej | Utkast |
 | D3/F18 | Ut | elev-24 | 185.12.64.1, 185.12.64.2 | udp/53, tcp/53 | Värd (molnet släpper alltid) | `D3/F18 DNS` | Nej | Utkast |
-| D4/F19 | Ut | elev-24 | 213.239.239.164–.166 (ntp.hetzner.com) | udp/123 | Värd + moln | `D4/F19 NTP` (båda lagren) | Nej | Utkast |
+| D4/F19 | Ut | elev-24 | 213.239.239.164–.166 (ntp.hetzner.com) | udp/123 | Värd + moln | värd: `D4/F19 NTP`, moln: `F19 NTP ntp.hetzner.com (D4)` | Nej | Utkast |
 | D5/F12 | Ut | elev-24 | log 172.20.1.58 | tcp/514 | Värd | `D5/F12 loggar till log (TCP 6514 med TLS från v5)` | Nej | Utkast |
 | D6/F23 | Ut | elev-24 | DHCP-servrar | udp/68 → 67 | Värd (molnet släpper alltid) | `D6/F23 DHCP-förnyelse` | Nej | Utkast |
-| D7/F20 | Ut | elev-24 | Internet | tcp/443 | Värd + moln | `D7/F20 paketuppdateringar` (båda lagren) | Nej | Utkast |
+| D7/F20 | Ut | elev-24 | Internet | tcp/443 | Värd + moln | värd: `D7/F20 paketuppdateringar`, moln: `F20 paketuppdateringar dnf` | Nej | Utkast |
 | Nekande | In och ut | Allt annat | – | – | Värd + moln | `policy drop` + `ZON-IN-DROP` / `ZON-UT-DROP` | Ja | Utkast |
 
 F12 på TCP 6514 med TLS läggs till i vecka 5 och ersätter då D5. Öppningar för enskilda labbar (till exempel ctf → tcp/80) läggs bara till när labben kräver det, se [zoner-i-labbet](../../zoner-i-labbet.md).

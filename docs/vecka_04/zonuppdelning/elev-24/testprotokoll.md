@@ -37,7 +37,7 @@ journalctl -k -g ZON- --since "-15 min"
 Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och innan teamnätet fanns: [bevis/testprotokoll-elev-24-fore-regelverk.csv](bevis/testprotokoll-elev-24-fore-regelverk.csv). Den kördes med de adresser som gällde före Hugos adressplan (elev-38 = 10.40.1.210 i stället för 10.40.1.162), vilket inte påverkar resultatet eftersom teamnätet inte fanns än.
 
 - De nekade fallen **D3-nek, D7-nek** gav `oppen` och **D5-nek** gav `avvisad` (loggservern svarar RST på tcp/9000). Utan regelverk släpps alltså trafiken ut. När samma fall ger `tyst` efter att regelverket laddats är det regelverket som stoppar dem, inte en fel adress eller en tjänst som saknas.
-- **10-till** gav `tyst` eftersom elev-38 ännu inte är kopplad till teamnätet. Det är ett exempel på ett nekat utfall som inte bevisar något om reglerna.
+- **10-till** (i dag F10-till) gav `tyst` eftersom elev-38 ännu inte är kopplad till teamnätet. Det är ett exempel på ett nekat utfall som inte bevisar något om reglerna.
 - Tillåtna driftflöden (D3, D4, D5, D7) gav `oppen`, så testfallen fungerar.
 
 ## Resultat
@@ -47,23 +47,24 @@ Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och in
 | Id | Källa | Förväntat | Nekas av | Faktiskt | Paket i fångsten | Loggrad | Resultat |
 |---|---|---|---|---|---|---|---|
 | D1-till | jump | oppen | – | | | | |
-| L1-nek | jump | tyst | elev-24 in | | | | |
-| 22-till | jump | oppen | – | | | | |
-| 22-nek | elev-46 | tyst | elev-46 ut | | | | |
-| 8-till | elev-09 | oppen | – | | | | |
-| 8-nek | jump | tyst | elev-24 in | | | | |
-| 9-till | elev-46 | oppen | – | | | | |
-| 9-nek | jump | tyst | elev-24 in | | | | |
-| 9-nek-intern | elev-46 | tyst | elev-46 ut | | | | |
-| 10-till | elev-24 | oppen | – | | | | |
-| 10-nek | elev-24 | tyst | elev-24 ut | | | | |
-| 12-till | elev-24 | oppen | – | | | | |
+| 80-nek | jump | tyst | elev-24 in | | | | |
+| F22-till | jump | oppen | – | | | | |
+| F22-nek | elev-46 | tyst | elev-46 ut | | | | |
+| F8-till | elev-09 | oppen | – | | | | |
+| F8-nek | jump | tyst | elev-24 in | | | | |
+| F9-till | elev-46 | oppen | – | | | | |
+| F9-nek | jump | tyst | elev-24 in | | | | |
+| F9-nek-intern | elev-46 | tyst | elev-46 ut | | | | |
+| F10-till | elev-24 | oppen | – | | | | |
+| F10-nek | elev-24 | tyst | elev-24 ut | | | | |
 | D3-till | elev-24 | oppen | – | | | | |
 | D3-till-tcp | elev-24 | oppen | – | | | | |
 | D3-nek | elev-24 | tyst | elev-24 ut | | | | |
 | D4-till | elev-24 | oppen | – | | | | |
+| D4-nek | elev-24 | tyst | elev-24 ut | | | | |
 | D5-till | elev-24 | oppen | – | | | | |
 | D5-nek | elev-24 | tyst | elev-24 ut | | | | |
+| F12-nek-v4 | elev-24 | tyst | elev-24 ut | | | | |
 | D7-till | elev-24 | oppen | – | | | | |
 | D7-nek | elev-24 | tyst | elev-24 ut | | | | |
 
