@@ -1,0 +1,13 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av
+F10-till,elev-24,10.40.1.162,5432,tcp,ut,oppen,avvisad,13,AVVIKER,
+F10-nek,elev-24,10.40.1.162,22,tcp,ut,tyst,tyst,3010,OK,elev-24 ut
+D3-till,elev-24,185.12.64.1,53,udp,ut,oppen,oppen,143,OK,
+D3-till-tcp,elev-24,185.12.64.1,53,tcp,ut,oppen,oppen,14,OK,
+D3-nek,elev-24,8.8.8.8,53,udp,ut,tyst,tyst,3052,OK,elev-24 ut
+D4-till,elev-24,ntp.hetzner.com,123,udp,ut,oppen,oppen,72,OK,
+D4-nek,elev-24,185.12.64.2,123,udp,ut,tyst,avvisad,46,AVVIKER,elev-24 ut
+D5-till,elev-24,172.20.1.58,514,tcp,ut,oppen,oppen,10,OK,
+D5-nek,elev-24,172.20.1.58,9000,tcp,ut,tyst,tyst,3013,OK,elev-24 ut
+F12-nek-v4,elev-24,172.20.1.58,6514,tcp,ut,tyst,tyst,3009,OK,elev-24 ut
+D7-till,elev-24,download.rockylinux.org,443,tcp,ut,oppen,oppen,47,OK,
+D7-nek,elev-24,log.sec.chas-lab.dev,80,tcp,ut,tyst,tyst,3012,OK,elev-24 ut

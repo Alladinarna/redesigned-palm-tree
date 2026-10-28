@@ -44,6 +44,8 @@ Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och in
 
 Första körningen efter att regelverket laddats 2026-10-28 07:48Z, från elev-24: [bevis/testprotokoll-elev-24-fran-elev-24-20261028T074858Z.csv](bevis/testprotokoll-elev-24-fran-elev-24-20261028T074858Z.csv). Ingen trafikfångst gjordes vid den körningen. Loggraderna är hämtade med `loggsök` på jump. Fallen från jump, elev-09 och elev-46 körs på workshop 2 (torsdag 29/10).
 
+**Omstartstest:** elev-24 startades om 2026-10-28 07:58:40Z. Samma testfall kördes 08:00:42Z med samma utfall: [bevis/testprotokoll-elev-24-fran-elev-24-20261028T080042Z-efter-omstart.csv](bevis/testprotokoll-elev-24-fran-elev-24-20261028T080042Z-efter-omstart.csv). (Den körningen använde den äldre testfall.csv där D4-nek förväntades `tyst`, därför står AVVIKER i filen.) D4-nek blev `avvisad`, vilket visar att det var det nya regelverket med låst NTP som laddades vid uppstarten. Det gamla släppte all udp/123 ut på eth0. Loggraderna för D4-nek och D5-nek kom fram till loggservern efter omstarten (`loggsök`, 08:00:48Z). Regelverket och loggningen överlever alltså en omstart.
+
 | Id | Källa | Förväntat | Nekas av | Faktiskt | Paket i fångsten | Loggrad | Resultat |
 |---|---|---|---|---|---|---|---|
 | D1-till | jump | oppen | – | | | | |
