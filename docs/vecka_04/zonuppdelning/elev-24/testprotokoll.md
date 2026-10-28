@@ -8,7 +8,7 @@ Varje rad i [spårbarhetslistan](sparbarhetslista.md) testas med ett tillåtet o
 |---|---|
 | oppen | SYN → SYN-ACK → ACK (eller DNS-/NTP-/ICMP-svar) |
 | tyst | Upprepade SYN utan svar, och en `ZON-IN-DROP` eller `ZON-UT-DROP`-rad i `journalctl -k` på den server som står i kolumnen *nekas av* (eller ingen loggrad alls om det är molnbrandväggen) |
-| avvisad | SYN → RST, eller ICMP destination unreachable |
+| avvisad | SYN → RST, eller ICMP destination unreachable. Undantag: UDP som stoppas i den egna serverns kedja ut (t.ex. D4-nek) ger felet EPERM direkt i skriptet och syns som `avvisad`, med en `ZON-UT-DROP`-rad i loggen |
 
 Nekade fall in mot elev-24 körs från **jump** över labbnätet (172.20.1.124). Jumps egen trafik filtreras inte, så SYN-paketet når elev-24 och det är elev-24:s regel som stoppar det. Nekade fall som körs från en teamkamrat i teamnätet stoppas redan i teamkamratens utgående kedja, vilket också är rätt enligt flödestabellen, men syns då i *källserverns* logg.
 
@@ -42,7 +42,7 @@ Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och in
 
 ## Resultat
 
-*Fylls i efter körning på workshop 2 (torsdag 29/10).*
+Första körningen efter att regelverket laddats 2026-10-28 07:48Z, från elev-24: [bevis/testprotokoll-elev-24-fran-elev-24-20261028T074858Z.csv](bevis/testprotokoll-elev-24-fran-elev-24-20261028T074858Z.csv). Ingen trafikfångst gjordes vid den körningen. Loggraderna är hämtade med `loggsök` på jump. Fallen från jump, elev-09 och elev-46 körs på workshop 2 (torsdag 29/10).
 
 | Id | Källa | Förväntat | Nekas av | Faktiskt | Paket i fångsten | Loggrad | Resultat |
 |---|---|---|---|---|---|---|---|
@@ -55,17 +55,17 @@ Skriptet kördes på elev-24 2026-10-26T07:45Z, innan regelverket laddats och in
 | F9-till | elev-46 | oppen | – | | | | |
 | F9-nek | jump | tyst | elev-24 in | | | | |
 | F9-nek-intern | elev-46 | tyst | elev-46 ut | | | | |
-| F10-till | elev-24 | oppen | – | | | | |
-| F10-nek | elev-24 | tyst | elev-24 ut | | | | |
-| D3-till | elev-24 | oppen | – | | | | |
-| D3-till-tcp | elev-24 | oppen | – | | | | |
-| D3-nek | elev-24 | tyst | elev-24 ut | | | | |
-| D4-till | elev-24 | oppen | – | | | | |
-| D4-nek | elev-24 | tyst | elev-24 ut | | | | |
-| D5-till | elev-24 | oppen | – | | | | |
-| D5-nek | elev-24 | tyst | elev-24 ut | | | | |
-| F12-nek-v4 | elev-24 | tyst | elev-24 ut | | | | |
-| D7-till | elev-24 | oppen | – | | | | |
-| D7-nek | elev-24 | tyst | elev-24 ut | | | | |
+| F10-till | elev-24 | oppen | – | avvisad | | – | AVVIKER: snabbt nej (23 ms) från elev-38, alltså släppte elev-24 ut paketet. elev-38 saknar lyssnare eller regel på tcp/5432. Körs om |
+| F10-nek | elev-24 | tyst | elev-24 ut | tyst | | ej kontrollerad | OK |
+| D3-till | elev-24 | oppen | – | oppen | | – | OK |
+| D3-till-tcp | elev-24 | oppen | – | oppen | | – | OK |
+| D3-nek | elev-24 | tyst | elev-24 ut | tyst | | ej kontrollerad | OK |
+| D4-till | elev-24 | oppen | – | oppen | | – | OK |
+| D4-nek | elev-24 | avvisad | elev-24 ut | avvisad | | `ZON-UT-DROP OUT=eth0 DST=185.12.64.2 DPT=123` (07:49:04Z) | OK |
+| D5-till | elev-24 | oppen | – | oppen | | – | OK |
+| D5-nek | elev-24 | tyst | elev-24 ut | tyst | | `ZON-UT-DROP OUT=eth1 DST=172.20.1.58 DPT=9000` (07:49:04Z) | OK |
+| F12-nek-v4 | elev-24 | tyst | elev-24 ut | tyst | | ej kontrollerad | OK |
+| D7-till | elev-24 | oppen | – | oppen | | – | OK |
+| D7-nek | elev-24 | tyst | elev-24 ut | tyst | | ej kontrollerad | OK |
 
 Avvikelser felsöks och testet körs om tills tabellen är stabil. Varje körning sparas som en egen `testprotokoll-elev-24-fran-<källa>-<tid>.csv` i `bevis/`.

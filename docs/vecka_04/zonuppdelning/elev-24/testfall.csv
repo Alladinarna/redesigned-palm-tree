@@ -14,7 +14,7 @@ D3-till,elev-24,185.12.64.1,53,udp,ut,oppen,,
 D3-till-tcp,elev-24,185.12.64.1,53,tcp,ut,oppen,,
 D3-nek,elev-24,8.8.8.8,53,udp,ut,tyst,,elev-24 ut
 D4-till,elev-24,ntp.hetzner.com,123,udp,ut,oppen,,
-D4-nek,elev-24,185.12.64.2,123,udp,ut,tyst,,elev-24 ut
+D4-nek,elev-24,185.12.64.2,123,udp,ut,avvisad,,elev-24 ut
 D5-till,elev-24,172.20.1.58,514,tcp,ut,oppen,,
 D5-nek,elev-24,172.20.1.58,9000,tcp,ut,tyst,,elev-24 ut
 F12-nek-v4,elev-24,172.20.1.58,6514,tcp,ut,tyst,,elev-24 ut

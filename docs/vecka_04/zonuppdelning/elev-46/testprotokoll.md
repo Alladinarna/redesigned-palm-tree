@@ -8,7 +8,7 @@ Varje rad i [spårbarhetslistan](sparbarhetslista.md) testas med ett tillåtet o
 |---|---|
 | oppen | SYN → SYN-ACK → ACK (eller DNS-/NTP-/ICMP-svar) |
 | tyst | Upprepade SYN utan svar, och en `ZON-IN-DROP` eller `ZON-UT-DROP`-rad i `journalctl -k` på den server som står i kolumnen *nekas av* (eller ingen loggrad alls om det är molnbrandväggen) |
-| avvisad | SYN → RST, eller ICMP destination unreachable |
+| avvisad | SYN → RST, eller ICMP destination unreachable. Undantag: UDP som stoppas i den egna serverns kedja ut (t.ex. D4-nek) ger felet EPERM direkt i skriptet och syns som `avvisad`, med en `ZON-UT-DROP`-rad i loggen |
 
 Nekade fall in mot elev-46 körs från **jump** över labbnätet (172.20.1.146). Jumps egen trafik filtreras inte, så SYN-paketet når elev-46 och det är elev-46:s regel som stoppar det. Nekade fall som körs från en teamkamrat i teamnätet stoppas redan i teamkamratens utgående kedja, vilket också är rätt enligt flödestabellen, men syns då i *källserverns* logg.
 
@@ -51,7 +51,7 @@ journalctl -k -g ZON- --since "-15 min"
 | D3-till | elev-46 | oppen | – | | | | |
 | D3-nek | elev-46 | tyst | elev-46 ut | | | | |
 | D4-till | elev-46 | oppen | – | | | | |
-| D4-nek | elev-46 | tyst | elev-46 ut | | | | |
+| D4-nek | elev-46 | avvisad | elev-46 ut | | | | |
 | D5-till | elev-46 | oppen | – | | | | |
 | D5-nek | elev-46 | tyst | elev-46 ut | | | | |
 | D7-till | elev-46 | oppen | – | | | | |

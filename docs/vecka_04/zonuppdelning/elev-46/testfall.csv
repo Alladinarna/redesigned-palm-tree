@@ -11,7 +11,7 @@ F11-nek-v4,elev-46,172.20.1.58,6514,tcp,ut,tyst,,elev-46 ut
 D3-till,elev-46,185.12.64.1,53,udp,ut,oppen,,
 D3-nek,elev-46,8.8.8.8,53,udp,ut,tyst,,elev-46 ut
 D4-till,elev-46,ntp.hetzner.com,123,udp,ut,oppen,,
-D4-nek,elev-46,185.12.64.2,123,udp,ut,tyst,,elev-46 ut
+D4-nek,elev-46,185.12.64.2,123,udp,ut,avvisad,,elev-46 ut
 D5-till,elev-46,172.20.1.58,514,tcp,ut,oppen,,
 D5-nek,elev-46,172.20.1.58,9000,tcp,ut,tyst,,elev-46 ut
 D7-till,elev-46,download.rockylinux.org,443,tcp,ut,oppen,,

@@ -12,6 +12,6 @@ F6-nek,elev-09,8.8.8.8,53,tcp,ut,tyst,,elev-09 ut
 D3-till,elev-09,185.12.64.1,53,udp,ut,oppen,,
 D3-nek,elev-09,8.8.8.8,53,udp,ut,tyst,,elev-09 ut
 D4-till,elev-09,ntp.hetzner.com,123,udp,ut,oppen,,
-D4-nek,elev-09,185.12.64.2,123,udp,ut,tyst,,elev-09 ut
+D4-nek,elev-09,185.12.64.2,123,udp,ut,avvisad,,elev-09 ut
 D5-till,elev-09,172.20.1.58,514,tcp,ut,oppen,,
 D5-nek,elev-09,172.20.1.58,9000,tcp,ut,tyst,,elev-09 ut
