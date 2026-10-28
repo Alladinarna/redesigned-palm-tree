@@ -27,7 +27,7 @@ mkdir -p bevis
 sudo tcpdump -nn -i any -w bevis/elev-46-test.pcap 'not port 22 or net 10.40.1.0/24'
 
 # terminal 2 – på varje källa i tur och ordning
-./test.sh testfall.csv
+bash test.sh testfall.csv      # körrättigheten följer inte med scp från Windows
 
 # efteråt på den server som ska ha nekat
 journalctl -k -g ZON- --since "-15 min"

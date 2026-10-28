@@ -4,7 +4,8 @@ Utkast för teamets fyra servrar. Gemensamt underlag ligger här, och varje serv
 
 | Fil / mapp | Innehåll |
 |---|---|
-| [flodestabell-driftfloden.md](flodestabell-driftfloden.md) | Driftflöden D1–D7, zonernas adresser, rader per server och föreslagna ändringar i flödestabellen |
+| [flodestabell-driftfloden.md](flodestabell-driftfloden.md) | Zonernas adresser och vilka rader i flödestabellen (F1–F24, D1–D7) som hamnar på vilken server |
+| [ladda-zon.sh](ladda-zon.sh) | Laddar den egna serverns regelverk med säkerhetsnät (väljer fil efter värdnamnet) |
 | [elev-09/](elev-09/) | Klientzon (10.40.1.2) |
 | [elev-24/](elev-24/) | Serverzon (10.40.1.98) |
 | [elev-38/](elev-38/) | Databaszon (10.40.1.162) |
@@ -26,18 +27,17 @@ Varje servermapp innehåller:
 
 1. Teamnätet finns och servern är kopplad: `moln koppla 10.40.1.NN` på jump, kontrollera med `ip -br addr` att eth2 har rätt adress.
 2. Två SSH-sessioner öppna mot servern.
-3. Lägg regelverket på plats och ladda det med säkerhetsnät:
+3. Kopiera hela mappen `zonuppdelning` till servern och ladda regelverket med säkerhetsnät:
 
 ```
-sudo cp elev-NN-zon.nft /etc/nftables/zon.nft
-echo 'include "/etc/nftables/zon.nft"' | sudo tee -a /etc/sysconfig/nftables.conf
-sudo nft -c -f /etc/nftables/zon.nft                                     # syntaxkontroll
-sudo systemd-run --on-active=5min --unit=nodbroms nft flush ruleset     # säkerhetsnät
-sudo nft -f /etc/nftables/zon.nft
-# öppna en ny session via jump – fungerar den:
+scp -r zonuppdelning lab:                     # från repot på din dator
+cd ~/zonuppdelning
+sudo bash ladda-zon.sh     # syntaxkontroll, backup, include (bara en gång), nödbroms 5 min, laddning
+# öppna en NY session via jump. Fungerar den, stoppa nödbromsen direkt:
 sudo systemctl stop nodbroms.timer
-sudo systemctl enable --now nftables                                     # överlever omstart
 ```
+
+   Glöms timern töms regelverket efter 5 minuter. Ladda då om med `sudo nft -f /etc/nftables/zon.nft`. Skriptet aktiverar nftables-tjänsten, så regelverket laddas vid omstart. Kontrollera det med `sudo reboot` och sedan `sudo nft list ruleset | grep comment`.
 
 4. Brandväggsloggen till loggservern:
 
@@ -47,9 +47,11 @@ sudo systemctl restart rsyslog
 journalctl -k -g ZON- --since "-10 min"
 ```
 
+   Att raden har kommit fram till loggservern kontrolleras på jump med `loggsök ZON-`.
+
 5. Molnbrandväggen enligt `molnbrandvagg-elev-NN.md`.
-6. Testa enligt `testprotokoll.md` och uppdatera status i spårbarhetslistan. Samma skript kör alla servrars testfall från en källa: `for f in ../elev-*/testfall.csv; do ./test.sh "$f"; done`.
+6. Testa enligt `testprotokoll.md` och uppdatera status i spårbarhetslistan. Samma skript kör alla servrars testfall från en källa: `for f in ../elev-*/testfall.csv; do bash test.sh "$f"; done`. Kör med `bash`, eftersom körrättigheten inte följer med scp från Windows.
 
 Har det gått fel: `moln återställ-ssh` på jump tar bort regelverket.
 
-Syntaxen i alla fyra regelverk är kontrollerad med `nft -c` i ett eget nätverksnamnrymd på elev-24 (påverkar inte servern).
+Syntaxen i alla fyra regelverk är kontrollerad 2026-10-28 med `unshare -rn nft -c` på elev-24 (eget nätverksnamnrymd, påverkar inte servern).
