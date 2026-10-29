@@ -9,6 +9,7 @@ table inet zon {
         iif "lo" accept
         ip saddr 172.20.1.2 tcp dport 22 accept comment "D1 SSH från jump"
         ip saddr 172.20.1.10 tcp dport 22 accept comment "D2 kontroll från ctf"
+        ip saddr 172.20.1.2 icmp type echo-request accept comment "F22 ping från jump"
                 limit rate 10/minute log prefix "ZON-IN-DROP " level info
     }
 
