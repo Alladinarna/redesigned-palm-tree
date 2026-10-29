@@ -1,6 +1,5 @@
 id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,nekas_av,metod
 D1-till,jump,172.20.1.146,22,tcp,in,oppen,,,skript
-D1-nek,elev-24,10.40.1.146,22,tcp,in,tyst,,elev-46 in,skript
 F4-till,jump,46.224.175.57,80,tcp,in,oppen,,,skript
 F4-nek,jump,46.224.175.57,8080,tcp,in,tyst,,moln,skript
 F4-nek-eth1,jump,172.20.1.146,80,tcp,in,tyst,,elev-46 in,skript
