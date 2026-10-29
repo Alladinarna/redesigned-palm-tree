@@ -1,0 +1,19 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,nekas_av,metod
+D1-till,jump,172.20.1.146,22,tcp,in,oppen,,,skript
+D1-nek,elev-24,10.40.1.146,22,tcp,in,tyst,,elev-46 in,skript
+F4-till,jump,46.224.175.57,80,tcp,in,oppen,,,skript
+F4-nek,jump,46.224.175.57,8080,tcp,in,tyst,,moln,skript
+F4-nek-eth1,jump,172.20.1.146,80,tcp,in,tyst,,elev-46 in,skript
+F5-nek,jump,46.224.175.57,443,tcp,in,tyst,,moln,skript
+F22-nek,jump,172.20.1.146,-,icmp,in,tyst,,elev-46 in,ping
+F9-till,elev-46,10.40.1.98,8080,tcp,ut,avvisad,,,skript
+F9-nek,elev-46,10.40.1.162,5432,tcp,ut,tyst,,elev-46 ut,skript
+F11-nek-v4,elev-46,172.20.1.58,6514,tcp,ut,tyst,,elev-46 ut,skript
+D3-till,elev-46,185.12.64.1,53,udp,ut,oppen,,,dig
+D3-nek,elev-46,8.8.8.8,53,udp,ut,tyst,,elev-46 ut,dig + journalctl
+D4-till,elev-46,213.239.239.164,123,udp,ut,oppen,,,chronyc
+D4-nek,elev-46,185.12.64.2,123,udp,ut,tyst,,elev-46 ut,journalctl
+D5-till,elev-46,172.20.1.58,514,tcp,ut,oppen,,,skript
+D5-nek,elev-46,172.20.1.58,9000,tcp,ut,tyst,,elev-46 ut,skript
+D7-till,elev-46,download.rockylinux.org,443,tcp,ut,oppen,,,skript
+D7-nek,elev-46,example.com,80,tcp,ut,tyst,,elev-46 ut,skript
