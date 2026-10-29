@@ -16,3 +16,4 @@
 | 2026-10-26 | reviderad-zonskiss2.0.png | Stöd vid uppdatering av skissen enligt teamets beslut | Hugo |
 | 2026-10-26 | markeringstabell.md, zoner-i-labbet.md | Stöd vid uppdatering av prefix och hänvisningar till flödestabellen | Hugo |
 | 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
+| 2026-10-29 | testfall.csv | Tog fram testfallslistan för elev-46 utifrån flödestabellen. | Hugo |
