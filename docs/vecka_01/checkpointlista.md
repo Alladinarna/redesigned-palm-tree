@@ -2,8 +2,8 @@
 
 | Punkt | Status |
 |---|---|
-| Tillgångsförteckning | Pågår |
-| Trafikbaslinje | Återstår |
+| Tillgångsförteckning | Klar |
+| Trafikbaslinje | Klar |
 | Teamöverenskommelse | Klar |
 | GitHub – behörigheter, grenar och granskning | Klar |
 | Huvudgrenen (`main`) | Klar |
