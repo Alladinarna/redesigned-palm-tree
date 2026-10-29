@@ -17,3 +17,4 @@
 | 2026-10-26 | markeringstabell.md, zoner-i-labbet.md | Stöd vid uppdatering av prefix och hänvisningar till flödestabellen | Hugo |
 | 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
 | 2026-10-29 | testfall.csv | Tog fram testfallslistan för elev-46 utifrån flödestabellen. | Hugo |
+| 2026-10-29 | test.sh | AI som stöd för att bygga vidare på förövningens test.sh ut efter min egna testfalls lista | Hugo |
