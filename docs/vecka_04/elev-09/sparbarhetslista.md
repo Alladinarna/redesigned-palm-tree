@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|---|---|---|
 | D1 | in | 172.20.1.2 (jump) | elev-09 | tcp/22 | värd | "D1 SSH från jump" | nej | verifierad |
 | D2 | in | 172.20.1.10 (ctf) | elev-09 | tcp/22 | värd | "D2 kontroll från ctf" | nej | verifierad |
+| F22 | in | 172.20.1.2 (jump) | elev-09 | icmp echo-request | värd | "F22 ping från jump" | nej | verifierad |
 | D3 | ut | elev-09 | 185.12.64.1, 185.12.64.2 | tcp+udp/53 | värd | "D3 DNS" | nej | aktiv |
 | D4 | ut | elev-09 | 213.239.239.164–166 | udp/123 | värd | "D4 NTP" | nej | verifierad |
 | D5 | ut | elev-09 | 172.20.1.58 (log) | tcp/514 | värd | "D5 logg till log" | nej | verifierad |
