@@ -63,7 +63,11 @@ Köfilerna låg kvar i `/var/lib/rsyslog` vid kontrollen 20 sekunder efter att b
 
 **Observerat vid omstart (2/11):** rsyslog startade 08:28:09.38Z. dhclient började arbeta på eth1 08:28:09.33Z. Efter omstarten fastnade två anslutningar mot `172.20.1.58:6514` i `SYN-SENT` med den **publika** avsändaradressen 91.99.144.137 (eth0), medan kön växte till cirka 1,5 MB på disk. 08:30:21Z återupptogs leveransen via eth1 (`172.20.1.124 → 172.20.1.58:6514 ESTAB`), och raderna från perioden togs emot 08:30:22Z, till exempel `omstart-elev-24-20261102T082826Z` som skapades 08:28:26Z. Inga rader saknades vid kontrollen, men de kom fram cirka 2 minuter för sent.
 
-**Inte kontrollerat:** vad som händer när kön når taket på 256 MB, och varför den första anslutningen efter omstarten använde eth0.
+**Varför eth0:** vid omstarten 08:38Z gick rsyslogs första SYN-paket ut på eth0 (`ZON-UT-DROP OUT=eth0 SRC=91.99.144.137`, 08:39:05.65Z), innan dhclient hade bundit eth1 (`bound to 172.20.1.124`, 08:39:07.50Z). När servern väl är uppe går 172.20.1.58 via eth1 (`ip route get 172.20.1.58`: `via 172.20.0.1 dev eth1 src 172.20.1.124`). Fördröjningen på cirka 128 s stämmer med `net.ipv4.tcp_syn_retries = 6` (1+2+4+8+16+32+64 = 127 s), som var inställt.
+
+**Åtgärd 2/11 08:37Z:** D5 är låst till eth1 (`oifname "eth1"`). Den gör att paketen inte lämnar servern på eth0, men den kortar inte fördröjningen. Den uppmätta fördröjningen efter omstarten 08:38Z var cirka 128 s, och inga rader saknades ([testprotokoll elev-24](../vecka_04/zonuppdelning/elev-24/testprotokoll.md)). **Känd brist:** de första cirka 2 minuterna efter en omstart når loggarna loggservern först när kön skickas.
+
+**Inte kontrollerat:** vad som händer när kön når taket på 256 MB.
 
 ## Scenario: angripare med root på elev-24
 

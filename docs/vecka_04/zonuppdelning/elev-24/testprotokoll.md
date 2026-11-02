@@ -142,3 +142,32 @@ D7-nek visar att `log.sec.chas-lab.dev` från elev-24 slås upp till den publika
 ```
 
 Det stämmer med [molnbrandvagg-elev-24.md](molnbrandvagg-elev-24.md). `moln status` visar teamnätet 10.40.1.0/24 med alla sju subnät och elev-24 kopplad som 10.40.1.98.
+
+## D5 låst till labbnätet (eth1), 2026-11-02 08:37Z
+
+**Bakgrund (observerat vid omstarten 08:27Z):** efter omstarten låg två anslutningar från rsyslog mot `172.20.1.58:6514` i `SYN-SENT` med avsändaradressen 91.99.144.137 (eth0). D5-regeln saknade då villkor för gränssnitt, så värden släppte ut paketen på eth0.
+
+**Ändring:** D5-regeln i [elev-24-zon.nft](elev-24-zon.nft) blev `ip daddr $LOG oifname "eth1" tcp dport 6514 accept`. Det gick till så här:
+1. `nft -c -f` gav inga fel.
+2. Regelverket laddades med `ladda-zon.sh` 08:37Z.
+3. En ny session via jump fungerade 08:37:29Z, och nödbromsen stoppades.
+4. sha256 för `/etc/nftables/zon.nft` var samma som för repots fil (`61c9151a…071e`).
+
+| Körning | Från elev-24 | Från jump | Utfall |
+|---|---|---|---|
+| Före omstart | [08:37:50Z](bevis/testprotokoll-elev-24-fran-elev-24-20261102T083750Z.csv) | [08:38:07Z](bevis/testprotokoll-elev-24-test-fran-jump-20261102T083807Z.csv) | Samma som 08:25Z. Bara F10-till avviker (se ovan) |
+| Efter omstart | [08:41:49Z](bevis/testprotokoll-elev-24-fran-elev-24-20261102T084149Z-efter-omstart.csv) | [08:42:06Z](bevis/testprotokoll-elev-24-test-fran-jump-20261102T084206Z-efter-omstart.csv) | Samma |
+
+**Omstart 08:38:45Z** (uppe igen 08:38:54Z). Efter omstarten var nftables, rsyslog, auditd och chronyd `active`, sha256 för `/etc/nftables/zon.nft` var oförändrad och de två `root-cmd`-reglerna fanns kvar.
+
+**Vad ändringen gjorde (journalen efter omstarten):**
+
+| Tid (UTC) | Händelse |
+|---|---|
+| 08:39:05.32 | rsyslog startar |
+| 08:39:05.65 | `ZON-UT-DROP IN= OUT=eth0 SRC=91.99.144.137 DST=172.20.1.58 ... DPT=6514 SYN`, två anslutningar. Regeln stoppar nu paketen på eth0 och loggar dem. Fyra sådana rader under omstarten |
+| 08:39:07.50 | `dhclient: bound to 172.20.1.124` (eth1) |
+| 08:39:25 | `ss`: de två anslutningarna ligger fortfarande i `SYN-SENT` |
+| 08:41:14.13 | rsyslog: `omfwd ... suspending action`, följt av `resumed`. Anslutningen går upp via eth1 (`172.20.1.124 → 172.20.1.58:6514 ESTAB`) |
+
+**Resultat:** paketen går inte längre ut på eth0. Fördröjningen blev däremot inte kortare: cirka 128 s (08:39:05.65–08:41:14.13), att jämföra med cirka 130 s vid omstarten 08:27Z. När TCP-paketet stoppas i kedjan ut fick anslutningen inget fel direkt, utan kärnan fortsatte skicka SYN igen (`net.ipv4.tcp_syn_retries = 6`). Inga rader saknades: `omstart2-elev-24-20261102T083925Z` skapades 08:39:25Z och togs emot 08:41:14Z.
