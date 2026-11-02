@@ -36,10 +36,19 @@ Oct 29 08:41:46 elev-46 kernel: ZON-UT-DROP IN= OUT=eth0 SRC=46.224.175.57 DST=8
 Oct 29 08:43:20 elev-46 kernel: ZON-UT-DROP IN= OUT=eth0 SRC=46.224.175.57 DST=185.12.64.2 ... PROTO=UDP SPT=53073 DPT=123
 → elev-46:s kedja ut stoppade båda
 
-## F22-nek – ping från jump (jump, 2026-11-02)
+## F22 – ping från jump (jump, 2026-11-02, efter att F22-regeln lagts till)
 $ ping -c2 -W3 172.20.1.146
+2 packets transmitted, 2 received, 0% packet loss
+→ F22-till: svar via labbnätet, oppen
+
+$ ping -c2 -W3 46.224.175.57
 2 packets transmitted, 0 received, 100% packet loss
-→ inget svar: tyst. zon.nft har ingen ICMP-regel i kedjan in, så policy drop stoppar pingen.
+→ F22-nek: publika adressen, molnbrandväggen har ingen ICMP-regel, tyst
+
+Avvikelse: zon.nft saknade först F22-regeln, och testfallet förväntade att ping
+från jump skulle stoppas. Flödestabellen tillåter ping från adminzonen till DMZ.
+Felet låg i regeln. Regeln lades till och testfallet ändrades till F22-till/F22-nek.
+Fångsten elev-46-test.pcap togs före ändringen och innehåller inte dessa ping.
 
 ## D1-nek – SSH från teamnätet (körd av Stef på elev-24, 2026-11-02)
 $ timeout 3 bash -c '</dev/tcp/10.40.1.146/22'
