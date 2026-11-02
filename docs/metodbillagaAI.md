@@ -17,3 +17,4 @@
 | 2026-10-26 | reviderad-zonskiss2.0.png | Stöd vid uppdatering av skissen enligt teamets beslut | Hugo |
 | 2026-10-26 | markeringstabell.md, zoner-i-labbet.md | Stöd vid uppdatering av prefix och hänvisningar till flödestabellen | Hugo |
 | 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
+| 2026-11-02 | vecka_05/* och D5-ändringarna i vecka_04/zonuppdelning | Claude tog fram utkast till loggkällekarta, urval, skyddsbeskrivning, loggstrategi, 90-logg.conf, auditregel och ladda-logg.sh utifrån Canvas (studieguiden v5, föreläsning 6) och läsning på elev-24 utan sudo. 90-logg.conf kontrollerad med rsyslogd -N1. Inte provkört med sudo. Teamet granskar mot man-sidorna och serverns faktiska tillstånd | Stef |

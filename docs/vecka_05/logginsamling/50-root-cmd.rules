@@ -1,0 +1,6 @@
+## /etc/audit/rules.d/50-root-cmd.rules – vecka 5 (U5.3, fråga U2 i ../urval.md)
+## Loggar varje kommando som körs med root-behörighet (euid=0) av en person som faktiskt loggat in
+## (auid är satt och tillhör ett vanligt konto). Bakgrundstjänster har auid=unset och loggas inte.
+## Laddas med: sudo augenrules --load   Kontroll: sudo auditctl -l | grep root-cmd
+-a always,exit -F arch=b64 -S execve -F euid=0 -F auid>=1000 -F auid!=unset -k root-cmd
+-a always,exit -F arch=b32 -S execve -F euid=0 -F auid>=1000 -F auid!=unset -k root-cmd
