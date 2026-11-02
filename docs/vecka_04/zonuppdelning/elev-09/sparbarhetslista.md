@@ -13,12 +13,12 @@ Varje rad i flödestabellen som gäller elev-09, och var den är implementerad. 
 | F6 | Ut | elev-09 | Internet | tcp/80, tcp/443 | Värd + moln | värd: `F6/D7 webb och paketuppdateringar`, moln: `F6 webb http`, `F6 webb https och paketuppdateringar (D7)` | Nej | Utkast |
 | D3/F7 | Ut | elev-09 | 185.12.64.1, 185.12.64.2 | udp/53, tcp/53 | Värd (molnet släpper alltid) | `D3/F7 DNS` | Nej | Utkast |
 | D4/F19 | Ut | elev-09 | 213.239.239.164–.166 (ntp.hetzner.com) | udp/123 | Värd + moln | värd: `D4/F19 NTP`, moln: `F19 NTP ntp.hetzner.com (D4)` | Nej | Utkast |
-| D5 | Ut | elev-09 | log 172.20.1.58 | tcp/514 | Värd | `D5 brandväggslogg till log` | Nej | Utkast |
+| D5/F25 | Ut | elev-09 | log 172.20.1.58 | tcp/6514 (TLS) | Värd | `D5/F25 loggar till log över TLS (v5)` | Nej | Ändrad 2/11 (v5): 514 → 6514. Ej verifierad, testas i workshop 2 |
 | D6/F23 | Ut | elev-09 | DHCP-servrar | udp/68 → 67 | Värd (molnet släpper alltid) | `D6/F23 DHCP-förnyelse` | Nej | Utkast |
 | D7 | Ut | elev-09 | Internet | tcp/443 | Värd + moln | Täcks av F6 | Nej | Utkast |
 | Nekande | In och ut | Allt annat | – | – | Värd + moln | `policy drop` + `ZON-IN-DROP` / `ZON-UT-DROP` | Ja | Utkast |
 
-Klientzonen har ingen loggrad till loggservern i flödestabellen (F11–F14 gäller DMZ, Server, Databas och Admin). Brandväggsloggen skickas ändå enligt D5.
+Klientzonens loggflöde till loggservern har fått en egen rad i flödestabellen, F25 (vecka 5). Från vecka 5 går D5/F25 på TCP 6514 med TLS och klartext på TCP 514 nekas (testfall D5-nek-klartext), se [vecka 5](../../../vecka_05/README.md).
 
 Ingen generell öppning för ctf → tcp/80. Regeln (L1) fanns för U3.4, som är stängd, och står inte i flödestabellen. Öppningar för enskilda labbar läggs bara till när en labb kräver det, se [zoner-i-labbet](../../zoner-i-labbet.md).
 

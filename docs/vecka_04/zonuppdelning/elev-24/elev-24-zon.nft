@@ -34,7 +34,7 @@ table inet zon {
         oif "lo" accept
         ip daddr $HETZNER_DNS meta l4proto { tcp, udp } th dport 53 accept comment "D3/F18 DNS"
         ip daddr $HETZNER_NTP udp dport 123 accept comment "D4/F19 NTP"
-        ip daddr $LOG tcp dport 514 accept comment "D5/F12 loggar till log (TCP 6514 med TLS från v5)"
+        ip daddr $LOG tcp dport 6514 accept comment "D5/F12 loggar till log över TLS (v5)"
         udp sport 68 udp dport 67 accept comment "D6/F23 DHCP-förnyelse"
         ip daddr $DATABASZON tcp dport 5432 accept comment "F10 appen till databasen"
         oifname "eth0" tcp dport 443 accept comment "D7/F20 paketuppdateringar"

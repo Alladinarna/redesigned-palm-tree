@@ -27,7 +27,7 @@ Alla fyra har D1–D7 och F22 (ping från jump). NTP (D4/F19) är låst till ntp
 | elev-38 | Databaszon | F10 (från Serverzon tcp/5432) | F13 (→ log, som D5 i v4) | [elev-38](elev-38/) |
 | elev-46 | DMZ | F4–F5 (från internet tcp/80, 443) | F9 (→ Serverzon tcp/8080), F11 (→ log, som D5 i v4) | [elev-46](elev-46/) |
 
-F11–F13 realiseras i vecka 4 som D5 (TCP 514 i klartext). TCP 6514 med TLS läggs till i vecka 5, och fram till dess nekas den porten.
+F11–F13 realiserades i vecka 4 som D5 (TCP 514 i klartext). Från vecka 5 går D5 på TCP 6514 med TLS (F11–F13, och F25 för Klientzonen), och TCP 514 nekas.
 
 Ingen generell öppning för ctf → tcp/80. Den tidigare regeln L1 gällde U3.4, som är stängd. Öppningar för enskilda labbar läggs bara till när en labb kräver det ([zoner-i-labbet](../zoner-i-labbet.md)).
 

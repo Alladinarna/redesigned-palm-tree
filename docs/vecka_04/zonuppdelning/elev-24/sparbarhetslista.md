@@ -14,12 +14,12 @@ Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. 
 | F10 | Ut | elev-24 | Databaszon 10.40.1.160/29 (elev-38) | tcp/5432 | Värd | `F10 appen till databasen` | Nej | Ut släpps (svar från elev-38). Väntar på lyssnare på elev-38 |
 | D3/F18 | Ut | elev-24 | 185.12.64.1, 185.12.64.2 | udp/53, tcp/53 | Värd (molnet släpper alltid) | `D3/F18 DNS` | Nej | Verifierad 28/10 (även efter omstart) |
 | D4/F19 | Ut | elev-24 | 213.239.239.164–.166 (ntp.hetzner.com) | udp/123 | Värd + moln | värd: `D4/F19 NTP`, moln: `F19 NTP ntp.hetzner.com (D4)` | Nej | Verifierad 28/10 (även efter omstart) |
-| D5/F12 | Ut | elev-24 | log 172.20.1.58 | tcp/514 | Värd | `D5/F12 loggar till log (TCP 6514 med TLS från v5)` | Nej | Verifierad 28/10 (även efter omstart) |
+| D5/F12 | Ut | elev-24 | log 172.20.1.58 | tcp/6514 (TLS) | Värd | `D5/F12 loggar till log över TLS (v5)` | Nej | Ändrad 2/11 (v5): 514 → 6514. Ej verifierad, testas i workshop 2 |
 | D6/F23 | Ut | elev-24 | DHCP-servrar | udp/68 → 67 | Värd (molnet släpper alltid) | `D6/F23 DHCP-förnyelse` | Nej | Utkast |
 | D7/F20 | Ut | elev-24 | Internet | tcp/443 | Värd + moln | värd: `D7/F20 paketuppdateringar`, moln: `F20 paketuppdateringar dnf` | Nej | Verifierad 28/10 (även efter omstart) |
 | Nekande | In och ut | Allt annat | – | – | Värd + moln | `policy drop` + `ZON-IN-DROP` / `ZON-UT-DROP` | Ja | Kedjan ut verifierad 28/10, loggrader på loggservern. Kedjan in testas från jump 29/10 |
 
-F12 på TCP 6514 med TLS läggs till i vecka 5 och ersätter då D5. Öppningar för enskilda labbar (till exempel ctf → tcp/80) läggs bara till när labben kräver det, se [zoner-i-labbet](../../zoner-i-labbet.md).
+Från vecka 5 går D5/F12 på TCP 6514 med TLS och klartext på TCP 514 nekas (testfall D5-nek-klartext), se [vecka 5](../../../vecka_05/README.md). Öppningar för enskilda labbar (till exempel ctf → tcp/80) läggs bara till när labben kräver det, se [zoner-i-labbet](../../zoner-i-labbet.md).
 
 Rader i flödestabellen som inte gäller elev-24 (t.ex. F4–F5, F11, F13) implementeras på respektive teamkamrats server.
 

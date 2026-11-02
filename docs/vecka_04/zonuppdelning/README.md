@@ -16,7 +16,7 @@ Varje servermapp innehåller:
 | Fil | Innehåll |
 |---|---|
 | `<server>-zon.nft` | Värdens regelverk i nftables, default deny i båda riktningarna |
-| `60-brandvagg.conf` | rsyslog: brandväggsloggen till loggservern (D5) |
+| `60-brandvagg.conf` | rsyslog: brandväggsloggen till loggservern (D5), klartext i vecka 4. Ersätts i vecka 5 av [90-logg.conf](../../vecka_05/logginsamling/90-logg.conf) över TLS |
 | `molnbrandvagg-<server>.md` | Molnbrandväggens regler (moln) |
 | `sparbarhetslista.md` | Rad i flödestabellen → regel → lager → loggning → status |
 | `testfall.csv` | Ett tillåtet och ett nekat testfall per rad, med var nekningen ska synas |
