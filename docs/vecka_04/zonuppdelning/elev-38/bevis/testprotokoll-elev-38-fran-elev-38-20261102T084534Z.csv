@@ -1,0 +1,11 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av
+ut-nek-intern,elev-38,10.40.1.98,8080,tcp,ut,tyst,tyst,3009,OK,elev-38 ut
+F13-nek-v4,elev-38,172.20.1.58,6514,tcp,ut,tyst,tyst,3014,OK,elev-38 ut
+D3-till,elev-38,185.12.64.1,53,udp,ut,oppen,oppen,154,OK,
+D3-nek,elev-38,8.8.8.8,53,udp,ut,tyst,tyst,3061,OK,elev-38 ut
+D4-till,elev-38,ntp.hetzner.com,123,udp,ut,oppen,oppen,64,OK,
+D4-nek,elev-38,185.12.64.2,123,udp,ut,avvisad,avvisad,52,OK,elev-38 ut
+D5-till,elev-38,172.20.1.58,514,tcp,ut,oppen,oppen,18,OK,
+D5-nek,elev-38,172.20.1.58,9000,tcp,ut,tyst,tyst,3009,OK,elev-38 ut
+D7-till,elev-38,download.rockylinux.org,443,tcp,ut,oppen,oppen,37,OK,
+D7-nek,elev-38,log.sec.chas-lab.dev,80,tcp,ut,tyst,tyst,3011,OK,elev-38 ut
