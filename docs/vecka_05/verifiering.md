@@ -20,6 +20,9 @@ Konfigurationen installerades 08:07:40Z med [ladda-logg.sh](logginsamling/ladda-
 
 Avsändartiden har mikrosekunder och tidszonen `+00:00` (RFC 5424-mallen). chrony låg 0,00007 s efter NTP (`chronyc tracking`, Leap status Normal).
 
+| omstart-elev-24-20261102T082826Z | 08:28:26.111873 | 08:30:22.073 | elev-24 | logger efter omstarten | id:t | TLS | Ja: cirka 2 minuters fördröjning. Kön skickades först 08:30:21Z, se [skyddsbeskrivning.md](skyddsbeskrivning.md) avsnitt 4 |
+| sshd-session[2321] | 08:29:17.705947 | 08:30:22.074 | elev-24 | sshd efter omstarten | `Accepted publickey` | TLS | Samma fördröjning |
+
 **Före bytet:** den sista raden från elev-24 i klartext togs emot 08:07:21.609Z (`KLARTEXT`). Strax innan, 08:07:15Z och 08:07:16Z, kom två `ZON-UT-DROP`-rader för SYN till `DST=172.20.1.58 DPT=514`. Det visar att det nya regelverket stoppade nya anslutningar till tcp/514. Efter rsyslog-bytet 08:07:40Z finns inga klartextrader från elev-24 (`loggsök elev-24 | grep KLARTEXT\| grep KLARTEXT`, kontrollerat 08:15Z).
 
 ## elev-09, elev-38 och elev-46

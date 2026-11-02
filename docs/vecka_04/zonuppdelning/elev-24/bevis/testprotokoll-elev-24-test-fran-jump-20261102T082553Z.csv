@@ -1,0 +1,6 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av
+D1-till,jump,172.20.1.124,22,tcp,in,oppen,oppen,9,OK,
+80-nek,jump,172.20.1.124,80,tcp,in,tyst,tyst,3005,OK,elev-24 in
+F22-till,jump,172.20.1.124,-,icmp,in,oppen,oppen,8,OK,
+F8-nek,jump,172.20.1.124,443,tcp,in,tyst,tyst,3006,OK,elev-24 in
+F9-nek,jump,172.20.1.124,8080,tcp,in,tyst,tyst,3005,OK,elev-24 in

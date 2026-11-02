@@ -61,7 +61,9 @@ Händelsen skapades 08:10:47 och togs emot 08:12:06, efter två omstarter med mo
 
 Köfilerna låg kvar i `/var/lib/rsyslog` vid kontrollen 20 sekunder efter att blockeringen togs bort. Studieguiden säger att filerna kan ligga kvar tills rsyslog startas om nästa gång, och att leveransen ska kontrolleras centralt, inte på filerna.
 
-**Inte kontrollerat:** vad som händer när kön når taket på 256 MB.
+**Observerat vid omstart (2/11):** rsyslog startade 08:28:09.38Z. dhclient började arbeta på eth1 08:28:09.33Z. Efter omstarten fastnade två anslutningar mot `172.20.1.58:6514` i `SYN-SENT` med den **publika** avsändaradressen 91.99.144.137 (eth0), medan kön växte till cirka 1,5 MB på disk. 08:30:21Z återupptogs leveransen via eth1 (`172.20.1.124 → 172.20.1.58:6514 ESTAB`), och raderna från perioden togs emot 08:30:22Z, till exempel `omstart-elev-24-20261102T082826Z` som skapades 08:28:26Z. Inga rader saknades vid kontrollen, men de kom fram cirka 2 minuter för sent.
+
+**Inte kontrollerat:** vad som händer när kön når taket på 256 MB, och varför den första anslutningen efter omstarten använde eth0.
 
 ## Scenario: angripare med root på elev-24
 

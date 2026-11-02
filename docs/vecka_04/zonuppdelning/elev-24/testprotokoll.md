@@ -84,3 +84,61 @@ Regelverket laddades om med `ladda-zon.sh` 2026-11-02 cirka 08:06Z (D5 släpper 
 | F10-till | oppen | avvisad | AVVIKER, samma som 28/10 (elev-38 svarar med nej på tcp/5432) |
 
 Övriga fall från elev-24 gav samma utfall som 28/10. Loggrad för en nekad anslutning över TLS, mottagen på log: `mottaget 2026-11-02T08:13:00.261Z TLS | 2026-11-02T08:13:00.023266+00:00 172.20.1.124 elev-24 kernel ZON-UT-DROP IN= OUT=eth2 SRC=10.40.1.98 DST=10.40.1.146 ... DPT=22 ... SYN` (`loggsök ZON-UT-DROP`).
+
+## Checkpoint milstolpe 4: full körning, två gånger i rad, fångst och omstart (2026-11-02)
+
+**Fångst:** `tcpdump -nn -i any` på elev-24 08:25:45–08:27:20Z. Filtret var `not ((port 22 or port 6514) and tcp[tcpflags] & (tcp-syn|tcp-rst|tcp-fin) == 0)`, så att SSH och TLS bara kom med som handskakningar. 126 paket: [bevis/elev-24-full-20261102T0825Z.pcap](bevis/elev-24-full-20261102T0825Z.pcap).
+
+**Körning 1 och 2:** först från jump, sedan från elev-24. Varje körning sparades som en egen CSV.
+
+| Körning | Från jump | Från elev-24 |
+|---|---|---|
+| 1 | [08:25:53Z](bevis/testprotokoll-elev-24-test-fran-jump-20261102T082553Z.csv) | [08:26:06Z](bevis/testprotokoll-elev-24-fran-elev-24-20261102T082606Z.csv) |
+| 2 | [08:26:23Z](bevis/testprotokoll-elev-24-test-fran-jump-20261102T082623Z.csv) | [08:26:36Z](bevis/testprotokoll-elev-24-fran-elev-24-20261102T082636Z.csv) |
+
+Båda körningarna gav samma faktiska utfall på alla rader. F22-till (ping från jump) gav 2 av 2 svar båda gångerna.
+
+| Id | Förväntat | Faktiskt (båda körningarna) | I fångsten | Loggrad på elev-24 (`journalctl -k -g ZON-`) | Resultat |
+|---|---|---|---|---|---|
+| D1-till | oppen | oppen | – (SSH-handskakning) | – | OK |
+| 80-nek | tyst | tyst | Upprepade SYN `172.20.1.2 > 172.20.1.124.80`, inget svar | `ZON-IN-DROP IN=eth1 SRC=172.20.1.2 ... DPT=80` | OK |
+| F22-till | oppen | oppen | – | – | OK |
+| F8-nek | tyst | tyst | Upprepade SYN till `.443`, inget svar | `ZON-IN-DROP ... DPT=443` | OK |
+| F9-nek | tyst | tyst | Upprepade SYN till `.8080`, inget svar | `ZON-IN-DROP ... DPT=8080` | OK |
+| F10-till | oppen | avvisad | `10.40.1.98 > 10.40.1.162.5432 [S]` följt av `10.40.1.162.5432 > 10.40.1.98 [R.]` efter 4 ms | – | AVVIKER, se nedan |
+| F10-nek | tyst | tyst | – | `ZON-UT-DROP OUT=eth2 DST=10.40.1.162 DPT=22` | OK |
+| D3-till, D3-till-tcp, D4-till, D7-till | oppen | oppen | – | – | OK |
+| D3-nek | tyst | tyst | – | `ZON-UT-DROP OUT=eth0 DST=8.8.8.8 DPT=53` | OK |
+| D4-nek | avvisad | avvisad | – | `ZON-UT-DROP OUT=eth0 DST=185.12.64.2 DPT=123` (körning 1) | OK |
+| D5-till (6514) | oppen | oppen | – | – | OK |
+| D5-nek-klartext (514) | tyst | tyst | – | `ZON-UT-DROP OUT=eth1 DST=172.20.1.58 DPT=514` | OK |
+| D5-nek (9000) | tyst | tyst | – | ingen rad i fönstret | OK |
+| D7-nek | tyst | tyst | – | `ZON-UT-DROP OUT=eth0 DST=46.224.108.117 DPT=80` | OK |
+
+I körning 2 saknas loggraden för D4-nek. Loggregeln i nftables har `limit rate 10/minute`. Att det är begränsningen som gjorde att raden saknas är inte kontrollerat.
+
+D7-nek visar att `log.sec.chas-lab.dev` från elev-24 slås upp till den publika adressen 46.224.108.117, och att anslutningen stoppas i kedjan ut på eth0.
+
+**Avvikelsen F10-till: var låg felet?** Felet ligger varken i elev-24:s regel eller i testfallet. Fångsten visar att elev-24 skickar SYN ut på eth2 (regeln F10 i kedjan ut släpper den) och att **elev-38 svarar med RST**. Förväntningen `oppen` förutsätter att något lyssnar på tcp/5432 på elev-38. Om elev-38 saknar lyssnare eller har en reject-regel är inte kontrollerat från elev-24. Det kontrolleras på elev-38.
+
+**Omstart:** elev-24 startades om 08:27:48Z och var uppe igen 08:27:58Z.
+
+| Kontroll efter omstarten | Resultat |
+|---|---|
+| `systemctl is-active nftables rsyslog auditd chronyd` | active active active active |
+| `nft list ruleset` | 11 regler med F- eller D-id, D5 på tcp/6514 |
+| `auditctl -l` | De två `root-cmd`-reglerna |
+| `chronyc tracking` | Leap status Normal |
+| `test.sh` från elev-24 08:28:26Z | Samma utfall som före omstarten: [bevis/testprotokoll-elev-24-fran-elev-24-20261102T082826Z-efter-omstart.csv](bevis/testprotokoll-elev-24-fran-elev-24-20261102T082826Z-efter-omstart.csv) |
+| `test.sh` från jump 08:28:43Z | D1-till OK och inga avvikelser enligt utskriften. CSV-filen raderades på jump innan den kopierades och finns inte i bevis |
+
+**Molnbrandväggen** (`moln brandvägg regel lista` på jump, 2/11 cirka 08:24Z):
+
+```
+  1  out tcp  443         0.0.0.0/0            F20 paketuppdateringar dnf
+  2  out udp  123         213.239.239.164/32   F19 NTP ntp.hetzner.com (D4)
+  3  out udp  123         213.239.239.165/32   F19 NTP ntp.hetzner.com (D4)
+  4  out udp  123         213.239.239.166/32   F19 NTP ntp.hetzner.com (D4)
+```
+
+Det stämmer med [molnbrandvagg-elev-24.md](molnbrandvagg-elev-24.md). `moln status` visar teamnätet 10.40.1.0/24 med alla sju subnät och elev-24 kopplad som 10.40.1.98.
