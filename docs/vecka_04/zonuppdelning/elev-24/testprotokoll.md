@@ -71,3 +71,16 @@ Första körningen efter att regelverket laddats 2026-10-28 07:48Z, från elev-2
 | D7-nek | elev-24 | tyst | elev-24 ut | tyst | | ej kontrollerad | OK |
 
 Avvikelser felsöks och testet körs om tills tabellen är stabil. Varje körning sparas som en egen `testprotokoll-elev-24-fran-<källa>-<tid>.csv` i `bevis/`.
+
+## Vecka 5: D5 flyttad till tcp/6514 (TLS)
+
+Regelverket laddades om med `ladda-zon.sh` 2026-11-02 cirka 08:06Z (D5 släpper tcp/6514 mot 172.20.1.58 i stället för tcp/514). En ny session via jump fungerade och nödbromsen stoppades. `test.sh` kördes 08:07:08Z från elev-24: [bevis/testprotokoll-elev-24-fran-elev-24-20261102T080708Z.csv](bevis/testprotokoll-elev-24-fran-elev-24-20261102T080708Z.csv).
+
+| Id | Förväntat | Faktiskt | Resultat |
+|---|---|---|---|
+| D5-till (tcp/6514) | oppen | oppen (9 ms) | OK |
+| D5-nek-klartext (tcp/514) | tyst | tyst (3006 ms) | OK |
+| D5-nek (tcp/9000) | tyst | tyst | OK |
+| F10-till | oppen | avvisad | AVVIKER, samma som 28/10 (elev-38 svarar med nej på tcp/5432) |
+
+Övriga fall från elev-24 gav samma utfall som 28/10. Loggrad för en nekad anslutning över TLS, mottagen på log: `mottaget 2026-11-02T08:13:00.261Z TLS | 2026-11-02T08:13:00.023266+00:00 172.20.1.124 elev-24 kernel ZON-UT-DROP IN= OUT=eth2 SRC=10.40.1.98 DST=10.40.1.146 ... DPT=22 ... SYN` (`loggsök ZON-UT-DROP`).

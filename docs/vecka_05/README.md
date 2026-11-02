@@ -6,12 +6,12 @@ Milstolpen stäms av på checkpointen **måndag 9/11**. Den ska ligga i `main` s
 
 | Fil | Innehåll | Status |
 |---|---|---|
-| [loggkallekarta.md](loggkallekarta.md) | Loggkällor per server med klistrade exempelrader | elev-24 ifylld (⚠-rader kräver sudo), övriga tomma |
+| [loggkallekarta.md](loggkallekarta.md) | Loggkällor per server med klistrade exempelrader | elev-24 ifylld och verifierad 2/11, övriga tomma |
 | [urval.md](urval.md) | Fem frågor, urval och strukna källor | Utkast att granska i workshop 1 |
 | [loggstrategi.md](loggstrategi.md) | Loggstrategi version 1 | Utkast |
-| [skyddsbeskrivning.md](skyddsbeskrivning.md) | Skyddet av loggkedjan (fyra rubriker och ett scenario) | Utkast med belägg från elev-24 |
-| [verifiering.md](verifiering.md) | Testhändelser och var de hittades centralt | Fylls i i workshop 2 |
-| [logginsamling/](logginsamling/) | `90-logg.conf`, `50-root-cmd.rules`, `ca.pem`, `ladda-logg.sh` | Klara att köra, inte provkörda med sudo |
+| [skyddsbeskrivning.md](skyddsbeskrivning.md) | Skyddet av loggkedjan (fyra rubriker och ett scenario) | elev-24 ifylld med belägg och kötest 2/11. Central lagringstid och fylld kö är inte kontrollerade |
+| [verifiering.md](verifiering.md) | Testhändelser och var de hittades centralt | elev-24 klar 2/11 (alla källor över TLS), övriga fylls i i workshop 2 |
+| [logginsamling/](logginsamling/) | `90-logg.conf`, `50-root-cmd.rules`, `ca.pem`, `ladda-logg.sh` | Körda på elev-24 2/11 08:07Z (RC=0) |
 
 Regelverket uppdaterades i samma veva: D5 släpper tcp/6514 i stället för 514 i alla fyra `*-zon.nft`, testfallen är ändrade och F25 (Klientzon → Loggzon) är ny i [flödestabellen](../vecka_03/flodestabell.md).
 

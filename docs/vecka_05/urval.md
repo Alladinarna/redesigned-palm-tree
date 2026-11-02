@@ -2,7 +2,7 @@
 
 Workshop 1, del 2. Urvalet styrs av vilka frågor uppdragsgivaren måste kunna besvara i efterhand, inte av hur mycket som går att samla in (NIST SP 800-92 4.2). Varje fråga har ett tidsspann, ett subjekt och något som ska fastställas.
 
-> **Utkast** (2/11), som teamet granskar och justerar i workshop 1. Källorna kommer från [loggkällekartan](loggkallekarta.md).
+> **Utkast** (2/11), som teamet granskar och justerar i workshop 1. Kolumnen "Går att besvara idag" beskriver läget före vecka 5-konfigurationen. elev-24 skickar sedan 2/11 08:07Z alla källor i urvalet över TLS ([verifiering.md](verifiering.md)). Källorna kommer från [loggkällekartan](loggkallekarta.md).
 
 ## Frågor
 
