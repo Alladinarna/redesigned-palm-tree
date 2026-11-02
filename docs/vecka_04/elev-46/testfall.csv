@@ -5,7 +5,8 @@ F4-till,jump,46.224.175.57,80,tcp,in,oppen,oppen,,skript
 F4-nek,jump,46.224.175.57,8080,tcp,in,tyst,tyst,moln,skript
 F4-nek-eth1,jump,172.20.1.146,80,tcp,in,tyst,tyst,elev-46 in,skript
 F5-nek,jump,46.224.175.57,443,tcp,in,tyst,tyst,moln,skript
-F22-nek,jump,172.20.1.146,-,icmp,in,tyst,tyst,elev-46 in,ping
+F22-till,jump,172.20.1.146,-,icmp,in,oppen,oppen,,ping
+F22-nek,jump,46.224.175.57,-,icmp,in,tyst,tyst,moln,ping
 F9-till,elev-46,10.40.1.98,8080,tcp,ut,avvisad,avvisad,,skript
 F9-nek,elev-46,10.40.1.162,5432,tcp,ut,tyst,tyst,elev-46 ut,skript
 F11-nek-v4,elev-46,172.20.1.58,6514,tcp,ut,tyst,tyst,elev-46 ut,skript
