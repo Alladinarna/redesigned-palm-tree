@@ -1,0 +1,13 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av
+F8-till,elev-09,10.40.1.98,443,tcp,ut,oppen,oppen,18,OK,
+F8-nek,elev-09,10.40.1.98,8080,tcp,ut,tyst,tyst,3010,OK,elev-09 ut
+F8-nek-db,elev-09,10.40.1.162,5432,tcp,ut,tyst,tyst,3007,OK,elev-09 ut
+F6-till-80,elev-09,download.rockylinux.org,80,tcp,ut,oppen,oppen,28,OK,
+F6-till-443,elev-09,download.rockylinux.org,443,tcp,ut,oppen,oppen,36,OK,
+F6-nek,elev-09,8.8.8.8,53,tcp,ut,tyst,tyst,3009,OK,elev-09 ut
+D3-till,elev-09,185.12.64.1,53,udp,ut,oppen,oppen,99,OK,
+D3-nek,elev-09,8.8.8.8,53,udp,ut,tyst,tyst,3030,OK,elev-09 ut
+D4-till,elev-09,ntp.hetzner.com,123,udp,ut,oppen,oppen,56,OK,
+D4-nek,elev-09,185.12.64.2,123,udp,ut,avvisad,avvisad,43,OK,elev-09 ut
+D5-till,elev-09,172.20.1.58,514,tcp,ut,oppen,oppen,11,OK,
+D5-nek,elev-09,172.20.1.58,9000,tcp,ut,tyst,tyst,3006,OK,elev-09 ut
