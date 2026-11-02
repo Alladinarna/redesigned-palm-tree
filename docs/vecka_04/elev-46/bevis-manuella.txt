@@ -2,6 +2,12 @@
 # test.sh testar bara TCP. UDP, ICMP och D1-nek (körs från elev-24) testades för hand.
 # Varje fall: kommando, utskrift och tolkning. Nekade fall bevisas med loggrader.
 
+## Senaste körning 2026-11-02 (efter omstart, U4.5-raderna borttagna)
+TCP-raderna i resultat-elev-46.csv och resultat-jump.csv kommer från denna körning.
+Fångst under körningen: elev-46-test.pcap (tcpdump -i any på elev-46).
+Skriptet kördes två gånger i rad på elev-46 och på jump. diff på kolumnerna
+id, faktiskt och resultat gav ingen skillnad.
+
 ## D3-till – DNS mot tillåten resolver (elev-46, 2026-10-29)
 $ dig @185.12.64.1 example.com +short
 172.66.147.243
@@ -30,7 +36,7 @@ Oct 29 08:41:46 elev-46 kernel: ZON-UT-DROP IN= OUT=eth0 SRC=46.224.175.57 DST=8
 Oct 29 08:43:20 elev-46 kernel: ZON-UT-DROP IN= OUT=eth0 SRC=46.224.175.57 DST=185.12.64.2 ... PROTO=UDP SPT=53073 DPT=123
 → elev-46:s kedja ut stoppade båda
 
-## F22-nek – ping från jump (jump, 2026-10-29)
+## F22-nek – ping från jump (jump, 2026-11-02)
 $ ping -c2 -W3 172.20.1.146
 2 packets transmitted, 0 received, 100% packet loss
 → inget svar: tyst. zon.nft har ingen ICMP-regel i kedjan in, så policy drop stoppar pingen.
