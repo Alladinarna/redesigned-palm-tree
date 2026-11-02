@@ -6,6 +6,7 @@ Varje regel i [zon.nft](zon.nft) och [molnregler.md](molnregler.md) kopplad till
 |---|---|---|---|---|---|---|---|---|
 | D1 (F16) | in | 172.20.1.2 (jump) | elev-46 | tcp/22 | värd | "D1 SSH från jump" | D1-till, D1-nek | verifierad |
 | D2 | in | 172.20.1.10 (ctf) | elev-46 | tcp/22 | värd | "D2 kontroll från ctf" | – | aktiv |
+| F22 | in | 172.20.1.2 (jump) | elev-46 | icmp echo-request | värd | "F22 ping från jump" | F22-till, F22-nek | verifierad |
 | F4 | in | internet | elev-46 eth0 | tcp/80 | värd | "F4 internet till webb" | F4-till, F4-nek-eth1 | verifierad |
 | F4 | in | 0.0.0.0/0 | elev-46 | tcp/80 | moln | molnregel 1 | F4-till, F4-nek | verifierad |
 | D3 (F18) | ut | elev-46 | 185.12.64.1, 185.12.64.2 | tcp+udp/53 | värd | "D3 DNS" | D3-till, D3-nek | verifierad |
@@ -26,7 +27,10 @@ Endast N1 loggar. Loggraderna skickas till loggservern via [60-brandvagg.conf](6
 |---|---|---|
 | F5 (443 in) | Webben har ingen TLS ännu. Öppnas när den har det | F5-nek |
 | F11 (logg 6514 TLS) | TLS-insamlingen görs i vecka 5. Till dess skickas loggen klartext via D5 | F11-nek-v4 |
-| F22 (ping från adminzon) | **Avvikelse.** Flödestabellen tillåter ping från adminzonen (jump) till DMZ, men zon.nft saknar regeln. Regelverket är snävare än tabellen och testfallet förväntade sig fel utfall. Rättas genom att lägga till regeln och ändra testfallet till F22-till | F22-nek |
+
+## Avvikelse som hittades och rättades
+
+F22 saknades först i zon.nft, så regelverket var snävare än flödestabellen. Felet låg i regeln. Regeln lades till 2026-11-02 och verifierades med ping, se [bevis-manuella.txt](bevis-manuella.txt).
 
 ## Status
 
