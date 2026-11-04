@@ -51,10 +51,15 @@ Felet låg i regeln. Regeln lades till och testfallet ändrades till F22-till/F2
 Fångsten elev-46-test.pcap togs före ändringen och innehåller inte dessa ping.
 
 ## D1-nek – SSH från teamnätet (körd av Stef på elev-24, 2026-11-02)
-$ timeout 3 bash -c '</dev/tcp/10.40.1.146/22'
+$ time timeout 3 bash -c '</dev/tcp/10.40.1.146/22'; echo rc=$?
+real 0m3.005s
+rc=124
 $ sudo journalctl -k --since "1 min ago" | grep ZON-UT-DROP
 Nov 02 07:28:50 elev-24 kernel: ZON-UT-DROP IN= OUT=eth2 SRC=10.40.1.98 DST=10.40.1.146 ... PROTO=TCP SPT=35166 DPT=22 ... SYN
 Nov 02 07:28:51 elev-24 kernel: ZON-UT-DROP IN= OUT=eth2 SRC=10.40.1.98 DST=10.40.1.146 ... PROTO=TCP SPT=35166 DPT=22 ... SYN
-→ stoppad redan i elev-24:s kedja ut och gav ett lokalt fel: avvisad.
-  Avvikelse: först förväntat tyst, stoppad av elev-46 in. Felet låg i förväntningen,
-  inte i regeln. Testfallet rättades till avvisad, nekas av elev-24 ut.
+→ timeout efter 3 s: tyst. Stoppad redan i elev-24:s kedja ut.
+  Avvikelse: först förväntat nekad av elev-46 in. Loggen visade att elev-24:s egen
+  kedja ut stoppade paketet. Felet låg i förväntningen om var paketet stoppas.
+  Utfallet tolkades först som avvisad; omkörning med rc visade timeout (rc=124).
+  TCP som stoppas i egen kedja ut ger nya SYN-försök tills tiden går ut, inte ett
+  direkt fel. Direkt fel (EPERM) gäller UDP, se D4-nek.
