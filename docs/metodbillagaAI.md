@@ -18,3 +18,6 @@
 | 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
 | 2026-10-29 | testfall.csv | Tog fram testfallslistan för elev-46 utifrån flödestabellen. | Hugo |
 | 2026-10-29 | test.sh | AI som stöd för att bygga vidare på förövningens test.sh ut efter min egna testfalls lista | Hugo |
+| 2026-11-02 | zon.nft (elev-46) | Granskning mot flödestabellen. AI hittade att F22 (ping från jump) saknades. Jag lade till regeln och verifierade den med ping | Hugo |
+| 2026-11-04 | loggstrategi.md | Stöd vid tolkning av kommandoutskrifter (rotation, tidsformat). All data hämtad av mig från elev-46 | Hugo |
+| 2026-11-04 | loggstrategi.md | Gjorde om google docs tabell till md format för att fungera i github repot. | Hugo |
