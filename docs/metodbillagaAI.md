@@ -18,6 +18,8 @@
 | 2026-10-26 | Hela repot | Kontroll av att dokumenten och länkarna stämmer med varandra | Gabriel, Hugo |
 | 2026-10-29 | testfall.csv | Tog fram testfallslistan för elev-46 utifrån flödestabellen. | Hugo |
 | 2026-10-29 | test.sh | AI som stöd för att bygga vidare på förövningens test.sh ut efter min egna testfalls lista | Hugo |
+| 2026-10-29 | zon.nft (elev-09) | AI som stöd vid uppbyggnad av mitt regelverk (loggregel, policy drop, F22 ping från jump); jag byggde och verifierade reglerna själv och kontrollerade med nft -c | Gabriel |
+| 2026-10-29 | testprotokoll (elev-09) | Körde test.sh och tcpdump på min server och sparade bevisen i Bevis/; AI som stöd vid tolkning av utfallen (tyst / avvisad / nekad) | Gabriel |
 | 2026-11-02 | zon.nft (elev-46) | Granskning mot flödestabellen. AI hittade att F22 (ping från jump) saknades. Jag lade till regeln och verifierade den med ping | Hugo |
 | 2026-11-02 | testfall.csv, bevis-manuella.txt (D1-nek) | AI påstod att TCP som stoppas i egen kedja ut ger "avvisad". Omkörning med returkod (rc=124) visade "tyst". Rättat efter vår egen kontroll | Hugo, Stef |
 | 2026-11-04 | loggstrategi.md | Stöd vid tolkning av kommandoutskrifter (rotation, tidsformat). All data hämtad av mig från elev-46 | Hugo |
