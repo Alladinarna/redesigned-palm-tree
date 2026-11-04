@@ -22,3 +22,4 @@
 | 2026-11-02 | testfall.csv, bevis-manuella.txt (D1-nek) | AI påstod att TCP som stoppas i egen kedja ut ger "avvisad". Omkörning med returkod (rc=124) visade "tyst". Rättat efter vår egen kontroll | Hugo, Stef |
 | 2026-11-04 | loggstrategi.md | Stöd vid tolkning av kommandoutskrifter (rotation, tidsformat). All data hämtad av mig från elev-46 | Hugo |
 | 2026-11-04 | loggstrategi.md | Gjorde om google docs tabell till md format för att fungera i github repot. | Hugo |
+| 2026-11-04 | rsyslog/nftables-konfig | AI som stöd för konfig och uträkningar; jag kontrollerar mot man-sidorna och rsyslogd -N1 / nft -c, och har förenklat eller sagt emot när förslaget varit fel eller för krångligt | Gabriel |
