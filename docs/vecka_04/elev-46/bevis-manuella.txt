@@ -63,3 +63,12 @@ Nov 02 07:28:51 elev-24 kernel: ZON-UT-DROP IN= OUT=eth2 SRC=10.40.1.98 DST=10.4
   Utfallet tolkades först som avvisad; omkörning med rc visade timeout (rc=124).
   TCP som stoppas i egen kedja ut ger nya SYN-försök tills tiden går ut, inte ett
   direkt fel. Direkt fel (EPERM) gäller UDP, se D4-nek.
+
+## Omstartstest 2026-11-04
+Servern hade inte startats om sedan 2026-10-28 (journalctl --list-boots visade en uppstart).
+Omstart med sudo reboot 2026-11-04 10:20 UTC.
+$ sudo journalctl --list-boots --no-pager
+  0 ac19719c4c834b78a9122bdcd4436aeb Wed 2026-11-04 10:20:56 UTC ...
+$ sudo nft list ruleset | grep -c comment
+10
+→ alla 10 regler (D1, D2, F22, F4 in; D3–D7, F9 ut) laddades från zon.nft vid uppstart.
