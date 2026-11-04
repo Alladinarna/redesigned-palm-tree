@@ -2,7 +2,7 @@
 # test.sh testar bara TCP. UDP, ICMP och D1-nek (körs från elev-24) testades för hand.
 # Varje fall: kommando, utskrift och tolkning. Nekade fall bevisas med loggrader.
 
-## Senaste körning 2026-11-02 (efter omstart, U4.5-raderna borttagna)
+## Senaste körning 2026-11-02 (U4.5-raderna borttagna)
 TCP-raderna i resultat-elev-46.csv och resultat-jump.csv kommer från denna körning.
 Fångst under körningen: elev-46-test.pcap (tcpdump -i any på elev-46).
 Skriptet kördes två gånger i rad på elev-46 och på jump. diff på kolumnerna
