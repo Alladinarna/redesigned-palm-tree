@@ -25,3 +25,4 @@
 | 2026-11-04 | loggstrategi.md | Stöd vid tolkning av kommandoutskrifter (rotation, tidsformat). All data hämtad av mig från elev-46 | Hugo |
 | 2026-11-04 | loggstrategi.md | Gjorde om google docs tabell till md format för att fungera i github repot. | Hugo |
 | 2026-11-04 | rsyslog/nftables-konfig | AI som stöd för konfig och uträkningar; jag kontrollerar mot man-sidorna och rsyslogd -N1 / nft -c, och har förenklat eller sagt emot när förslaget varit fel eller för krångligt | Gabriel |
+| 2026-11-05 | 90-logg.conf | AI skrev utkastet utifrån Peters referens i föreläsning 6 och förklarade varje parameter. Jag gick igenom och anpassade filen, installerade den, felsökte SELinux-felet på CA-filen med AI och verifierade med rsyslogd -N1 och testhändelser via loggsök | Hugo |
