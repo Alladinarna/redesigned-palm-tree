@@ -21,11 +21,11 @@ student : student wheel
 Wheel är gruppen som får använda sudo i rocky linux, därför kan student bli root.
 ```
 
-Journalen ligger i RAM (`/run/log/journal`) och försvinner vid omstart. Alla med root kan därför radera den genom att starta om servern.
+Journalen ligger i RAM (/run/log/journal) och försvinner vid omstart. Alla med root kan därför radera den genom att starta om servern.
 
 ## 2. Vem kan ändra eller radera loggen centralt?
 
-Jag har inget konto på loggservern. Jag kan bara läsa mina egna rader med `loggsök` på jump. Troligen kan bara kursens administratörer ändra eller radera loggar centralt. Den som tar sig in på elev-46 som root når alltså inte det som redan har skickats.
+Jag har inget konto på loggservern. Jag kan bara läsa mina egna rader med loggsök på jump. Troligen kan bara kursens administratörer ändra eller radera loggar centralt. Den som tar sig in på elev-46 som root når alltså inte det som redan har skickats.
 
 Belägg:
 ```
@@ -42,9 +42,9 @@ mottaget 2026-11-05T07:41:25.783Z TLS | 2026-11-05T07:41:25+00:00 172.20.1.146 e
 
 | Källa | Rotation | Hur länge |
 |---|---|---|
-| secure, messages, cron | Veckovis, 4 gamla filer (`weekly`, `rotate 4`) | Ca 5 veckor |
-| Journalen | Efter storlek, högst 10 % av `/run`, i RAM | Bara till nästa omstart |
-| Granskningslogg (audit) | Vid 8 MB, upp till 5 filer (`max_log_file`, `num_logs`) | Beror på mängden händelser, inte tid |
+| secure, messages, cron | Veckovis, 4 gamla filer (weekly, rotate 4) | Ca 5 veckor |
+| Journalen | Efter storlek, högst 10 % av /run, i RAM | Bara till nästa omstart |
+| Granskningslogg (audit) | Vid 8 MB, upp till 5 filer (max_log_file, num_logs) | Beror på mängden händelser, inte tid |
 | Webbserverlogg (httpd) | Veckovis, 4 gamla filer | Ca 5 veckor |
 
 Belägg:
@@ -63,7 +63,7 @@ max_log_file_action = ROTATE
 
 ## 4. Vad händer när mottagaren är onåbar?
 
-rsyslog lägger händelserna i en kö i minnet (`queue.type="LinkedList"`). Med `queue.filename` går kön över till disk, och `queue.saveOnShutdown="on"` sparar den när rsyslog stängs. `action.resumeRetryCount="-1"` gör att rsyslog försöker skicka tills loggservern svarar.
+rsyslog lägger händelserna i en kö i minnet (queue.type="LinkedList"). Med queue.filename går kön över till disk, och queue.saveOnShutdown="on" sparar den när rsyslog stängs. action.resumeRetryCount="-1" gör att rsyslog försöker skicka tills loggservern svarar.
 
 Belägg från U5.2: flödet till 6514 blockerades och rsyslog startades om två gånger.
 ```
@@ -79,19 +79,19 @@ mottaget 2026-11-05T08:40:09.937Z TLS | 2026-11-05T08:36:51+00:00 172.20.1.146 e
 ```
 Händelsen skapades 08:36:51 och togs emot 08:40:09, 198 sekunder senare. Den behöll sin ursprungliga tidsstämpel.
 
-**Gräns:** ingen `queue.maxDiskSpace` är satt, så kön har ingen övre gräns. Vid ett långt avbrott kan den fylla disken. Då kan rsyslog inte längre skriva, och nya händelser förloras. En rimlig förbättring är `queue.maxDiskSpace="100m"`.
+**Gräns:** ingen queue.maxDiskSpace är satt, så kön har ingen övre gräns. Vid ett långt avbrott kan den fylla disken. Då kan rsyslog inte längre skriva, och nya händelser förloras. En rimlig förbättring är queue.maxDiskSpace="100m".
 
 ## 5. Scenario: en angripare med root försöker förstöra bevis
 
 En angripare har tagit sig in på elev-46 och fått root. För att dölja vad hen gör kan hen:
-1. stoppa rsyslog (`systemctl stop rsyslog`), så att inget mer skickas,
+1. stoppa rsyslog (systemctl stop rsyslog), så att inget mer skickas,
 2. blockera tcp 6514 i nftables, så att kön aldrig töms,
-3. radera köfilerna i `/var/lib/rsyslog/`,
+3. radera köfilerna i /var/lib/rsyslog/,
 4. radera eller ändra de lokala loggarna och starta om servern, så att journalen försvinner.
 
 **Vad kedjan ändå fångar:**
 - **Allt som redan har skickats** ligger på loggservern, utom räckhåll för angriparen.
-- **Själva stoppet loggas.** `sudo systemctl stop rsyslog` skrivs till secure och skickas innan rsyslog hinner stanna. Det sista loggservern får är alltså beviset på stoppet, med vilket konto som körde det.
+- **Själva stoppet loggas.** sudo systemctl stop rsyslog skrivs till secure och skickas innan rsyslog hinner stanna. Det sista loggservern får är alltså beviset på stoppet, med vilket konto som körde det.
 - **Luckan syns.** När en server som brukar logga flera rader i minuten plötsligt tystnar, är tystnaden i sig en varningssignal. U5.4 visade samma mönster: arena tystnade direkt efter att kontot drift stoppade rsyslog.
 
 **Vad kedjan inte fångar:** det angriparen gör **efter** stoppet. TLS skyddar loggarna på vägen, men inte mot en angripare som redan har root på avsändarservern.
