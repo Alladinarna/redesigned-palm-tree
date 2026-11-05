@@ -14,6 +14,6 @@ Insamling till loggservern över TLS (port 6514), verifierad med `loggsök` på 
 
 ## Avvikelser
 
-1. **CA-filen gick först inte att läsa** (`Permission denied`). Den hade flyttats med `mv` från hemkatalogen och behöll SELinux-etiketten `user_home_t`. Löst med `sudo restorecon -v /etc/pki/rsyslog/ca.pem`.
-2. **Varningarna `certificate file is not set` och `key file is not set`** gäller elev-46:s eget certifikat, som bara behövs om loggservern ska kontrollera avsändaren. De påverkar inte leveransen.
+1. **CA-filen gick först inte att läsa** (Permission denied). Den hade flyttats med mv från hemkatalogen och behöll SELinux-etiketten user_home_t. Löst med sudo restorecon -v /etc/pki/rsyslog/ca.pem.
+2. **Varningarna certificate file is not set och key file is not set** gäller elev-46:s eget certifikat, som bara behövs om loggservern ska kontrollera avsändaren. De påverkar inte leveransen.
 3. **Brandväggsrader före kl. 07:38** kom fram i klartext på port 514, från den gamla konfigurationen. Alla rader efter omkopplingen kommer via TLS.
