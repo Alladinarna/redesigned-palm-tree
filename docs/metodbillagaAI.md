@@ -27,4 +27,4 @@
 | 2026-11-04 | rsyslog/nftables-konfig | AI som stöd för konfig och uträkningar; jag kontrollerar mot man-sidorna och rsyslogd -N1 / nft -c, och har förenklat eller sagt emot när förslaget varit fel eller för krångligt | Gabriel |
 | 2026-11-05 | 90-logg.conf | AI skrev utkastet utifrån Peters referens i föreläsning 6 och förklarade varje parameter. Jag gick igenom och anpassade filen, installerade den, felsökte SELinux-felet på CA-filen med AI och verifierade med rsyslogd -N1 och testhändelser via loggsök | Hugo |
 | 2026-11-05 | skyddsbeskrivning.md | AI skrev mallen och texten utifrån studieguidens fyra rubriker och mina resultat från veckan. Jag körde kommandona och tog fram beläggen (rättigheter, sudo-gruppen, SSH-försöket mot loggservern), rättade påståenden som saknade belägg och jämförde med teamets version | Hugo |
-
+| 2026-11-05 | verifieringsanteckning.md | AI sammanställde tabellen utifrån mina utskrifter från loggsök. Jag körde testerna och kontrollerade raderna | Hugo |
