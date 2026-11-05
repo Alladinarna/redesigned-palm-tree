@@ -10,6 +10,7 @@ Insamling till loggservern över TLS (port 6514), verifierad med `loggsök` på 
 | – | 08:03 | elev-46 | kernel / ZON-UT-DROP (brandvägg) | ZON | Ja, över TLS | Äldre rader finns som KLARTEXT, från före omkopplingen |
 | – | 08:01 | elev-46 | CROND (cron) | CROND | Ja, över TLS | Nej |
 | – | 07:35 | elev-46 | systemd (system) | systemd | Ja, över TLS | Fördröjda ca 3,5 min medan TLS låg nere, levererade av kön |
+| spar38a207e4 | 10:26 | elev-46 | auditd / root-cmd | spar38a207e4 | Ja, auid=1000 | Nej |
 
 ## Avvikelser
 
