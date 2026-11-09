@@ -28,6 +28,15 @@ Avsändartiden har mikrosekunder och tidszonen `+00:00` (RFC 5424-mallen). chron
 
 **Före bytet:** den sista raden från elev-24 i klartext togs emot 08:07:21.609Z (`KLARTEXT`). Strax innan, 08:07:15Z och 08:07:16Z, kom två `ZON-UT-DROP`-rader för SYN till `DST=172.20.1.58 DPT=514`. Det visar att det nya regelverket stoppade nya anslutningar till tcp/514. Efter rsyslog-bytet 08:07:40Z finns inga klartextrader från elev-24 (`loggsök elev-24 | grep KLARTEXT\| grep KLARTEXT`, kontrollerat 08:15Z).
 
+## elev-24 (2026-11-09)
+
+| Identifierare | Avsändartid (UTC) | Mottaget på log (UTC) | Värdnamn | Källa | Söksträng | Kanal | Avvikelse? |
+|---|---|---|---|---|---|---|---|
+| sparbarhet-elev-24-20261109T073944Z | 07:39:44.757523 | 07:39:44.824 | elev-24 | logger (user.notice) | id:t | TLS | Nej |
+| ZON-UT-DROP (nekad tcp/22 till 10.40.1.146) | 07:41:35.172977 | 07:41:35.537 | elev-24 | paketfiltret (kern) | `ZON-UT-DROP` | TLS | Nej |
+
+Upptid 6 dygn sedan omstarten 2/11, och TLS-anslutningen till 172.20.1.58:6514 är fortfarande `ESTAB`. Konfigurationen håller alltså efter omstart.
+
 ## elev-09, elev-38 och elev-46
 
 | Identifierare | Avsändartid (UTC) | Mottaget på log (UTC) | Värdnamn | Källa | Söksträng | Kanal | Avvikelse? |
