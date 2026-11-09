@@ -36,7 +36,6 @@ Prefixen kommer från adressplanen ([adressplan.md](../vecka_02/adressplan.md)).
 | F22 | Adminzon (10.40.1.128/28) | Samma zoner som F16 (inte Loggzon, se F24) | ICMP | echo-request | Intern | Felsökning, att kunna kontrollera om en enhet går att nå | Värd |
 | F23 | Alla serverzoner | DHCP-servern | UDP | 68 → 67 | Ut | Servrarna förnyar sina adresser på alla nätkort. Utan regeln tappar servern adresserna när lånet går ut | Värd (molnbrandväggen släpper alltid DHCP) |
 | F24 | Adminzon (10.40.1.128/28), endast loggadmin-kontot | Loggzon (10.40.1.152/29) | ICMP | echo-request | Intern | Felsökning av loggservern. Bara loggadministratören ska nå Loggzonen, även med ping | Värd. Loggserverns brandvägg ser bara jumps adress, inte vilket konto som pingar. Kontot styrs därför på jump, i kedjan ut (nftables `meta skuid` för loggadmin-kontot) |
-| F25 | Klientzon (10.40.1.0/26) | Loggzon (10.40.1.152/29) | TCP | 6514 (TLS) | Intern | Arbetsplatserna skickar autentiserings-, system- och brandväggsloggar till loggservern, så att inloggningar och nekad trafik från klientnätet går att spåra i efterhand (tillagd vecka 5) | Värd |
  
 **Nekanderegel:** Allt som inte står ovan nekas, inkommande och utgående.
 - **På värden:** policy drop i både kedjan in och kedjan ut, med en loggregel sist i varje kedja.
@@ -55,7 +54,7 @@ Driftflödena är det varje teamserver (elev-46, elev-24, elev-38 och elev-09) s
 | D2 | In | ctf 172.20.1.10 → min server | TCP 22 | Kursens kontrolltjänst. Utan den kommer CTF-kontrollerna inte in | – (labbet) | Värd |
 | D3 | Ut | min server → 185.12.64.1 och 185.12.64.2 | UDP och TCP 53 | Namnuppslag | F18 | Värd |
 | D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med `server ntp.hetzner.com`). Slutar tidssynken fungera kontrolleras adresserna med `getent ahostsv4 ntp.hetzner.com` | F19 | Värd och molnbrandvägg |
-| D5 | Ut | min server → log 172.20.1.58 | TCP 6514 (TLS) | Loggar till loggservern (system, autentisering, brandvägg, audit). Klartext på TCP 514 i vecka 4, TLS på TCP 6514 från vecka 5. TCP 514 nekas från vecka 5 | F11–F14, F25 | Värd |
+| D5 | Ut | min server → log 172.20.1.58 | TCP 514 | Brandväggsloggen till loggservern. Klartext i vecka 4, TCP 6514 med TLS från vecka 5 | F11–F14 | Värd |
 | D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) | UDP 68 → 67 | Förnyelse av serverns adresser | F23 | Värd |
 | D7 | Ut | min server → internet | TCP 443 | Paketuppdateringar (dnf) | F20 | Värd och molnbrandvägg |
  
