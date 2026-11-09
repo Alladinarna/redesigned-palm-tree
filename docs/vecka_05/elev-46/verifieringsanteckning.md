@@ -11,6 +11,7 @@ Insamling till loggservern över TLS (port 6514), verifierad med `loggsök` på 
 | – | 08:01 | elev-46 | CROND (cron) | CROND | Ja, över TLS | Nej |
 | – | 07:35 | elev-46 | systemd (system) | systemd | Ja, över TLS | Fördröjda ca 3,5 min medan TLS låg nere, levererade av kön |
 | spar38a207e4 | 10:26 | elev-46 | auditd / root-cmd | spar38a207e4 | Ja, auid=1000 | Nej |
+| spar4b8bf1b6 | 10:40 | elev-46 | logger / sparbarhet | spar4b8bf1b6 | Ja, över TLS i RFC 5424-format | Nej, tidsstämpel med delsekunder och tidszon |
 
 ## Avvikelser
 
