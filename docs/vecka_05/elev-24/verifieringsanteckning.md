@@ -1,12 +1,12 @@
 # Verifieringsanteckning – elev-24 (vecka 5)
 
-Workshop 2. Sök centralt på jump med `loggsök SÖKORD`. Raden börjar med mottagningstiden på log (UTC) och kanalen (TLS eller KLARTEXT). Efter lodstrecket kommer avsändarens tidsstämpel, adress, värdnamn, tagg och text.
+Sök centralt på jump med `loggsök SÖKORD`. Raden börjar med mottagningstiden på log (UTC) och kanalen (TLS eller KLARTEXT). Efter lodstrecket kommer avsändarens tidsstämpel, adress, värdnamn, tagg och text.
 
 **Avvikelse** betyder fel kanal, fel värdnamn, för stor skillnad mellan avsändartid och mottagningstid, eller att raden inte hittas.
 
 ## elev-24 (2026-11-02)
 
-Konfigurationen installerades 08:07:40Z med [ladda-logg.sh](ladda-logg.sh). TLS-kontrollen gav `subject=CN=log.sec.chas-lab.dev`, `issuer=CN=ITSX26 labb-CA` och `Verify return code: 0 (ok)`.
+Konfigurationen installerades 08:07:40Z . TLS-kontrollen gav `subject=CN=log.sec.chas-lab.dev`, `issuer=CN=ITSX26 labb-CA` och `Verify return code: 0 (ok)`.
 
 | Identifierare | Avsändartid (UTC) | Mottaget på log (UTC) | Värdnamn | Källa | Söksträng | Kanal | Avvikelse? |
 |---|---|---|---|---|---|---|---|
@@ -37,9 +37,3 @@ Avsändartiden har mikrosekunder och tidszonen `+00:00` (RFC 5424-mallen). chron
 
 Upptid 6 dygn sedan omstarten 2/11, och TLS-anslutningen till 172.20.1.58:6514 är fortfarande `ESTAB`. Konfigurationen håller alltså efter omstart.
 
-## Felsökning nedifrån och upp (studieguiden)
-
-1. Skrivs händelsen i den lokala loggen? (`sudo tail /var/log/messages`)
-2. Säger rsyslogs egen logg något om mottagaren? (`journalctl -u rsyslog`)
-3. Lämnar paketen servern? (`sudo tcpdump -nn -i eth1 host 172.20.1.58 and port 6514` medan du skickar)
-4. Kommer trafiken fram? Syns svar från log, eller bara upprepade SYN?

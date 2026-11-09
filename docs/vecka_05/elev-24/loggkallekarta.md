@@ -1,6 +1,6 @@
 # Loggkällekarta – elev-24 (vecka 5)
 
-Workshop 1, del 1. Teamkamraternas kartor ligger i deras egna mappar (`docs/vecka_05/elev-NN/`). Varje rad ska ha en exempelrad klistrad från den egna servern, med serverns värdnamn.
+Varje rad ska ha en exempelrad klistrad från den egna servern, med serverns värdnamn.
 
 Samma händelse kan synas på två ställen: sshd skriver till journalen, och rsyslog läser journalen (imjournal) och skriver samma rad till `/var/log/secure`. Det är **en** händelse i två lagringar, inte två händelser.
 

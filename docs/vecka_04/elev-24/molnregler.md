@@ -1,6 +1,6 @@
 # Molnbrandväggen för elev-24
 
-Molnbrandväggen filtrerar bara det publika gränssnittet (eth0). Trafik i labbnätet 172.20.1.0/24 och teamnätet 10.40.1.0/24 passerar inte den och filtreras på värden, se [elev-24-zon.nft](elev-24-zon.nft).
+Molnbrandväggen filtrerar bara det publika gränssnittet (eth0). Trafik i labbnätet 172.20.1.0/24 och teamnätet 10.40.1.0/24 passerar inte den och filtreras på värden, se [elev-24-zon.nft](zon.nft).
 
 ## Inkommande
 

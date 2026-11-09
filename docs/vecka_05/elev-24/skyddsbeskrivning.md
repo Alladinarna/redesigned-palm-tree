@@ -1,6 +1,6 @@
 # Skyddsbeskrivning av loggkedjan – elev-24 (vecka 5)
 
-Workshop 2, del 2. Varje svar har belägg i form av ett kommando, en konfigurationsrad eller en rättighetsutskrift.
+Varje svar har belägg i form av ett kommando, en konfigurationsrad eller en rättighetsutskrift.
 
 Beläggen kommer från **elev-24**, insamlade 2026-11-02 mellan 07:50 och 08:14 UTC. Teamkamraternas skyddsbeskrivningar ligger i deras egna mappar. Det som inte har kunnat kontrolleras står under **Inte kontrollerat**.
 
@@ -65,7 +65,7 @@ Köfilerna låg kvar i `/var/lib/rsyslog` vid kontrollen 20 sekunder efter att b
 
 **Varför eth0:** vid omstarten 08:38Z gick rsyslogs första SYN-paket ut på eth0 (`ZON-UT-DROP OUT=eth0 SRC=91.99.144.137`, 08:39:05.65Z), innan dhclient hade bundit eth1 (`bound to 172.20.1.124`, 08:39:07.50Z). När servern väl är uppe går 172.20.1.58 via eth1 (`ip route get 172.20.1.58`: `via 172.20.0.1 dev eth1 src 172.20.1.124`). Fördröjningen på cirka 128 s stämmer med `net.ipv4.tcp_syn_retries = 6` (1+2+4+8+16+32+64 = 127 s), som var inställt.
 
-**Åtgärd 2/11 08:37Z:** D5 är låst till eth1 (`oifname "eth1"`). Den gör att paketen inte lämnar servern på eth0, men den kortar inte fördröjningen. Den uppmätta fördröjningen efter omstarten 08:38Z var cirka 128 s, och inga rader saknades ([testprotokoll elev-24](../../vecka_04/elev-24/testprotokoll.md)). **Känd brist:** de första cirka 2 minuterna efter en omstart når loggarna loggservern först när kön skickas.
+**Åtgärd 2/11 08:37Z:** D5 är låst till eth1 (`oifname "eth1"`). Den gör att paketen inte lämnar servern på eth0, men den kortar inte fördröjningen. Den uppmätta fördröjningen efter omstarten 08:38Z var cirka 128 s, och inga rader saknades ([Bevis](../../vecka_04/elev-24/Bevis/)). **Känd brist:** de första cirka 2 minuterna efter en omstart når loggarna loggservern först när kön skickas.
 
 **Inte kontrollerat:** vad som händer när kön når taket på 256 MB.
 

@@ -1,6 +1,6 @@
 # Spårbarhetslista – elev-24 (Serverzon)
 
-Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. Regelns identifierare är kommentaren i [elev-24-zon.nft](elev-24-zon.nft) eller beskrivningen i [molnbrandväggen](molnregler.md). Rad-id (F1–F24, D1–D7) enligt [flödestabellen](../../vecka_03/flodestabell.md).
+Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. Regelns identifierare är kommentaren i [elev-24-zon.nft](zon.nft) eller beskrivningen i [molnbrandväggen](molnregler.md). Rad-id (F1–F24, D1–D7) enligt [flödestabellen](../../vecka_03/flodestabell.md).
 
 **Loggar?** Tillåtande regler loggar inte. Allt som inte släpps av någon regel loggas av den sista regeln i kedjan (`ZON-IN-DROP` / `ZON-UT-DROP`) och skickas till loggservern (D5).
 
@@ -19,8 +19,8 @@ Varje rad i flödestabellen som gäller elev-24, och var den är implementerad. 
 | D7/F20 | Ut | elev-24 | Internet | tcp/443 | Värd + moln | värd: `D7/F20 paketuppdateringar`, moln: `F20 paketuppdateringar dnf` | Nej | Verifierad 28/10 och 2/11 (två körningar och efter omstart). Molnregeln kontrollerades med `moln brandvägg regel lista` 2/11 |
 | Nekande | In och ut | Allt annat | – | – | Värd + moln | `policy drop` + `ZON-IN-DROP` / `ZON-UT-DROP` | Ja | Kedjan ut verifierad 28/10 och 2/11. Kedjan in verifierad 2/11 (80-nek, F8-nek och F9-nek från jump var tysta, `ZON-IN-DROP IN=eth1`). Molnet har inga inkommande regler |
 
-Från vecka 5 går D5/F12 på TCP 6514 med TLS och klartext på TCP 514 nekas (testfall D5-nek-klartext), se [vecka 5](../../vecka_05/elev-24/README.md). Öppningar för enskilda labbar (till exempel ctf → tcp/80) läggs bara till när labben kräver det, se [zoner-i-labbet](../zoner-i-labbet.md).
+Från vecka 5 går D5/F12 på TCP 6514 med TLS och klartext på TCP 514 nekas (testfall D5-nek-klartext), se [vecka 5](../../vecka_05/elev-24/verifieringsanteckning.md). Öppningar för enskilda labbar (till exempel ctf → tcp/80) läggs bara till när labben kräver det, se [zoner-i-labbet](../zoner-i-labbet.md).
 
 Rader i flödestabellen som inte gäller elev-24 (t.ex. F4–F5, F11, F13) implementeras på respektive teamkamrats server.
 
-Status ändras till **Verifierad** när raden har ett godkänt test i [testprotokollet](testprotokoll.md).
+Status ändras till **Verifierad** när raden har ett godkänt test i [Bevis/](Bevis/) (sista körningen från elev-24 och från jump, efter omstart 2/11).
