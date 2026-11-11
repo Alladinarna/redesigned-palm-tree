@@ -5,7 +5,7 @@
 | Händelse | Loggkälla | Filter | Faktiska värden | Gränsfall |
 |---|---|---|---|---|
 | 1. Brute force mot SSH | sshd-session, wazuh-alerts-* | location elev-46, rule.id 5710/5712, ≥5 på 5 min | 172.20.1.10, admin97 m.fl., 2026-11-10 10:10 UTC | Enstaka feltryckning, fel lösenord på befintligt konto (5760) |
-| 2. Zonöverträdelse | kernel (nftables), wazuh-archives-* | location elev-46, data.action ZON-IN-DROP | 172.20.1.2 till port 80, IN=eth1, 2026-11-02 08:37 UTC | ZON-UT-DROP från port 80 med ACK/FIN (svarstrafik), egna testkörningar |
+| 2. Zonöverträdelse | kernel (nftables), wazuh-archives-* | location elev-46, data.action ZON-IN-DROP | 172.20.1.2 till port 80, IN=eth1, 2026-11-02 08:37 UTC | ZON-UT-DROP från port 80 med ACK/FIN (svarstrafik) |
 | 3. Root-kommando | auditd (audisp-syslog), wazuh-archives-* | location elev-46, audisp-syslog, full_log "root-cmd" och "type=SYSCALL" | auid=1000 (student), euid=0, exe=/usr/sbin/nft, 2026-11-09 07:29 UTC | CONFIG_CHANGE op=add_rule med samma nyckel, 2026-11-09 07:26 UTC |
 | 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-46, rule.id 5902, inte data.shell *nologin* | test46, uid 1001, /bin/bash, 2026-11-11 08:38 UTC | Systemkonto från dnf, uid under 1000, /sbin/nologin (filtreras bort på shell) |
  
@@ -24,7 +24,9 @@ Vi letar efter många misslyckade SSH-inloggningar mot elev-46. Raderna skrivs a
 Vi letar efter trafik som vår brandvägg (nftables) stoppar på väg **in**. Det är kärnan som loggar, därför står det `kernel` som program. Ingen standardregel larmar på raderna, så de finns bara i `wazuh-archives-*`. Vi filtrerar på loggprefixet `ZON-IN-DROP` som vi själva satte i `zon.nft`.
  
 - **Riktig träff:** 172.20.1.2 försökte nå port 80 via eth1 den 2/11 kl. 08:37 UTC.
-- **Ska inte larma:** `ZON-UT-DROP` med ACK/FIN från port 80. Det är svar på en anslutning som redan stängts, alltså svarstrafik och inget angrepp. Inte heller våra egna testkörningar.
+- **Ska inte larma:** `ZON-UT-DROP` med ACK/FIN från port 80. Det är svar på en anslutning som redan stängts, alltså svarstrafik och inget angrepp.
+- **Falsklarmsrisk:** våra egna testkörningar från jump larmar likadant som ett riktigt försök, eftersom källa och port är desamma. De måste stämmas av mot testloggen.
+- **Framkallad:** paket från jump mot 172.20.1.146:80, 2026-11-11 11:44:03 UTC. Monitorn larmade 11:44 och avslutades 11:49 UTC (fönster 5 min).
 ### 3. Kommando som körs som root
  
 Vi letar efter kommandon som en **inloggad person** kör med root-rättigheter (till exempel via sudo). auditd loggar dem med nyckeln `root-cmd` och skickar dem vidare via `audisp-syslog`. Ingen standardregel larmar, så de finns bara i `wazuh-archives-*`. Wazuh tolkar inte auditposterna här, så allt ligger i `full_log`.
@@ -43,4 +45,3 @@ Ett `sudo useradd` ger tre larm: 5902 (nytt konto), 5901 (ny grupp) och 5402 (su
 - **Ska inte larma:** systemkonton som skapas när ett paket installeras med dnf (uid under 1000, `/sbin/nologin`). De filtreras bort på shell, inte på uid.
 - **Filter:** `location: *elev-46* and rule.id: 5902 and not data.shell: *nologin*`. Wazuh lagrar shell med ett kommatecken på slutet (`/bin/bash,`), därför jokertecken.
 - **Att tänka på:** regel 5902 larmar även för systemkonton (verifierat med `useradd -r test46r`: uid 994, `/bin/bash`, 2026-11-11 09:01 UTC). Att filtrera bort uid under 1000 hade alltså dolt ett konto som en angripare skapat med `-r`, och `useradd -o -u 0` ger dessutom ett andra root-konto. Därför filtrerar vi på shell.
----
