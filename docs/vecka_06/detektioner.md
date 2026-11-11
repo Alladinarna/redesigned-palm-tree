@@ -7,7 +7,7 @@
 | 1. Brute force mot SSH | sshd-session, wazuh-alerts-* | location elev-46, rule.id 5710/5712, ≥5 på 5 min | 172.20.1.10, admin97 m.fl., 2026-11-10 10:10 UTC | Enstaka feltryckning, fel lösenord på befintligt konto (5760) |
 | 2. Zonöverträdelse | kernel (nftables), wazuh-archives-* | location elev-46, data.action ZON-IN-DROP | 172.20.1.2 till port 80, IN=eth1, 2026-11-02 08:37 UTC | ZON-UT-DROP från port 80 med ACK/FIN (svarstrafik), egna testkörningar |
 | 3. Root-kommando | auditd (audisp-syslog), wazuh-archives-* | location elev-46, audisp-syslog, full_log "root-cmd" och "type=SYSCALL" | auid=1000 (student), euid=0, exe=/usr/sbin/nft, 2026-11-09 07:29 UTC | CONFIG_CHANGE op=add_rule med samma nyckel, 2026-11-09 07:26 UTC |
-| 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-46, rule.id 5902 | test46, uid 1001, /bin/bash, 2026-11-11 08:38 UTC | Systemkonto från dnf, uid under 1000, /sbin/nologin |
+| 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-46, rule.id 5902, inte data.shell *nologin* | test46, uid 1001, /bin/bash, 2026-11-11 08:38 UTC | Systemkonto från dnf, uid under 1000, /sbin/nologin (filtreras bort på shell) |
  
 ---
  
@@ -40,6 +40,7 @@ Vi letar efter att någon skapar ett konto – en angripare gör det för att ku
 Ett `sudo useradd` ger tre larm: 5902 (nytt konto), 5901 (ny grupp) och 5402 (sudo till root). Vi använder bara 5902, eftersom 5901 alltid kommer tillsammans med den. Samma kommando ger också en träff i händelse 3.
  
 - **Riktig träff:** test46 skapades med uid 1001 och `/bin/bash` den 11/11 kl. 08:38 UTC. Kontot är borttaget efteråt.
-- **Ska inte larma:** systemkonton som skapas när ett paket installeras med dnf. De har uid under 1000 och shell `/sbin/nologin`, så ingen kan logga in på dem.
-- **Att tänka på:** en angripare kan själv skapa ett konto som ser ut som ett systemkonto (`useradd -r`). Filtrerar vi bort uid under 1000 blir det mindre brus, men också en blind fläck.
+- **Ska inte larma:** systemkonton som skapas när ett paket installeras med dnf (uid under 1000, `/sbin/nologin`). De filtreras bort på shell, inte på uid.
+- **Filter:** `location: *elev-46* and rule.id: 5902 and not data.shell: *nologin*`. Wazuh lagrar shell med ett kommatecken på slutet (`/bin/bash,`), därför jokertecken.
+- **Att tänka på:** regel 5902 larmar även för systemkonton (verifierat med `useradd -r test46r`: uid 994, `/bin/bash`, 2026-11-11 09:01 UTC). Att filtrera bort uid under 1000 hade alltså dolt ett konto som en angripare skapat med `-r`, och `useradd -o -u 0` ger dessutom ett andra root-konto. Därför filtrerar vi på shell.
 ---
