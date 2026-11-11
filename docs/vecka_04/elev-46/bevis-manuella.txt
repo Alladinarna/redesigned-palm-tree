@@ -2,11 +2,10 @@
 # test.sh testar bara TCP. UDP, ICMP och D1-nek (körs från elev-24) testades för hand.
 # Varje fall: kommando, utskrift och tolkning. Nekade fall bevisas med loggrader.
 
-## Senaste körning 2026-11-02 (U4.5-raderna borttagna)
-TCP-raderna i resultat-elev-46.csv och resultat-jump.csv kommer från denna körning.
-Fångst under körningen: elev-46-test.pcap (tcpdump -i any på elev-46).
-Skriptet kördes två gånger i rad på elev-46 och på jump. diff på kolumnerna
-id, faktiskt och resultat gav ingen skillnad.
+## Senaste körning 2026-11-11 (D5 till 6514, F11-nek-v4 borttagen, D5-nek-514 ny)
+TCP-raderna i resultat-elev-46.csv kommer från denna körning. Alla OK.
+resultat-jump.csv och fångsten elev-46-test.pcap är från körningen 2026-11-02;
+jump-raderna har inte ändrats sedan dess.
 
 ## D3-till – DNS mot tillåten resolver (elev-46, 2026-10-29)
 $ dig @185.12.64.1 example.com +short
@@ -29,6 +28,13 @@ $ timeout 3 bash -c "echo > /dev/udp/185.12.64.2/123"; echo rc=$?
 bash: line 1: echo: write error: Operation not permitted
 rc=1
 → stoppad i egen kedja ut, lokalt fel (EPERM): avvisad
+
+## D5 – logg till log över TLS (elev-46, 2026-11-11)
+D5 gick tidigare till 514 i klartext. Sedan vecka 5 går loggningen över TLS på 6514
+(regeln heter F11 i zon.nft). Testfallen ändrades så att de följer regelverket:
+D5-till mot 6514 och D5-nek-514 som visar att den gamla porten är stängd.
+D5-till,oppen,oppen,12,OK
+D5-nek-514,tyst,tyst,3010,OK
 
 ## Loggbevis D3-nek och D4-nek (elev-46)
 $ sudo journalctl -k -g ZON-UT-DROP --since "10 min ago"
@@ -72,3 +78,22 @@ $ sudo journalctl --list-boots --no-pager
 $ sudo nft list ruleset | grep -c comment
 10
 → alla 10 regler (D1, D2, F22, F4 in; D3–D7, F9 ut) laddades från zon.nft vid uppstart.
+
+## Brandväggsloggen hela vägen – F4-nek-eth1 (2026-11-11)
+Från jump:
+$ timeout 3 bash -c 'exec 3<>/dev/tcp/172.20.1.146/80'
+
+På elev-46:
+$ sudo journalctl -k --since "5 min ago" | grep ZON
+Nov 11 11:44:03 elev-46 kernel: ZON-IN-DROP IN=eth1 OUT= ... SRC=172.20.1.2 DST=172.20.1.146 ... PROTO=TCP SPT=44912 DPT=80 ... SYN
+Nov 11 11:44:04 elev-46 kernel: ZON-IN-DROP IN=eth1 OUT= ... SRC=172.20.1.2 DST=172.20.1.146 ... PROTO=TCP SPT=44912 DPT=80 ... SYN
+
+På jump (loggservern):
+$ loggsök ZON-IN-DROP
+mottaget 2026-11-11T11:44:03.491Z TLS | ... elev-46 kernel ZON-IN-DROP ... SPT=44912 DPT=80 ... SYN
+mottaget 2026-11-11T11:44:04.599Z TLS | ... elev-46 kernel ZON-IN-DROP ... SPT=44912 DPT=80 ... SYN
+
+→ Loggregeln slår till och posten når log över TLS.
+  Två rader per försök: TCP skickar om SYN efter 1 s.
+  Att loggen var nästan tom vid checkpointen beror på att få försöker nå förbjudna
+  portar via labb- och teamnätet; brus från internet stoppas redan i molnbrandväggen.
