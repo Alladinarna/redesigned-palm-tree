@@ -29,8 +29,12 @@
 | 2026-11-05 | skyddsbeskrivning.md | Jag tog fram underlaget och beläggen (rättigheter, sudo-gruppen, SSH-försöket mot loggservern) och lät AI strukturera texten efter studieguidens fyra rubriker. Jag rättade påståenden som saknade belägg och jämförde mot teamets version | Hugo |
 | 2026-11-05 | verifieringsanteckning.md | AI sammanställde tabellen utifrån mina utskrifter från loggsök. Jag körde testerna och kontrollerade raderna | Hugo |
 | 2026-11-11 | detektioner.md | Stöd vid förklaring av DQL-sökningar, ai gjorde om min textfil till md format. | Hugo |
+| 2026-11-11 | testfall.csv, bevis-manuella.txt | AI föreslog ändringar efter Peters återkoppling. AI hade fel om D1-nek (TCP i egen ut-kedja ger "tyst", inte "avvisad") och om elev-24s adress, upptäckt i mina egna resultat. Testerna körde jag själv | Hugo |
 | 2026-11-12 | README.md | Förbättrade readme med stöd och förslag från AI. | Hugo |
 | 2026-11-11 | detektioner.md (elev-09) | AI stöd med DQL-sökningar och gränsfall. Jag valde händelserna och hämtade värdena själv | Gabriel |
 | 2026-11-12 | triagelogg.md (elev-09) | Jag tog fram innehållet och triagebesluten; AI hjälpte med formuleringen. Jag framkallade larmen och hämtade fälten från Wazuh själv | Gabriel |
 | 2026-11-12 | playbooks/brute-force.md | AI stöd med struktur (NIST-faser) och kommandon. Jag verifierade nftables själv och korstestade med Hugo | Gabriel |
 | 2026-11-12 | testlogg | AI sammanställde mina testrader och räknade om tider till UTC. Jag körde testerna | Gabriel |
+| 2026-11-12 | detektioner.md | Stöd med DQL och brusmätning. AI påstod att zonöverträdelsens 33 träffar var egna tester,fel, data.srcip visade CTF-kontroller. Regelpåståenden kontrollerade mot Wazuhs regelverk | Hugo |
+| 2026-11-12 | playbooks/nytt-konto.md | AI skrev utkastet. Jag granskade och testade alla steg på ett riktigt larm, AI:s usermod -L stoppade inte SSH-nycklar, -L -e 1 verifierades. Korstestad av Gabriel | Hugo |
+| 2026-11-12 | triagelogg.md, testlogg.md | AI hjälpte med format och tidslinje. Observationer från mina sökningar, falskt negativt (5760/5763) hittade jag genom att testa gränsfallet. | Hugo |
