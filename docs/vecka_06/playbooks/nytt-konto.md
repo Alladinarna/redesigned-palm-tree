@@ -47,7 +47,7 @@ Byt `<server>` mot servern i larmet (t.ex. elev-46) och `<kontot>` mot kontonamn
  
 ## 3. Begränsning, utrotning och återställning
  
-10. **Lås** kontot direkt vid eskalering: `sudo usermod -L -e 1 <kontot>` (låser lösenordet och sätter kontot som utgånget, så att även SSH-nycklar stoppas) och avsluta dess sessioner: `sudo pkill -KILL -u <kontot>`. Går att ångra med `sudo usermod -U -e "" <kontot>`.
+10. **Lås** kontot direkt vid eskalering: `sudo usermod -L -e 1 <kontot>` (låser lösenordet och sätter kontot som utgånget, så att även SSH-nycklar stoppas) och avsluta dess sessioner: `sudo pkill -KILL -u <kontot>`. Går att ångra med `sudo usermod -U -e "" <kontot>`. **(verifierat 2026-11-12: inloggning med SSH-nyckel nekades efter låsning, upplåsning fungerade)**
 11. **Säkra** posterna från steg 4–8 (skärmdump eller export) innan något tas bort.
 12. **Ta bort** kontot: `sudo userdel -r <kontot>`. Gäller även testkonton.
 13. **Verifiera** att det är borta: `getent passwd <kontot>` ska inte ge något.
