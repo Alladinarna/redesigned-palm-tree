@@ -41,3 +41,11 @@
 - Vad hände: upprepade felaktiga lösenord mot ett konto som finns. Wazuh känner igen det som brute force (5763: 8 försök på 120 s från samma källa), men teamets monitor räknar bara 5710/5712, som gäller påhittade användare.
 - Vad berördes: elev-09, kontot student. Ingen lyckad inloggning (5715) från 172.20.1.2 under försöken 08:33–08:43; de tre lyckade inloggningarna från samma källa (08:01, 08:27, 08:28) ligger före och är Gabriels egna via jump.
 - Vad ska göras: själva händelsen avfärdas – den stämmer med testloggen (~08:33, Hugo, ssh student@…). Men detektionen har ett falskt negativt: en angripare som gissar på ett riktigt användarnamn syns inte. Monitorn utökas med 5760/5763, och brute-force.md uppdateras. Gränsfallet "fel lösenord på befintligt konto" gäller bara enstaka försök.
+
+  ## Larm: brute force mot elev-09 – korstest av brute-force.md
+- Triagerad av: Hugo (elev-46), följde Gabriels playbook. Gabriel antecknade.
+- Observation: 15 misslyckade inloggningar, rule.id 5710, elev-09, 2026-11-12 13:42 UTC. data.srcip 172.20.1.2, data.srcuser fejk7.
+- Vad hände: upprepade inloggningsförsök med ett påhittat användarnamn från jump.
+- Vad berördes: bara elev-09 – sökning på data.srcip 172.20.1.2 utan värdfilter gav inga försök mot andra servrar. Ingen lyckad inloggning från källan i fönstret.
+- Vad ska göras: avfärda – stämmer med testloggen (13:42, Gabriel, ssh fejk7@…).
+- Fynd i playbooken: oklart var man börjar (startrad tillagd); tidsfönstret hölls inte runt larmet, en sökning gav 179 träffar över 24 h (förtydligat); inget om vad man gör när testloggen inte matchar (tillagt: behandla som skarpt); testloggens plats saknades (tillagd). Detektionen missar brute force mot riktiga konton (5760/5763), samma lucka som i posten "Falskt negativt".
