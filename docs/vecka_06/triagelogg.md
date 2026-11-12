@@ -26,3 +26,18 @@
 - Vad hände: en brute force mot student som till slut lyckades. Det är här skillnaden mot 5712 blir viktig – i 5712 kom ingen in, här kom någon faktiskt in på kontot.
 - Vad berördes: elev-09, kontot student. Källan är 172.20.1.2 (jump), samma som i försöket innan.
 - Vad ska göras: eskalera direkt, det här ser ut som en möjlig kontoövertagande. Jag skulle spärra eller tvinga lösenordsbyte på student, kolla vad som hände på elev-09 efter inloggningen (vilka kommandon som kördes), och utreda källan 172.20.1.2. Nivå 12 betyder att en analytiker ska titta på den, inte avfärda.
+
+## Larm: nytt användarkonto (rule 5902) – verifiering av playbook
+- Triagerad av: Hugo (elev-46)
+- Observation: rule.id 5902, elev-46, 2026-11-12 12:16:52 UTC. name=lastest46, uid 1001, /bin/bash, home /home/lastest46, from=/dev/pts/1. Larm 12:17 UTC, avslutat 12:22. 5402 samma sekund: student, /sbin/useradd -m lastest46 (även /bin/passwd lastest46). 5715 12:22:20: lastest46 inloggad med nyckel från 172.20.1.2.
+- Vad hände: student skapade ett testkonto med sudo och loggade in på det från jump.
+- Vad berördes: elev-46, kontot lastest46. Utan värdfilter finns lastest46 bara på elev-46.
+- Vad ska göras: avfärda – stämmer med testloggen (12:16, Hugo, useradd, nyckelinloggning). Kontot låstes med usermod -L -e 1; inloggning med nyckel nekades ("account has expired"). Upplåsning fungerade. Kontot borttaget, nyckeln på jump raderad.
+- Fynd i playbooken: from= var svårt att hitta (steg 4 förtydligat), flera 5402-poster (steg 5 förtydligat), saknat steg för om nya kontot använts (nytt steg 7).
+
+## Falskt negativt: brute force mot befintligt konto (rule 5760/5763)
+- Triagerad av: Hugo (elev-46)
+- Observation: 23 × rule.id 5760 "authentication failed" och 1 × 5763 (08:43:21 UTC, med previous_output) på elev-09, data.dstuser student, data.srcip 172.20.1.2. Brute force-monitorn larmade inte.
+- Vad hände: upprepade felaktiga lösenord mot ett konto som finns. Wazuh känner igen det som brute force (5763: 8 försök på 120 s från samma källa), men teamets monitor räknar bara 5710/5712, som gäller påhittade användare.
+- Vad berördes: elev-09, kontot student. Ingen lyckad inloggning (5715) från 172.20.1.2 under försöken 08:33–08:43; de tre lyckade inloggningarna från samma källa (08:01, 08:27, 08:28) ligger före och är Gabriels egna via jump.
+- Vad ska göras: själva händelsen avfärdas – den stämmer med testloggen (~08:33, Hugo, ssh student@…). Men detektionen har ett falskt negativt: en angripare som gissar på ett riktigt användarnamn syns inte. Monitorn utökas med 5760/5763, och brute-force.md uppdateras. Gränsfallet "fel lösenord på befintligt konto" gäller bara enstaka försök.
