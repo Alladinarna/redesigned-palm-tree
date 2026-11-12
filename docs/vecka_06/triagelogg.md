@@ -4,7 +4,7 @@
 - Vad berördes: bara elev-09. Alla träffar från 172.20.1.2 ligger på elev-09/syslog.log, så källan rörde ingen annan server.
 - Vad ska göras: källan är 172.20.1.2, alltså jump, som är intern. Så jag skulle kolla vem som satt på jump just då. Allt misslyckades så det brinner inte, men en intern maskin som brute forcar är ändå nåt man vill utreda.
 
-## Larm: brute force som lyckades (rule.id 40112)
+## Larm: brute force som lyckades (rule.id 40112) Övningexempel.
 - Observation: flera misslyckade lösenordsförsök mot kontot student på elev-09 från 172.20.1.2, följt av en lyckad inloggning som student. Regel 40112, nivå 12 (mycket högre än 5712). Fyra larm mellan 09:33 och 09:45.
 - Vad hände: en brute force mot student som till slut lyckades. Det är här skillnaden mot 5712 blir viktig – i 5712 kom ingen in, här kom någon faktiskt in på kontot.
 - Vad berördes: elev-09, kontot student. Källan är 172.20.1.2 (jump), samma som i försöket innan.
