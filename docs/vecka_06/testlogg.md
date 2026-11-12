@@ -13,4 +13,4 @@ Rader märkta *(i efterhand)* skrevs in efter att testet körts, med tider från
 | 2026-11-12 ~09:01 | Hugo | jump | elev-09 | `/dev/tcp/172.20.1.109/80` *(i efterhand)* | Zonöverträdelse |
 | 2026-11-12 09:21 | Hugo | elev-46 | elev-46 | `sudo useradd test1`, `userdel -r test1` 09:34 *(i efterhand)* | Nytt konto (5902), root-kommando |
 | 2026-11-12 12:16 | Hugo | elev-46 / jump | elev-46 | `sudo useradd -m lastest46`, ssh-nyckel, `usermod -L -e 1`, inloggningsförsök, `userdel -r` | Nytt konto (5902), root-kommando |
-| 2026-11-12 14:15 | Hugo | elev-46 | elev-46 | `sudo useradd -m lastest46` | Nytt konto (5902), root commando |
+| 2026-11-12 14:15 | Hugo | elev-46 | elev-46 | `sudo useradd -m korstest46` | Nytt konto (5902), root commando |
