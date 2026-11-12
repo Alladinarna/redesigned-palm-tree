@@ -4,7 +4,7 @@
  
 | Händelse | Loggkälla | Filter | Faktiska värden | Gränsfall |
 |---|---|---|---|---|
-| 1. Brute force mot SSH | sshd-session, wazuh-alerts-* | location elev-46, rule.id 5710,5712, 5760, 5763,  ≥5 på 5 min | 172.20.1.10, admin97 m.fl., 2026-11-10 10:10 UTC | Enstaka fel lösenord på befintligt konto (enstaka 5760) |
+| 1. Brute force mot SSH | sshd-session, wazuh-alerts-* | location elev-46, rule.id 5710/5712/5760/5763,  ≥5 på 5 min | 172.20.1.10, admin97 m.fl., 2026-11-10 10:10 UTC | Enstaka fel lösenord på befintligt konto (enstaka 5760) |
 | 2. Zonöverträdelse | kernel (nftables), wazuh-archives-* | location elev-46, data.action ZON-IN-DROP | 172.20.1.2 till port 80, IN=eth1, 2026-11-02 08:37 UTC | ZON-UT-DROP från port 80 med ACK/FIN (svarstrafik) |
 | 3. Root-kommando | auditd (audisp-syslog), wazuh-archives-* | location elev-46, audisp-syslog, full_log "root-cmd" och "type=SYSCALL" | auid=1000 (student), euid=0, exe=/usr/sbin/nft, 2026-11-09 07:29 UTC | CONFIG_CHANGE op=add_rule med samma nyckel, 2026-11-09 07:26 UTC |
 | 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-46, rule.id 5902, inte data.shell *nologin* | test46, uid 1001, /bin/bash, 2026-11-11 08:38 UTC | Systemkonto från dnf, uid under 1000, /sbin/nologin (filtreras bort på shell) |
@@ -20,6 +20,8 @@ Vi letar efter många misslyckade SSH-inloggningar mot elev-46. Raderna skrivs a
 - **Riktig träff:** ctf-servern 172.20.1.10 provade admin97 och andra påhittade användarnamn den 10/11 kl. 10:10 UTC (U6.2).
 - **Ska inte larma:** någon som skriver fel lösenord en eller ett par gånger på ett konto som finns (enstaka 5760). Fem eller fler inom 5 minuter larmar – det är ett angrepp, inte en feltryckning.
 - **Falskt negativt (hittat 2026-11-12):** 24 felaktiga lösenord mot det befintliga kontot student på elev-09 (5760/5763, 08:33–08:43 UTC) gav inget larm, eftersom monitorn bara räknade 5710/5712 (påhittade användare). Monitorn utökad med 5760 och 5763.
+- **Brus, normaltrafik:** 13 träffar på 0,5 h (10 försök från olika adresser samma sekund, 3 enstaka fel lösenord) – monitorn hade larmat en gång, ett falsklarm. Den ensamma feltryckningen 08:30 larmade inte.
+- **Brus, verifierat fönster:** 25 träffar på 357 h (≈ 0,07/h). Alla förklarade: U6.2, normaltrafiken och enstaka fel lösenord. Före utökningen med 5760/5763: 22 träffar.
 
 ### 2. Zonöverträdelse
  
