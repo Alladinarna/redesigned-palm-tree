@@ -29,3 +29,4 @@
 | 2026-11-05 | skyddsbeskrivning.md | Jag tog fram underlaget och beläggen (rättigheter, sudo-gruppen, SSH-försöket mot loggservern) och lät AI strukturera texten efter studieguidens fyra rubriker. Jag rättade påståenden som saknade belägg och jämförde mot teamets version | Hugo |
 | 2026-11-05 | verifieringsanteckning.md | AI sammanställde tabellen utifrån mina utskrifter från loggsök. Jag körde testerna och kontrollerade raderna | Hugo |
 | 2026-11-11 | detektioner.md | Stöd vid förklaring av DQL-sökningar, ai gjorde om min textfil till md format. | Hugo |
+| 2026-11-12 | README.md | Förbättrade readme med stöd och förslag från AI. | Hugo |
