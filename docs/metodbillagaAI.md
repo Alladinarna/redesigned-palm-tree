@@ -30,3 +30,7 @@
 | 2026-11-05 | verifieringsanteckning.md | AI sammanställde tabellen utifrån mina utskrifter från loggsök. Jag körde testerna och kontrollerade raderna | Hugo |
 | 2026-11-11 | detektioner.md | Stöd vid förklaring av DQL-sökningar, ai gjorde om min textfil till md format. | Hugo |
 | 2026-11-12 | README.md | Förbättrade readme med stöd och förslag från AI. | Hugo |
+| 2026-11-11 | detektioner.md (elev-09) | AI stöd med DQL-sökningar och gränsfall. Jag valde händelserna och hämtade värdena själv | Gabriel |
+| 2026-11-12 | triagelogg.md (elev-09) | Jag tog fram innehållet och triagebesluten; AI hjälpte med formuleringen. Jag framkallade larmen och hämtade fälten från Wazuh själv | Gabriel |
+| 2026-11-12 | playbooks/brute-force.md | AI stöd med struktur (NIST-faser) och kommandon. Jag verifierade nftables själv och korstestade med Hugo | Gabriel |
+| 2026-11-12 | testlogg | AI sammanställde mina testrader och räknade om tider till UTC. Jag körde testerna | Gabriel |
