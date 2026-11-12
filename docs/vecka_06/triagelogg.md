@@ -16,12 +16,11 @@
 - Vad berördes: bara elev-09, port 80. Källan är jump (172.20.1.2). Ingen kom in, paketet droppades.
 - Vad ska göras: en enstaka blockad anslutning är oftast ett misstag eller nån som testar, och den är ju redan stoppad. Jag avfärdar: känd intern källa (jump), ett fåtal paket, redan droppat av brandväggen. Men hade det kommit många drops mot olika portar från samma källa hade det varit en portscan, och då hade jag utrett källan.
 
-## Larm: nytt användarkonto (rule.id 5902)
-- Observation: ett nytt konto test12 skapades på elev-09 kl 10:19. uid 1001, gid 1001, home /home/test12, shell /bin/bash. Regel 5902, nivå 8, från en interaktiv session (pts/1).
-- Vad hände: en ny användare lades till på systemet. 5902 larmar på det. uid 1001 betyder att det är ett vanligt interaktivt konto (≥1000), inte ett system-/tjänstekonto.
-- Vad berördes: bara elev-09, själva det nya kontot test12.
-- Vad ska göras: nya interaktiva konton är en klassisk persistence-grej – en angripare skapar ett konto för att kunna komma tillbaka, så default är misstänkt. Jag kollar vem som skapade det och om det var planerat. Här var det student som la till det som ett test, så jag avfärdar med skäl: känd admin, interaktiv session, känd anledning. Men var kontot skapat av ett okänt konto eller utan förklaring hade jag eskalerat – det kan vara en bakdörr.
-
+## Larm: nytt användarkonto (rule 5902)
+- Observation: rule.id 5902, nivå 8, T1136. elev-46, 2026-11-12 09:21:57 UTC. useradd: name=test1, UID=1001, GID=1001, home=/home/test1, shell=/bin/bash, from=/dev/pts/1. Samma sekund: rule.id 5402, data.srcuser student, data.command /sbin/useradd test1, tty pts/0.
+- Vad hände: inloggade användaren student skapade ett vanligt inloggningsbart konto med sudo. Skillnaden pts/0–pts/1 beror troligen på att sudo kör kommandot i en egen terminal (use_pty).
+- Vad berördes: elev-46, kontot test1. Utan värdfilter finns test1 bara på elev-46 – inget tecken på att samma konto skapats på fler servrar.
+- Vad ska göras: avfärda – kontot skapades av student som en planerad framkallning i triageövningen, och sudo-posten visar vem och vilket kommando. Kontot är borttaget. 
 ## Larm: brute force som lyckades (rule.id 40112) – övningsexempel
 - Observation: flera misslyckade lösenordsförsök mot kontot student på elev-09 från 172.20.1.2, följt av en lyckad inloggning som student. Regel 40112, nivå 12 (mycket högre än 5712). Fyra larm mellan 09:33 och 09:45.
 - Vad hände: en brute force mot student som till slut lyckades. Det är här skillnaden mot 5712 blir viktig – i 5712 kom ingen in, här kom någon faktiskt in på kontot.
