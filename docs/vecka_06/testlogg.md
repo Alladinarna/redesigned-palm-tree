@@ -14,3 +14,10 @@ Rader märkta *(i efterhand)* skrevs in efter att testet körts, med tider från
 | 2026-11-12 09:21 | Hugo | elev-46 | elev-46 | `sudo useradd test1`, `userdel -r test1` 09:34 *(i efterhand)* | Nytt konto (5902), root-kommando |
 | 2026-11-12 12:16 | Hugo | elev-46 / jump | elev-46 | `sudo useradd -m lastest46`, ssh-nyckel, `usermod -L -e 1`, inloggningsförsök, `userdel -r` | Nytt konto (5902), root-kommando |
 | 2026-11-12 14:15 | Hugo | elev-46 | elev-46 | `sudo useradd -m korstest46` | Nytt konto (5902), root commando |
+| Tid (UTC) | Vem | Från | Mot | Vad (kommando) | Förväntat larm |
+|---|---|---|---|---|---|
+| 2026-11-12 ~08:34 | Gabriel | jump | elev-09 | `ssh student@172.20.1.109` (lyckad inloggning, efter misslyckade försök) (i efterhand) | Brute force som lyckades (40112) |
+| 2026-11-12 ~08:46 | Gabriel | elev-09 | elev-09 | `sudo systemctl restart chronyd` (i efterhand) | Root-kommando (5402) |
+| 2026-11-12 ~09:19 | Gabriel | elev-09 | elev-09 | `sudo useradd test12`, `sudo userdel -r test12` (i efterhand) | Nytt konto (5902), root-kommando |
+| 2026-11-12 ~13:06 | Gabriel | jump | elev-09 | `ssh student@172.20.1.109` ~9 försök + `ssh fejk99@172.20.1.109` ~9 försök (självtest) (i efterhand) | Brute force (5712 på fejk99; student gav 2502/5760, inget 5712 = falskt negativt) |
+| 2026-11-12 ~13:43 | Gabriel | jump | elev-09 | `ssh fejk7@172.20.1.109` 9+ försök (korstest) (i efterhand) | Brute force (5712) |
