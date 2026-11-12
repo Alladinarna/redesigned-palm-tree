@@ -1,0 +1,12 @@
+id,forvantat,faktiskt,tid_ms,resultat
+F9-till,avvisad,avvisad,13,OK
+F9-nek,tyst,tyst,3005,OK
+D3-till,oppen,oppen,,OK
+D3-nek,tyst,tyst,,OK
+D4-till,oppen,oppen,,OK
+D4-nek,avvisad,avvisad,,OK
+D5-till,oppen,oppen,12,OK
+D5-nek-514,tyst,tyst,3010,OK
+D5-nek,tyst,tyst,3006,OK
+D7-till,oppen,oppen,42,OK
+D7-nek,tyst,tyst,3007,OK
