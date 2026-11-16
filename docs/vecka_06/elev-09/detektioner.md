@@ -14,9 +14,15 @@ Det här är grunden för detektionerna (milstolpe 6).
   - data.srcip: 10.40.3.86, 10.40.1.219, 172.20.1.10 (tre olika angreppskällor)
   - data.srcuser: admin, ubuntu, admin97 (klassiska angreppskonton)
   - rule.mitre.id: T1110 (Brute Force)
-- **Gränsfall (ska inte träffa):** misslyckade inloggningar från jump
-  (172.20.1.2) mot kontot student. Det är min egen inloggning. Känd källa,
-  så det ska inte larma.
+- **Gränsfall (ska inte träffa):** enstaka misslyckade inloggningar från jump
+  (172.20.1.2) mot kontot student, alltså när jag själv skriver fel lösenord.
+  Upprepade försök ska däremot larma, även mot ett riktigt konto.
+  
+**Brusmätning:**
+  Monitorn: rule.groups: authentication_failed, över 4 på 5 min, alla servrar.
+- Normaltrafikperioden 2026-11-11 08:05–08:37 (0,53 h): 310 träffar, ca 580 per timme. Över 4 i nästan varje 5-minutersfönster.
+- 2026-11-15–16 (24 h): 11 träffar, alla från ett enda U6.2-test. 0 i vanlig trafik.
+- Falsklarmrisk: hög. Monitorn räknar varje misslyckad inloggning på alla servrar, så den inmatade normaltrafiken räcker för att larma hela tiden.
 
 ## Händelse 2 – Zonöverträdelse
 
