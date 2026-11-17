@@ -1,6 +1,6 @@
 # Nedbrytning av händelser – elev-24
 
-**Mätfönster:** normaltrafik 2026-11-11 07:06–07:36 UTC (0,5 h, `inmatat/elev-24/normal.log`). Verifierat fönster 2026-10-27 12:40 UTC – 2026-11-17 13:38 UTC (≈ 505 h, min egen ström `elev-24/syslog.log`).
+**Mätfönster:** normaltrafik 2026-11-11 07:06–07:36 UTC (0,5 h, `inmatat/elev-24/normal.log`). Verifierat fönster 2026-10-27 12:40 UTC – 2026-11-17 13:41 UTC (≈ 505 h, min egen ström `elev-24/syslog.log`).
 
 Alla monitorer söker de senaste **5 min**, körs varje minut och avgränsar på **elev-24** (`location`).
 
@@ -11,7 +11,7 @@ Alla monitorer söker de senaste **5 min**, körs varje minut och avgränsar på
 | 1. Brute force mot SSH | sshd-session, wazuh-alerts-* | location elev-24, rule.id 5710/5712/5760/5763, ≥5 på 5 min | 172.20.1.10, test5, backup25, admin77 m.fl., 2026-11-11 08:33 UTC | Enstaka fel lösenord på befintligt konto (enstaka 5760) |
 | 2. Zonöverträdelse | kernel (nftables), wazuh-archives-* | location elev-24, full_log "ZON-IN-DROP" | 172.20.1.2 till port 8080, IN=eth1, 2026-11-11 08:33 UTC | ZON-UT-DROP (egen utgående trafik som stoppas) |
 | 3. Root-kommando | auditd (audisp-syslog), wazuh-archives-* | location elev-24, full_log "type=SYSCALL" och "success=yes" och nyckeln `root-cmd` **eller** `rootcmd` | auid=1000 (student), euid=0, syscall 59 (execve), exe=/usr/bin/sudo, 2026-11-11 08:18 UTC | CONFIG_CHANGE med samma nyckel när auditreglerna laddas om |
-| 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-24, rule.id 5902, inte data.shell *nologin* | Inte framkallad än – 0 träffar | Systemkonto från dnf, `/sbin/nologin` (filtreras bort på shell) |
+| 4. Nytt användarkonto | useradd, wazuh-alerts-* | location elev-24, rule.id 5902, inte data.shell *nologin* | test24, uid 1001, /bin/bash, 2026-11-17 13:40 UTC | Systemkonto från dnf, `/sbin/nologin` (filtreras bort på shell) |
 
 ---
 
@@ -57,8 +57,9 @@ Vi letar efter kommandon som en **inloggad person** kör med root-rättigheter (
 Vi letar efter att någon skapar ett konto – en angripare gör det för att kunna komma tillbaka senare (persistence, ATT&CK T1136). Raderna skrivs av `useradd`. Wazuh har en egen regel (5902 "New user added to the system"), så händelsen finns i `wazuh-alerts-*`.
 
 - **Larmet betyder:** någon har skapat ett konto med inloggningsbar shell på elev-24 – det kan vara en bakdörr.
-- **Riktig träff:** inte framkallad än. Det finns 0 träffar på regel 5902 för elev-24 i hela fönstret. Framkallas med `sudo useradd -m test24`, och kontot tas bort efteråt med `sudo userdel -r test24`.
+- **Riktig träff:** test24 skapades med uid 1001 och `/bin/bash` den 17/11 kl. 13:40:55 UTC (`sudo useradd -m test24`). Kontot togs bort två sekunder senare med `sudo userdel -r test24` (regel 5903, 13:40:57 UTC).
+- **Samma kommando ger fler larm:** 5402 (sudo till root) och 5901 (ny grupp) kom samtidigt. Vi använder bara 5902, eftersom 5901 alltid kommer tillsammans med den. useradd syns också som root-kommando i händelse 3 (nyckeln `rootcmd`).
 - **Ska inte larma:** systemkonton som skapas när ett paket installeras med dnf (`/sbin/nologin`). De filtreras bort på shell, inte på uid.
 - **Brus, normaltrafik:** 0 träffar på 0,5 h – inga falsklarm.
-- **Brus, verifierat fönster:** 0 träffar på 505 h.
+- **Brus, verifierat fönster:** 1 träff på 505 h (≈ 0,002/h), det egna testet med test24.
 - **Falsklarmsrisk:** legitim kontoadministration larmar likadant. Samma `sudo useradd` ger också en träff i händelse 3.
