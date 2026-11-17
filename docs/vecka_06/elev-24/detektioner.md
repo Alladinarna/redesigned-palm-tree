@@ -57,7 +57,7 @@ Vi letar efter kommandon som en **inloggad person** kör med root-rättigheter (
 Vi letar efter att någon skapar ett konto – en angripare gör det för att kunna komma tillbaka senare (persistence, ATT&CK T1136). Raderna skrivs av `useradd`. Wazuh har en egen regel (5902 "New user added to the system"), så händelsen finns i `wazuh-alerts-*`.
 
 - **Larmet betyder:** någon har skapat ett konto med inloggningsbar shell på elev-24 – det kan vara en bakdörr.
-- **Riktig träff:** test24 skapades med uid 1001 och `/bin/bash` den 17/11 kl. 13:40:55 UTC (`sudo useradd -m test24`). Kontot togs bort två sekunder senare med `sudo userdel -r test24` (regel 5903, 13:40:57 UTC). Det finns ingen egen T1136-monitor för elev-24 i Alerting än, så larmet kom bara via root-monitorn i händelse 3.
+- **Riktig träff:** test24 skapades med uid 1001 och `/bin/bash` den 17/11 kl. 13:40:55 UTC (`sudo useradd -m test24`). Kontot togs bort två sekunder senare med `sudo userdel -r test24` (regel 5903, 13:40:57 UTC). När testet kördes fanns ingen T1136-monitor för elev-24, så larmet kom bara via root-monitorn i händelse 3. Monitorn **T1136 nytt konto elev-24 – useradd med inloggningsbar shell (regel 5902)** skapades därefter (17/11). Filtret ger 1 träff (test24) och 0 träffar före testet, och en testkörning utlöste triggern.
 - **Samma kommando ger fler larm:** 5402 (sudo till root) och 5901 (ny grupp) kom samtidigt. Vi använder bara 5902, eftersom 5901 alltid kommer tillsammans med den. useradd syns också som root-kommando i händelse 3 (nyckeln `rootcmd`).
 - **Ska inte larma:** systemkonton som skapas när ett paket installeras med dnf (`/sbin/nologin`). De filtreras bort på shell, inte på uid.
 - **Brus, normaltrafik:** 0 träffar på 0,5 h – inga falsklarm.
