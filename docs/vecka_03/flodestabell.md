@@ -58,6 +58,7 @@ Driftflödena är det varje teamserver (elev-46, elev-24, elev-38 och elev-09) s
 | D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) | UDP 68 → 67 | Förnyelse av serverns adresser | F23 | Värd |
 | D7 | Ut | min server → internet | TCP 443 | Paketuppdateringar (dnf) | F20 | Värd och molnbrandvägg |
 | D8 | In | ctf 172.20.1.10 → min server | TCP 80 | Kursens kontrolltjänst. Gör så att ctf kan komma åt webben på port 80 för att hämta kvittot i U7.2 | – (labbet) | Värd |
+| D9 | In | ctf 172.20.1.10 → min server | TCP 7500 + elevnummer (elev-24: 7524) | Kursens kontrolltjänst ansluter till zonvakt i U7.3 och kontrollerar att SELinux-policyn nekar `overtrad` | – (labbet) | Värd |
  
 ### Interna flöden mellan teamservrarna
  
