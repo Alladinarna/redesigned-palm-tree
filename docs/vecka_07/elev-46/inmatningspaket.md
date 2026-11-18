@@ -1,7 +1,7 @@
 # Inmatningspaket – elev-46
 
-Material som matades in i AI-assistenten (datum, tid). Maskerade värden:
-PRIVAT-IP-n, FLAGGA-BORTTAGEN, NYCKEL-BORTTAGEN.
+Material som matades in i AI-assistenten (2026-11-18, 09:12 UTC+1). Maskerade värden:
+inga värden behövde maskeras.
 
 ## 1. Härdningslista
 | Nr | Åtgärd | Motivering – varför just här | Förväntad effekt | Hur den verifieras | Skript? |
