@@ -1,1 +1,46 @@
+# Inmatningspaket – elev-46
 
+Material som matades in i AI-assistenten (datum, tid). Maskerade värden:
+PRIVAT-IP-n, FLAGGA-BORTTAGEN, NYCKEL-BORTTAGEN.
+
+## 1. Härdningslista
+| Nr | Åtgärd | Motivering – varför just här | Förväntad effekt | Hur den verifieras | Skript? |
+|---|---|---|---|---|---|
+| 1 | Stäng av lösenordsinloggning i SSH | sshd -T visade passwordauthentication yes, lösenordet kan angripare nu gissa sig till och logga in | Angripare ska inte kunna gissa sig till lösenordet (bruteforce) | sshd -T ska visa passwordauthentication no | ja(ej genomförd än) |
+| 2 | Förbjud root- inloggning i SSH | sshd -T visade permitrootlogin without-password, med root kommer man åt allt på servern medans student är mer begränsad. | En nagripare ska inte kunna logga in direkt på root utan först ett användarkonto- ett extra hinder. | sshd -T ska visa permitrootlogin no | ja, (ej genomförd än) |
+| 3 | Dölj versionen i httpds server: -header | curl -I visade server: Apache/2.4.62 (rocky Linux), med exakt version av systemet kan angripare kolla upp kända sårbarheter. | Angripare får inte reda på version | curl -I ska visa "Server: Apache" utan version | Ja |
+| 4 | Uppdatera systemet | Uppdateringar täpper till kända säkerhets hå som tillverkaren hittat | Kända sårbarheter tilltäppta | dnf check-update ska ge felkod 0 | nej – nya uppdateringar släpps löpande, så skriptet kan säga GÄLLER INTE trots att inget har ändrats på servern. Kontrolleras därför manuellt. |
+| 5 | SELinux enforcing nu och efter omstart | Tar en angripare över en tjänst kan den bara göra det dess domän tillåter, även om den kör som root. Utan enforcing gäller bara DAC och root går förbi den. | Otillåtna åtgärder nekas och loggas som AVC | getenforce ska ge enforcing och grep ^SELINUX= /etc/selinux/config ska ge SELINUX=enforcing  | Ja |
+| 6 | Egen tvingande policy för zonvakt | Zonvakt kör som root och hamnade i unconfined_service_t, så overtrad kunde skriva i /etc. Tar någon över tjänsten kan den alltså ändra systemets inställningar. | Zonvakt får bara göra det policyn tillåter, lyssna på sin port,svara och skriva i sin egen logg. overtrad nekas och loggas som AVC. | ps -eZ visar zonvakt_t, och semanage permissive -l visar inte zonvakt_t | Ja |
+## 2. sestatus
+```
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+```
+
+## 3. semodule -l | grep zonvakt
+```
+zonvakt
+```
+
+## 4. ps -eZ | grep zonvakt
+```
+system_u:system_r:zonvakt_t:s0     1001 ?        00:00:00 zonvakt
+```
+
+## 5. verifiera-hardning
+```
+GÄLLER SELinux i tvingande läge nu (getenforce = Enforcing)
+GÄLLER SELinux enforcing efter omstart (/etc/selinux/config)
+GÄLLER zonvakt kör i egen domän zonvakt_t
+GÄLLER httpd visar inte versionen i Server-headern
+slutkod 0
+```
