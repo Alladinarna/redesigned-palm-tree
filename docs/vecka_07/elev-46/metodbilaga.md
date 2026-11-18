@@ -30,6 +30,7 @@ Två saker som inte står i underlaget och därför inte finns med i rapporten:
 Åtgärd 2: without-password stänger redan av lösenordsinloggning för root. Det som återstår att stänga är root-inloggning med nyckel. Din motivering låter som att lösenordsgissning mot root fortfarande är möjlig, så skriv om den.
 Åtgärd 1 och 2 tillsammans (L12): Kontrollera att nyckelinloggning som student fungerar innan du stänger av lösenordsinloggningen. Annars kan du låsa ute dig själv från servern.
 ```
+själva utkastet finns oredigerat här: [AI-utkast (PDF)](<Härdningsrapport – webbserver (Rocky Linux 9) – utkast.pdf>)
 ## 4. Rättelselogg – en rad per ändrat påstående
 
 | Påst. nr | Påstående (kort) | Dom | Kommando som avgjorde | Faktiskt utfall | Feltyp | Ändrat till |
