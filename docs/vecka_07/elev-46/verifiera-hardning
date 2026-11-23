@@ -1,0 +1,23 @@
+#!/bin/bash
+# verifierar härdningen på elev-46. Läser av, ändrar inget. Kod 0 = allt gäller.
+
+rc=0
+kontroll() {
+
+  if bash -c "$2" >/dev/null 2>&1; then printf 'GÄLLER %s\n' "$1"
+  else printf 'GÄLLER INTE %s\n' "$1"; rc=1; fi
+}
+
+# kontrollerna kommer här
+
+kontroll "SELinux i tvingande läge nu (getenforce = Enforcing)" '[ "$(getenforce)" = Enforcing ]'
+
+kontroll "SELinux enforcing efter omstart (/etc/selinux/config)" '[ "$(grep ^SELINUX= /etc/selinux/config)" = SELINUX=enforcing ]'
+
+kontroll "zonvakt kör i egen domän zonvakt_t" 'ps -eZ | grep -v grep | grep -q "zonvakt_t.*zonvakt"'
+
+kontroll "zonvakt-domänen är inte permissiv" '! semanage permissive -l | grep -q zonvakt_t'
+
+kontroll "httpd visar inte versionen i Server-headern" '! curl -sI http://127.0.0.1 | grep -qi "^Server:.*/"'
+
+exit $rc
