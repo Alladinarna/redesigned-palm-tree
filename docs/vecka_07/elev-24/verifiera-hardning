@@ -1,0 +1,13 @@
+#!/bin/bash
+# verifiera-hardning – läser bara av tillståndet, ändrar ingenting
+fel=0
+kontroll() {
+    if eval "$2" >/dev/null 2>&1; then echo "GÄLLER $1"
+    else echo "GÄLLER INTE $1"; fel=1; fi
+}
+kontroll "SELinux är Enforcing nu (getenforce)" '[ "$(getenforce)" = Enforcing ]'
+kontroll "SELinux är enforcing efter omstart (/etc/selinux/config)" 'grep -qx "SELINUX=enforcing" /etc/selinux/config'
+kontroll "zonvakt kör i egen domän zonvakt_t" 'ps -eZ | grep -q "zonvakt_t.*zonvakt"'
+kontroll "zonvakt_t är inte permissiv" '! seinfo --permissive | grep -qw zonvakt_t'
+kontroll "/srv/zonwebb har httpd_sys_content_t som tål relabel" 'matchpathcon /srv/zonwebb/kvitto.txt | grep -q httpd_sys_content_t && ls -Z /srv/zonwebb/kvitto.txt | grep -q httpd_sys_content_t'
+exit $fel
