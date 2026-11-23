@@ -1,0 +1,16 @@
+id,kalla,destination,port,protokoll,riktning,forvantat,faktiskt,tid_ms,resultat,nekas_av
+F8-till,elev-09,10.40.1.98,443,tcp,ut,oppen,avvisad,11,AVVIKER,
+F8-nek,elev-09,10.40.1.98,8080,tcp,ut,tyst,tyst,3008,OK,elev-09 ut
+F8-nek-db,elev-09,10.40.1.162,5432,tcp,ut,tyst,tyst,3007,OK,elev-09 ut
+F6-till-80,elev-09,download.rockylinux.org,80,tcp,ut,oppen,oppen,25,OK,
+F6-till-443,elev-09,download.rockylinux.org,443,tcp,ut,oppen,oppen,25,OK,
+F6-nek,elev-09,8.8.8.8,53,tcp,ut,tyst,tyst,3006,OK,elev-09 ut
+D3-till,elev-09,185.12.64.1,53,udp,ut,oppen,oppen,149,OK,
+D3-nek,elev-09,8.8.8.8,53,udp,ut,tyst,tyst,3034,OK,elev-09 ut
+D4-till,elev-09,ntp.hetzner.com,123,udp,ut,oppen,oppen,40,OK,
+D4-nek,elev-09,185.12.64.2,123,udp,ut,avvisad,avvisad,33,OK,elev-09 ut
+D5-till,elev-09,172.20.1.58,6514,tcp,ut,oppen,oppen,8,OK,
+D5-nek-514,elev-09,172.20.1.58,514,tcp,ut,tyst,tyst,3009,OK,elev-09 ut
+D5-nek,elev-09,172.20.1.58,9000,tcp,ut,tyst,tyst,3006,OK,elev-09 ut
+# Kommentar: Jag ändrade D5 från 514 till 6514 och lade till en ny rad D5-nek-514 som visar att 514 är stängd.
+# Fick 12 av 13 ok. F8-till avviker men regeln finns i nft list ruleset, den avviker bara för att Stefs tjänst på 10.40.1.98 inte var igång.
