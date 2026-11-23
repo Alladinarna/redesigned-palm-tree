@@ -32,7 +32,7 @@ miscfiles_read_localization(zonvakt_t)
 
 allow zonvakt_t self:tcp_socket { accept bind create getattr listen setopt read write };
 
-corecmd_exec_bin(zonvakt_t)
+corecmd_mmap_bin_files(zonvakt_t)
 
 auth_read_passwd_file(zonvakt_t)
 
