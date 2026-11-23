@@ -38,3 +38,7 @@
 | 2026-11-12 | detektioner.md | Stöd med DQL och brusmätning. AI påstod att zonöverträdelsens 33 träffar var egna tester,fel, data.srcip visade CTF-kontroller. Regelpåståenden kontrollerade mot Wazuhs regelverk | Hugo |
 | 2026-11-12 | playbooks/nytt-konto.md | AI skrev utkastet. Jag granskade och testade alla steg på ett riktigt larm, AI:s usermod -L stoppade inte SSH-nycklar, -L -e 1 verifierades. Korstestad av Gabriel | Hugo |
 | 2026-11-12 | triagelogg.md, testlogg.md | AI hjälpte med format och tidslinje. Observationer från mina sökningar, falskt negativt (5760/5763) hittade jag genom att testa gränsfallet. | Hugo |
+| 2026-11-17 | vecka_07/elev-46/Härdningslista.md | Stöd vid formulering av motivering och verifiering per rad. Åtgärderna valdes utifrån min egen inventering på servern (sshd -T, curl -I, ss -tlnp) | Hugo |
+| 2026-11-17 | vecka_07/elev-46/zonvakt.te | Stöd vid granskning av audit2allow-förslag och felsökning när hej kraschade (dontaudit dolde read/write på socketen). Varje regel testades på servern. Obs: AI rådde att behålla corecmd_exec_bin i stället för corecmd_mmap_bin_files, vilket lösningsförslaget till Ö9 visade var fel – rättat nu | Hugo |
+| 2026-11-17 | vecka_07/elev-46/verifiera-hardning | Ramen från föreläsning 11. AI gav två av kontrollraderna och hjälpte hitta två fel (kontroller efter exit, saknat citattecken). Skriptet testat efter omstart och godkänt i U7.5 | Hugo |
+
