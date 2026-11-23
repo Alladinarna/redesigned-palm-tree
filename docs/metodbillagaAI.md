@@ -41,4 +41,7 @@
 | 2026-11-17 | vecka_07/elev-46/Härdningslista.md | Stöd vid formulering av motivering och verifiering per rad. Åtgärderna valdes utifrån min egen inventering på servern (sshd -T, curl -I, ss -tlnp) | Hugo |
 | 2026-11-17 | vecka_07/elev-46/zonvakt.te | Stöd vid granskning av audit2allow-förslag och felsökning när hej kraschade (dontaudit dolde read/write på socketen). Varje regel testades på servern. Obs: AI rådde att behålla corecmd_exec_bin i stället för corecmd_mmap_bin_files, vilket lösningsförslaget till Ö9 visade var fel – rättat nu | Hugo |
 | 2026-11-17 | vecka_07/elev-46/verifiera-hardning | Ramen från föreläsning 11. AI gav två av kontrollraderna och hjälpte hitta två fel (kontroller efter exit, saknat citattecken). Skriptet testat efter omstart och godkänt i U7.5 | Hugo |
-
+| 2026-11-17 | vecka_07/elev-09/zonvakt.te, .fc, .if | AI stöd vid granskning av audit2allow. zonvakt kraschade, jag hittade i journalctl att read write saknades (dontaudit dolde AVC:n) | Gabriel |
+| 2026-11-18 | vecka_07/elev-09/hardningsrapport.md | AI gav råsvar, jag dömde 26 påståenden mot servern, 5 var fel | Gabriel |
+| 2026-11-18 | vecka_07/elev-09/verifiera-hardning.sh | AI förklarade hur && och \|\| ger GÄLLER / GÄLLER INTE på varje rad. Jag skrev kontrollerna och testade efter omstart, godkänt i U7.5 | Gabriel |
+| 2026-11-23 | vecka_04/elev-09/testfall.csv | Ändrade D5 till 6514 efter Peters återkoppling. AI hjälpte med Windows-radslut (\r) i test.sh. Jag körde testet, 12 av 13 OK | Gabriel |
