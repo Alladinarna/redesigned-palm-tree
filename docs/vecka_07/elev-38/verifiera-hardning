@@ -1,0 +1,17 @@
+#!/bin/bash
+# verifiera-hardning: läser av tillståndet, ändrar ingenting
+fel=0
+kolla() {
+  if eval "$2" >/dev/null 2>&1; then echo "GÄLLER: $1"
+  else echo "GÄLLER INTE: $1"; fel=1; fi
+}
+kolla "SELinux i Enforcing nu" '[ "$(getenforce)" = Enforcing ]'
+kolla "SELinux enforcing efter omstart" 'grep -qx "SELINUX=enforcing" /etc/selinux/config'
+kolla "policymodulen zonvakt är laddad" 'semodule -l | grep -qw zonvakt'
+kolla "zonvakt kör i domänen zonvakt_t" 'ps -eZ | grep -q "zonvakt_t.*zonvakt"'
+kolla "zonvakt_t är inte permissiv" '! semanage permissive -l | grep -q zonvakt_t'
+kolla "bestående fcontext-regel för /srv/zonwebb" 'semanage fcontext -l -C | grep -q "^/srv/zonwebb"'
+kolla "/srv/zonwebb har typen httpd_sys_content_t" 'ls -Zd /srv/zonwebb | grep -q httpd_sys_content_t'
+kolla "paketfiltret in har policy drop" 'nft list chain inet zon in | grep -q "policy drop"'
+kolla "nftables startar vid omstart" 'systemctl is-enabled nftables'
+exit $fel
