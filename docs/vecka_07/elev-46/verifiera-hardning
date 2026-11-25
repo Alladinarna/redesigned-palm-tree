@@ -20,4 +20,8 @@ kontroll "zonvakt-domänen är inte permissiv" '! semanage permissive -l | grep 
 
 kontroll "httpd visar inte versionen i Server-headern" '! curl -sI http://127.0.0.1 | grep -qi "^Server:.*/"'
 
+kontroll "SSH: lösenordsinloggning avstängd" 'sshd -T | grep -qi "^passwordauthentication no"'
+
+kontroll "Förbjudet att logga in på ssh som root" 'sshd -T | grep -qi "^permitrootlogin no"'
+
 exit $rc
