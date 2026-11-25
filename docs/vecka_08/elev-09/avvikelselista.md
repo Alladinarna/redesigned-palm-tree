@@ -19,3 +19,19 @@ Steg 3, 11:09:21: Angriparen lyckas logga in med ett giltigt konto, en lång SSH
 Steg 4, 11:09:30: Angriparen för ut data från min server via en DNS-tunnel (paket 706–738, T1048).
 
 Lateral rörelse finns inte i min fångst. Trafiken till log på port 1514 är en felkonfiguration och inte en del av angreppet.
+
+## AI-domar
+
+| Förslag | Dom | Skäl | Paketnummer |
+|---|---|---|---|
+| Filter: SYN från angriparen | stämmer | 236 träffar, visar skanningen och de 17 SSH-försöken | 95–, 337– |
+| Filter: vilka portar svarade med SYN/ACK | stämmer | Servern svarade öppen på port 22 (17 gånger) och 80 (1 gång) | |
+| Filter: conv,tcp för SSH-sessionerna | stämmer | Visar SSH-sessionerna, en är mycket större än de andra, 5 382 byte | 695 |
+| Filter: ssh.protocol, vilket SSH-program | stämmer | Visar OpenSSH 8.7 och 9.6. Inget attackverktyg syns, klienten ser ut som vanlig OpenSSH | |
+| Filter: DNS-frågorna | stämmer | Visar 14 frågor med långa namn till samma domän | 706–738 |
+| Hypotes 1: portskanning, troligen nmap -sS | stämmer (skanning), ogrundat (nmap) | SYN mot många portar från en källa bevisar skanning. Fångsten kan inte visa vilket verktyg | 95– |
+| Hypotes 2: brute force mot SSH | stämmer | 17 korta SSH-sessioner från samma källa på kort tid. Antal och längd syns, inte lösenorden | 337– |
+| Hypotes 3: lyckad inloggning | ogrundat | SSH är krypterat, bara storlek och längd syns. Bekräftas med loggen i U8.3 | 695 |
+| Hypotes 4: exfiltrering via DNS | stämmer | Frågorna går från min server ut till samma domän. Namnen är base32 och avkodas till ord | 706–738 |
+| Alternativ: godkänt penetrationstest | ogrundat | Fångsten kan inte visa om någon har gett lov. Det avgörs av avtal, inte av paket | |
+| Alternativ: vanlig telemetri | fel | Etiketterna avkodas till ord med sekvensnummer, blandat med brus. Domännamnet är kamouflage | 706–738 |
