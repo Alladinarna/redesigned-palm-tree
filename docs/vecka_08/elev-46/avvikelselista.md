@@ -7,7 +7,7 @@ Tider nedan = sekunder från fångstens start.
 |---|---|---|---|---|---|
 | 112-123 s | TCP SYN 172.20.1.110-> 172.20.1.146:många portar | sticker ut då det är 220 syn försök följt av rst från min server på olika portar på 11 sekunder | 91-536 | Hög | Angrepp, scanning, (T1046) |
 | 128-135 s | 172.20.1.110-> 172.20.1.146: port 22 | 15 korta SSH sessioner mot samma adress och port | 539-690 | Hög | Angrepp, bruteforce, (T1110) |
-| 135-152 s | 172.20.1.110-> 172.20.1.146: port 22 | En längre session  direkt efter dem 15 korta från samma källa. | 693-750 | Hög | Angrepp, lyckad inloggning, (T1078) |
+| 135-152 s | 172.20.1.110-> 172.20.1.146: port 22 | En längre session  direkt efter dem 15 korta från samma källa. | 693-750 | Hög | Angrepp, lyckad inloggning (bekräftad i logg, U8.3), (T1078) |
 | 140-141 s | 172.20.1.146-> 172.20.1.114: port 22 | Min server skickar SYN till en tredje värd på port 22. | 702-711 | Hög | Angrepp, lateral rörelse, (T1021) |
 | 144-147 s | 172.20.1.146-> 185.12.64.1: port 53 | Domännamnet avviker trots att målet är den vanliga resolvern, långa base32 etiketter med sekvensnummer. | 716-738 | Hög | Angrepp, DNS tunnling, (T1048) |
 | 0,3-175 s | 172.20.1.146-> 172.20.1.58: port 1514 | Min server skickar SYN paket var femte sekund till samma adress och port och får svar RST varje försök, pågår hela fångsten | 3-770 | Hög | Felkonfiguration, loggklient mot fel port (log tar bara emot på port 514/6514) |
@@ -28,4 +28,4 @@ Prompt (maskerad, inga adresser): "Jag utreder en paketfångst. Värd A skickar 
 | H2: A gissade lösenord mot SSH och lyckades till slut | Stämmer | 15 korta sessioner från A följt av en längre, Accepted password för samma källa och port finns i loggen som styrker den hypotesen. | 539-750 |
 | H3: Angriparen hoppade vidare från B till C med SSH | Stämmer anslutning från B till C, ogrundat att anslutningen lyckades| B skickar SYN till C:22 under angriparens session. SSH är krypterat och sessionen var kort, och det finns ingen loggpost från C som visar att inloggningen lyckades | 702-711 |
 | H4: Data fördes ut via DNS-tunneln, troligen /etc/shadow |exfiltration via dns Stämmer, från /etc/shadow är fel. | Etiketterna avkodades med base32 till fyra ord i sekvensordning, och bruset blir oläsligt så inget innehåll från /etc/shadow. | 716-738 |
-| H5: 1514-trafiken är en bakdörr som ringer hem | Fel | Målet är den interna loggservern, flödet börjar före angreppet och pågår hel afångsten med jämn takt och varje fösök får RST utan att någon data skickas. Tyder på felkonfiguration | 3-770 |
+| H5: 1514-trafiken är en bakdörr som ringer hem | Fel | Målet är den interna loggservern, flödet börjar före angreppet och pågår hela fångsten med jämn takt, och varje försök får RST utan att någon data skickas. Tyder på felkonfiguration (U8.4) | 3-770 |
