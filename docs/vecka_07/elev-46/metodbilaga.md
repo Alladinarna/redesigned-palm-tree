@@ -1,5 +1,7 @@
 # Metodbilaga - härdningsrapport elev-46
 
+Plats på servern: /usr/local/bin/verifiera-hardning
+
 ## 1. Underlag som matades in: härdningslistan, sestatus, semodule -l, ps eZ, verifiera-hardning, zonvakt.te och hardning.conf, inga kännsliga värden behövde markeras.
 
 ## 2. Prompt, ordagrant
