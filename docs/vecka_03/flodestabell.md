@@ -54,8 +54,8 @@ Driftflödena är det varje teamserver (elev-46, elev-24, elev-38 och elev-09) s
 | D2 | In | ctf 172.20.1.10 → min server | TCP 22 | Kursens kontrolltjänst. Utan den kommer CTF-kontrollerna inte in | – (labbet) | Värd |
 | D3 | Ut | min server → 185.12.64.1 och 185.12.64.2 | UDP och TCP 53 | Namnuppslag | F18 | Värd |
 | D4 | Ut | min server → 213.239.239.164, 213.239.239.165, 213.239.239.166 (ntp.hetzner.com) | UDP 123 | Tidssynk (chrony är konfigurerad med `server ntp.hetzner.com`). Slutar tidssynken fungera kontrolleras adresserna med `getent ahostsv4 ntp.hetzner.com` | F19 | Värd och molnbrandvägg |
-| D5 | Ut | min server → log 172.20.1.58 | TCP 514 | Brandväggsloggen till loggservern. Klartext i vecka 4, TCP 6514 med TLS från vecka 5 | F11–F14 | Värd |
-| D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) | UDP 68 → 67 | Förnyelse av serverns adresser | F23 | Värd |
+| D5 | Ut | min server → log 172.20.1.58 via eth1 | TCP 6514 | Loggar (allt på nivå info och uppåt, utom mail) till loggservern över TLS med certifikatkontroll. Klartext på 514 i vecka 4, TLS på 6514 från vecka 5. Låst till eth1 | F11–F14 | Värd |
+| D6 | Ut | min server → DHCP-servern (172.31.1.1 på eth0, 172.20.0.1 på eth1, 10.40.1.1 på eth2) samt broadcast 255.255.255.255 | UDP 68 → 67 | Förnyelse av serverns adresser. Broadcast behövs om lånet går ut och servern måste fråga på nytt. Servrarna bekräftade med `journalctl` (DHCPREQUEST till 172.20.0.1 och 10.40.1.1) | F23 | Värd |
 | D7 | Ut | min server → internet | TCP 443 | Paketuppdateringar (dnf) | F20 | Värd och molnbrandvägg |
  
 ### Interna flöden mellan teamservrarna
