@@ -1,3 +1,5 @@
+# Plats på servern: /usr/local/bin/verifiera-hardning
+
 #!/bin/bash
 # verifierar härdningen på elev-46. Läser av, ändrar inget. Kod 0 = allt gäller.
 
