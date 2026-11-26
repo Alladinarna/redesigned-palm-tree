@@ -35,3 +35,14 @@ Lateral rörelse finns inte i min fångst. Trafiken till log på port 1514 är e
 | Hypotes 4: exfiltrering via DNS | stämmer | Frågorna går från min server ut till samma domän. Namnen är base32 och avkodas till ord | 706–738 |
 | Alternativ: godkänt penetrationstest | ogrundat | Fångsten kan inte visa om någon har gett lov. Det avgörs av avtal, inte av paket | |
 | Alternativ: vanlig telemetri | fel | Etiketterna avkodas till ord med sekvensnummer, blandat med brus. Domännamnet är kamouflage | 706–738 |
+
+## Korrelationstabell
+
+Alla tider i UTC. Fångstens tid från tshark -t ud, loggens tid från full_log.
+
+| Steg | Nätverksbevis | Loggbevis | Tidsstämpel | Lucka | Detektion |
+|---|---|---|---|---|---|
+| 1. Skanning (T1046) | Paket 95–, SYN mot många portar | Ingen | 11:08:58 (paket) | Ja | Zonöverträdelse borde ha larmat, men inga drop-rader kom |
+| 2. Brute force (T1110) | Paket 337–, 17 SYN mot port 22 | Ingen | 11:09:04 (paket) | Ja | Brute force-monitorn borde ha larmat, men inga Failed-rader kom |
+| 3. Lyckad inloggning (T1078) | Paket 695, källport 55984 | Accepted password for student, port 55984 | 11:09:21 (paket), 11:09:23 (logg) | Nej | Ingen detektion finns för lyckad inloggning |
+| 4. DNS-tunnel (T1048) | Paket 706–738, 14 frågor med långa namn | Ingen | 11:09:30 (paket) | Ja | Ingen detektion finns för DNS |
