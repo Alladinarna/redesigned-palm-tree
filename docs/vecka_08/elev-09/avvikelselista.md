@@ -21,6 +21,24 @@ Steg 4, 11:09:30: Angriparen för ut data från min server via en DNS-tunnel (pa
 
 Lateral rörelse finns inte i min fångst. Trafiken till log på port 1514 är en felkonfiguration och inte en del av angreppet.
 
+## Tidslinje
+
+Alla tider i UTC. Fångstens tid från tshark -t ud, loggens tid från full_log.
+
+| Tid (UTC) | Källa | Typ | Händelse | Bevis |
+|---|---|---|---|---|
+| 11:06:57 | pcap | observation | MIN-SERVER skickar SYN till LOG på port 1514 var femte sekund, får RST varje gång | paket 5– |
+| 11:06:57 | – | slutsats | Felkonfigurerad loggklient, inte en del av angreppet | jämn takt, ett mål, en port |
+| 11:08:58 | pcap | observation | ANGRIPARE skickar SYN mot många portar på MIN-SERVER, en gång per port. RST tillbaka från de flesta, SYN/ACK från 22 och 80 | paket 95– |
+| 11:08:58 | – | slutsats | Någon testar flera portar för att se var det går att ta sig in: skanning (T1046) | en källa mot många portar på kort tid |
+| 11:09:04 | pcap | observation | ANGRIPARE öppnar 17 korta SSH-sessioner mot MIN-SERVER på port 22, ca 1 000 byte och 0,2 sekunder var | paket 337– |
+| 11:09:04 | – | slutsats | Många försök från samma källa: brute force (T1110) | 17 korta sessioner på några sekunder |
+| 11:09:21 | pcap | observation | ANGRIPARE öppnar en SSH-session mot MIN-SERVER från källport 55984, 5 382 byte och 17 sekunder, mycket längre än de andra | paket 695 |
+| 11:09:23 | logg | observation | sshd: Accepted password for student från ANGRIPARE port 55984 | loggrad i scenario.log |
+| 11:09:23 | – | slutsats | Angriparen lyckades logga in med kontot student: lyckad inloggning (T1078). Paket och logg är samma händelse | samma källa och port, 2 sekunder mellan SYN och Accepted |
+| 11:09:30 | pcap | observation | MIN-SERVER skickar 14 DNS-frågor till resolvern med långa namn till samma domän. Etiketterna avkodas från base32 till ord | paket 706–738 |
+| 11:09:30 | – | slutsats | Angriparen för ut data från servern gömd i DNS-frågor: exfiltrering via DNS-tunnel (T1048) | etiketterna avkodas till ord, frågorna går ut från MIN-SERVER |
+
 ## AI-domar
 
 | Förslag | Dom | Skäl | Paketnummer |
@@ -48,3 +66,10 @@ Alla tider i UTC. Fångstens tid från tshark -t ud, loggens tid från full_log.
 | 3. Lyckad inloggning (T1078) | Paket 695, källport 55984 | Accepted password for student, port 55984 | 11:09:21 (paket), 11:09:23 (logg) | Nej | – | – | Ingen detektion finns för lyckad inloggning |
 | 4. DNS-tunnel (T1048) | Paket 706–738, 14 frågor med långa namn | Ingen | 11:09:30 (paket) | Ja | Logg över DNS-frågor, i resolvern eller brandväggen | D3 tillåter DNS till resolvern utan loggning, och servern loggar inte sina DNS-frågor | Ingen detektion finns för DNS |
 
+## Ändringsförslag
+
+| Lucka | Ändringsförslag | Typ | Rad i tidslinjen |
+|---|---|---|---|
+| 1. Skanning | Ny nftables-regel med meter som loggar källor med fler än 20 nya anslutningsförsök per sekund, med prefixet ZON-SKANNING. Detektion i Wazuh på prefixet | regel och detektion | 11:08:58 |
+| 2. Brute force | sshd med LogLevel VERBOSE för fler detaljer per försök. Ändra brute force-monitorn så att den räknar authentication_failed per data.srcip, till exempel fler än 5 på 1 minut från samma källa | loggnivå och regel | 11:09:04 |
+| 4. DNS-tunnel | Lokal resolver (unbound) på servern som loggar varje DNS-fråga med namnet. Raderna skickas till log via rsyslog. Detektion i Wazuh på långa namn, till exempel över 25 tecken, eller många frågor till samma domän på kort tid | ny källa och detektion | 11:09:30 |
