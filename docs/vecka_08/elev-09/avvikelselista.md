@@ -4,8 +4,9 @@
 | 11:06:57 | MIN-SERVER → LOG:1514 | 38 SYN mot samma port, RST varje gång, var femte sekund. Fel port, log tar emot på 514 och 6514 | 5– | hög, jämn takt, ett mål och en port | felkonfiguration |
 | 11:08:58 | ANGRIPARE → MIN-SERVER | SYN mot många portar, en gång var | 95– | hög, en källa mot många portar på kort tid | angrepp (T1046) |
 | 11:09:04 | ANGRIPARE → MIN-SERVER:22 | 17 SYN mot port 22, korta sessioner, ca 1 000 byte och 0,2 sekunder | 337– | hög, många försök från samma källa | angrepp (T1110) |
-| 11:09:21 | ANGRIPARE → MIN-SERVER:22 | En stor session, 5 382 byte och 17 sekunder, källport 55984 | 695 | medel, SSH är krypterat, bara storlek och längd syns. Bekräftas med loggen i U8.3 | angrepp (T1078) |
+| 11:09:21 | ANGRIPARE → MIN-SERVER:22 | En stor session, 5 382 byte och 17 sekunder, källport 55984 | 695 | hög, bekräftad i loggen: Accepted password 11:09:23, samma källa och port | angrepp (T1078) |
 | 11:09:30 | MIN-SERVER → resolvern | 14 DNS-frågor med långa namn till samma domän, base32 i etiketterna | 706–738 | hög, avkodade till fyra ord | angrepp (T1048) |
+
 ## Berättelse
 
 Alla tider i UTC, från fångsten.
@@ -31,18 +32,19 @@ Lateral rörelse finns inte i min fångst. Trafiken till log på port 1514 är e
 | Filter: DNS-frågorna | stämmer | Visar 14 frågor med långa namn till samma domän | 706–738 |
 | Hypotes 1: portskanning, troligen nmap -sS | stämmer (skanning), ogrundat (nmap) | SYN mot många portar från en källa bevisar skanning. Fångsten kan inte visa vilket verktyg | 95– |
 | Hypotes 2: brute force mot SSH | stämmer | 17 korta SSH-sessioner från samma källa på kort tid. Antal och längd syns, inte lösenorden | 337– |
-| Hypotes 3: lyckad inloggning | ogrundat | SSH är krypterat, bara storlek och längd syns. Bekräftas med loggen i U8.3 | 695 |
+| Hypotes 3: lyckad inloggning | ogrundat | SSH är krypterat, fångsten kan inte avgöra. Bekräftad i loggen: Accepted password 11:09:23 | 695 |
 | Hypotes 4: exfiltrering via DNS | stämmer | Frågorna går från min server ut till samma domän. Namnen är base32 och avkodas till ord | 706–738 |
 | Alternativ: godkänt penetrationstest | ogrundat | Fångsten kan inte visa om någon har gett lov. Det avgörs av avtal, inte av paket | |
 | Alternativ: vanlig telemetri | fel | Etiketterna avkodas till ord med sekvensnummer, blandat med brus. Domännamnet är kamouflage | 706–738 |
 
-## Korrelationstabell
+## Korrelation och luckor
 
 Alla tider i UTC. Fångstens tid från tshark -t ud, loggens tid från full_log.
 
-| Steg | Nätverksbevis | Loggbevis | Tidsstämpel | Lucka | Detektion |
-|---|---|---|---|---|---|
-| 1. Skanning (T1046) | Paket 95–, SYN mot många portar | Ingen | 11:08:58 (paket) | Ja | Zonöverträdelse borde ha larmat, men inga drop-rader kom |
-| 2. Brute force (T1110) | Paket 337–, 17 SYN mot port 22 | Ingen | 11:09:04 (paket) | Ja | Brute force-monitorn borde ha larmat, men inga Failed-rader kom |
-| 3. Lyckad inloggning (T1078) | Paket 695, källport 55984 | Accepted password for student, port 55984 | 11:09:21 (paket), 11:09:23 (logg) | Nej | Ingen detektion finns för lyckad inloggning |
-| 4. DNS-tunnel (T1048) | Paket 706–738, 14 frågor med långa namn | Ingen | 11:09:30 (paket) | Ja | Ingen detektion finns för DNS |
+| Steg | Nätverksbevis | Loggbevis | Tidsstämpel | Lucka | Källa som hade behövts | Varför den saknades | Detektion |
+|---|---|---|---|---|---|---|---|
+| 1. Skanning (T1046) | Paket 95–, SYN mot många portar | Ingen | 11:08:58 (paket) | Ja | Paketfiltrets logg (ZON-IN-DROP) | Loggregeln har limit rate 10/minute burst 5. Den bekräftar att något händer, men visar inte en skanning mot många portar på kort tid | Zonöverträdelse borde ha larmat, men inga drop-rader kom |
+| 2. Brute force (T1110) | Paket 337–, 17 SYN mot port 22 | Ingen | 11:09:04 (paket) | Ja | sshd (authpriv) via rsyslog | Konfigurationen skickar *.info, men inga Failed password-rader kom fram för scenariot | Brute force-monitorn borde ha larmat, men inga Failed-rader kom |
+| 3. Lyckad inloggning (T1078) | Paket 695, källport 55984 | Accepted password for student, port 55984 | 11:09:21 (paket), 11:09:23 (logg) | Nej | – | – | Ingen detektion finns för lyckad inloggning |
+| 4. DNS-tunnel (T1048) | Paket 706–738, 14 frågor med långa namn | Ingen | 11:09:30 (paket) | Ja | Logg över DNS-frågor, i resolvern eller brandväggen | D3 tillåter DNS till resolvern utan loggning, och servern loggar inte sina DNS-frågor | Ingen detektion finns för DNS |
+
